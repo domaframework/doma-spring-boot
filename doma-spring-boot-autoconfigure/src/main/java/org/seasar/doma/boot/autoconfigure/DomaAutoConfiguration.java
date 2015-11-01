@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
@@ -22,6 +23,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
  */
 @Configuration
 @ConditionalOnClass(Config.class)
+@EnableConfigurationProperties(DomaProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class DomaAutoConfiguration {
     @Autowired
