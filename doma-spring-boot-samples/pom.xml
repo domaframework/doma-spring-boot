@@ -3,12 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>doma-boot</artifactId>
+        <artifactId>doma-spring-boot</artifactId>
         <groupId>org.seasar.doma.boot</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
+    <description>Doma Samples</description>
 
     <artifactId>doma-spring-boot-samples</artifactId>
     <name>doma-spring-boot-samples</name>

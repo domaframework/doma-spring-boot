@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>doma-spring-boot-autoconfigure</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Spring Boot AutoConfigure project for Doma</description>
 
     <parent>
         <groupId>org.seasar.doma.boot</groupId>
@@ -66,5 +66,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
 </project>

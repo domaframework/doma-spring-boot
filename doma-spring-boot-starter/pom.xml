@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
 
     <name>doma-spring-boot-starter</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Spring Boot Starter project for Doma</description>
 
     <parent>
         <groupId>org.seasar.doma.boot</groupId>
