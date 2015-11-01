@@ -4,8 +4,6 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 import java.util.function.Supplier;
 
-import javax.validation.constraints.NotNull;
-
 import lombok.Data;
 
 import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
@@ -28,13 +26,11 @@ public class DomaProperties {
     /**
      * Dialect of database used by Doma.
      */
-    @NotNull
     private DialectType dialect = DialectType.H2;
 
     /**
      * Type of {@link SqlFileRepository}.
      */
-    @NotNull
     private SqlFileRepositoryType sqlFileRepository = SqlFileRepositoryType.NO_CACHE;
 
     /**
