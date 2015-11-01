@@ -4,8 +4,6 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 import java.util.function.Supplier;
 
-import lombok.Data;
-
 import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
 import org.seasar.doma.jdbc.SqlFileRepository;
@@ -19,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConfigurationProperties(prefix = DOMA_PREFIX)
-@Data
 public class DomaProperties {
     public static final String DOMA_PREFIX = "doma";
 
@@ -37,6 +34,31 @@ public class DomaProperties {
      * Whether convert {@link org.seasar.doma.jdbc.JdbcException} into {@link org.springframework.dao.DataAccessException}.
      */
     private boolean exceptionTranslationEnabled = true;
+
+    public DialectType getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(DialectType dialect) {
+        this.dialect = dialect;
+    }
+
+    public SqlFileRepositoryType getSqlFileRepository() {
+        return sqlFileRepository;
+    }
+
+    public void setSqlFileRepository(SqlFileRepositoryType sqlFileRepository) {
+        this.sqlFileRepository = sqlFileRepository;
+    }
+
+    public boolean isExceptionTranslationEnabled() {
+        return exceptionTranslationEnabled;
+    }
+
+    public void setExceptionTranslationEnabled(
+            boolean exceptionTranslationEnabled) {
+        this.exceptionTranslationEnabled = exceptionTranslationEnabled;
+    }
 
     public static enum DialectType {
         SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
@@ -67,5 +89,12 @@ public class DomaProperties {
         public SqlFileRepository create() {
             return this.constructor.get();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "DomaProperties{" + "dialect=" + dialect + ", sqlFileRepository="
+                + sqlFileRepository + ", exceptionTranslationEnabled="
+                + exceptionTranslationEnabled + '}';
     }
 }
