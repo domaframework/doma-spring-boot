@@ -9,13 +9,11 @@ import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * {@link ConfigurationProperties} for configuring Doma.
  * @author Toshiaki Maki
  */
-@Configuration
 @ConfigurationProperties(prefix = DOMA_PREFIX)
 public class DomaProperties {
     public static final String DOMA_PREFIX = "doma";
