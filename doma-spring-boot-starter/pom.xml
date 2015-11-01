@@ -11,7 +11,7 @@
     <description>Demo project for Spring Boot</description>
 
     <parent>
-        <groupId>am.ik.doma.boot</groupId>
+        <groupId>org.seasar.doma.boot</groupId>
         <artifactId>doma-spring-boot</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -27,7 +27,7 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>am.ik.doma.boot</groupId>
+            <groupId>org.seasar.doma.boot</groupId>
             <artifactId>doma-spring-boot-autoconfigure</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
