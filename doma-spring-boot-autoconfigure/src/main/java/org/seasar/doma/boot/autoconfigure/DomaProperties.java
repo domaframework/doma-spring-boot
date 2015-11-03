@@ -26,7 +26,7 @@ public class DomaProperties {
     /**
      * Type of {@link SqlFileRepository}.
      */
-    private SqlFileRepositoryType sqlFileRepository = SqlFileRepositoryType.NO_CACHE;
+    private SqlFileRepositoryType sqlFileRepository = SqlFileRepositoryType.GREEDY_CACHE;
 
     /**
      * Whether convert {@link org.seasar.doma.jdbc.JdbcException} into {@link org.springframework.dao.DataAccessException}.
