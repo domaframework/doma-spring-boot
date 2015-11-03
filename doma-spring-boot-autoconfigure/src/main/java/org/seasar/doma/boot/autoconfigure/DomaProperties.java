@@ -21,7 +21,7 @@ public class DomaProperties {
     /**
      * Dialect of database used by Doma.
      */
-    private DialectType dialect = DialectType.H2;
+    private DialectType dialect = DialectType.STANDARD;
 
     /**
      * Type of {@link SqlFileRepository}.
@@ -59,10 +59,13 @@ public class DomaProperties {
     }
 
     public static enum DialectType {
-        SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
-                MssqlDialect::new), MYSQL(MysqlDialect::new), POSTGRES(
-                        PostgresDialect::new), ORACLE(OracleDialect::new), H2(
-                                H2Dialect::new), HSQL(HsqldbDialect::new);
+        STANDARD(StandardDialect::new), SQLITE(SqliteDialect::new), DB2(
+                Db2Dialect::new), MSSQL(MssqlDialect::new), MYSQL(
+                        MysqlDialect::new), POSTGRES(
+                                PostgresDialect::new), ORACLE(
+                                        OracleDialect::new), H2(
+                                                H2Dialect::new), HSQL(
+                                                        HsqldbDialect::new);
 
         private final Supplier<Dialect> constructor;
 
