@@ -5,8 +5,8 @@ Spring Boot Support for Doma
 ## Properties file configuration
 
 ``` properties
-doma.dialect= # Dialect of database used by Doma.
-doma.sql-file-repository= # Type of SqlFileRepository.
+doma.dialect= # Dialect of database used by Doma. (STANDARD, SQLITE, DB2, MSSQL, MYSQL, POSTGRES, ORACLE, H2, HSQL)
+doma.sql-file-repository= # Type of SqlFileRepository. (GREEDY_CACHE, NO_CACHE)
 doma.exception-translation-enabled= # Whether convert JdbcException into DataAccessException.
 ```
 
