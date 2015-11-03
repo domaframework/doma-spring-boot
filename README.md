@@ -24,6 +24,19 @@ doma.exception-translation-enabled= # Whether convert JdbcException into DataAcc
 </dependency>
 ```
 
+Add the following repository to use snapshots.
+
+``` xml
+<repository>
+    <id>sonatype-snapshots</id>
+    <name>Sonatype Snapshots</name>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+</repository>
+```
+
 ## License
 
 Licensed under the Apache License, Version 2.0.
