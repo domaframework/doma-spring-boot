@@ -76,10 +76,10 @@
 
     <profiles>
         <profile>
-            <id>release-sign-artifacts</id>
+            <id>sign-artifacts</id>
             <activation>
                 <property>
-                    <name>performRelease</name>
+                    <name>performSign</name>
                     <value>true</value>
                 </property>
             </activation>
