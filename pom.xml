@@ -11,6 +11,16 @@
     <name>doma-spring-boot</name>
     <description>Spring Boot Support for Doma</description>
 
+    <url>https://github.com/domaframework/doma-spring-boot</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/license/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <developers>
         <developer>
             <id>making</id>
@@ -19,6 +29,12 @@
             <url>https://twitter.com/making</url>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git@github.com:domaframework/doma-spring-boot.git</connection>
+        <developerConnection>scm:git:git@github.com:domaframework/doma-spring-boot.git</developerConnection>
+        <url>git@github.com:domaframework/doma-spring-boot.git</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
