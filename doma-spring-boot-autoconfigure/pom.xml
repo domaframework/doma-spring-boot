@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>doma-spring-boot-autoconfigure</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>doma-spring-boot-autoconfigure</name>
@@ -13,7 +12,7 @@
     <parent>
         <groupId>org.seasar.doma.boot</groupId>
         <artifactId>doma-spring-boot</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-beta-1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
