@@ -115,9 +115,9 @@ public class DomaProperties {
         LOWER_CASE(Naming.LOWER_CASE),
         UPPER_CASE(Naming.UPPER_CASE),
         SNAKE_LOWER_CASE(Naming.SNAKE_LOWER_CASE),
-        SNAKE_UPPER_CASE(Naming.UPPER_CASE),
-        LENIENT_SNAKE_LOWER_CASE(Naming.SNAKE_LOWER_CASE),
-        LENIENT_SNAKE_UPPER_CASE(Naming.SNAKE_UPPER_CASE),
+        SNAKE_UPPER_CASE(Naming.SNAKE_UPPER_CASE),
+        LENIENT_SNAKE_LOWER_CASE(Naming.LENIENT_SNAKE_LOWER_CASE),
+        LENIENT_SNAKE_UPPER_CASE(Naming.LENIENT_SNAKE_UPPER_CASE),
         DEFAULT(Naming.DEFAULT);
 
         private final Naming naming;
