@@ -7,7 +7,14 @@ Spring Boot Support for Doma
 ``` properties
 doma.dialect= # Dialect of database used by Doma. (STANDARD, SQLITE, DB2, MSSQL, MYSQL, POSTGRES, ORACLE, H2, HSQL)
 doma.sql-file-repository= # Type of SqlFileRepository. (GREEDY_CACHE, NO_CACHE)
+doma.naming= # Type of Naming (NONE, LOWER_CASE, UPPER_CASE, SNAKE_LOWER_CASE, SNAKE_UPPER_CASE, LENIENT_SNAKE_LOWER_CASE, LENIENT_SNAKE_UPPER_CASE, DEFAULT)
 doma.exception-translation-enabled= # Whether convert JdbcException into DataAccessException.
+doma.max-rows=0 # Limit for the maximum number of rows. Ignored unless this value is greater than 0.
+doma.query-timeout=0 # Number of seconds the driver will wait for a Statement object to execute. Ignored unless this value is greater than 0.
+doma.fetch-size=0 # Hint to the number of rows that should be fetched. Ignored unless this value is greater than 0.
+doma.batch-size=0 # Size in executing PreparedStatement#addBatch(). Regarded as 1 unless this value is greater than 1.
+doma.data-source-name= # Datasource name.
+doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED, NONE)
 ```
 
 ## Issue Tracking
@@ -20,7 +27,7 @@ doma.exception-translation-enabled= # Whether convert JdbcException into DataAcc
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-beta-2</version>
 </dependency>
 ```
 
