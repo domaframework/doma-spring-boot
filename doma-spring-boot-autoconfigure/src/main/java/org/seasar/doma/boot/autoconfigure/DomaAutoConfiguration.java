@@ -1,8 +1,7 @@
 package org.seasar.doma.boot.autoconfigure;
 
-import javax.sql.DataSource;
-
 import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +10,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
+import javax.sql.DataSource;
+
+import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration} for Doma.
+ *
  * @author Toshiaki Maki
  */
 @Configuration
@@ -49,25 +53,34 @@ public class DomaAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Config config(DataSource dataSource, Dialect dialect,
-            SqlFileRepository sqlFileRepository) {
-        return new Config() {
-            @Override
-            public DataSource getDataSource() {
-                return new TransactionAwareDataSourceProxy(dataSource);
-            }
+    public Naming naming() {
+        return domaProperties.getNaming().naming();
+    }
 
-            @Override
-            public Dialect getDialect() {
-                return dialect;
-            }
+    @Bean
+    @ConditionalOnMissingBean
+    public DomaConfigBuilder domaConfigBuilder() {
+        return new DomaConfigBuilder();
+    }
 
-            @Override
-            public SqlFileRepository getSqlFileRepository() {
-                return sqlFileRepository;
-            }
-
-        };
+    @Bean
+    @ConditionalOnMissingBean
+    @ConfigurationProperties(prefix = DOMA_PREFIX)
+    public DomaConfig config(DataSource dataSource, Dialect dialect, SqlFileRepository sqlFileRepository, Naming naming,
+                             DomaConfigBuilder domaConfigBuilder) {
+        if (domaConfigBuilder.dataSource() == null) {
+            domaConfigBuilder.dataSource(dataSource);
+        }
+        if (domaConfigBuilder.dialect() == null) {
+            domaConfigBuilder.dialect(dialect);
+        }
+        if (domaConfigBuilder.sqlFileRepository() == null) {
+            domaConfigBuilder.sqlFileRepository(sqlFileRepository);
+        }
+        if (domaConfigBuilder.naming() == null) {
+            domaConfigBuilder.naming(naming);
+        }
+        return new DomaConfig(domaConfigBuilder);
     }
 
 }

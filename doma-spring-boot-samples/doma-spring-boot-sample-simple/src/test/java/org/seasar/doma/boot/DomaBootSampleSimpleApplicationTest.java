@@ -1,10 +1,5 @@
 package org.seasar.doma.boot;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +12,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DomaBootSampleSimpleApplication.class)
 @WebIntegrationTest(randomPort = true)
-public class DomaBootSampleSimpleApplicationTests {
+public class DomaBootSampleSimpleApplicationTest {
     RestTemplate restTemplate = new TestRestTemplate();
 
     @Value("${local.server.port}")
@@ -38,7 +38,7 @@ public class DomaBootSampleSimpleApplicationTests {
         assertThat(message2.text, is("world"));
 
         List<Message> messages = restTemplate.exchange("http://localhost:"
-                + port, HttpMethod.GET, HttpEntity.EMPTY,
+                        + port, HttpMethod.GET, HttpEntity.EMPTY,
                 new ParameterizedTypeReference<List<Message>>() {
                 }).getBody();
         assertThat(messages.size(), is(2));
