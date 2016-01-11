@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.seasar.doma.boot</groupId>
         <artifactId>doma-spring-boot-samples</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0.RC1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
