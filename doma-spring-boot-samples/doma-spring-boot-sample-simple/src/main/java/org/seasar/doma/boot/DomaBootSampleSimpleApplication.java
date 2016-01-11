@@ -13,23 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DomaBootSampleSimpleApplication {
 
-    @Autowired
-    MessageDao messageDao;
+	@Autowired
+	MessageDao messageDao;
 
-    @RequestMapping("/")
-    List<Message> list() {
-        return messageDao.selectAll();
-    }
+	@RequestMapping("/")
+	List<Message> list() {
+		return messageDao.selectAll();
+	}
 
-    @RequestMapping(value = "/", params = "text")
-    Message add(@RequestParam String text) {
-        Message message = new Message();
-        message.text = text;
-        messageDao.insert(message);
-        return message;
-    }
+	@RequestMapping(value = "/", params = "text")
+	Message add(@RequestParam String text) {
+		Message message = new Message();
+		message.text = text;
+		messageDao.insert(message);
+		return message;
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(DomaBootSampleSimpleApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(DomaBootSampleSimpleApplication.class, args);
+	}
 }

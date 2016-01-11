@@ -11,9 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 @ConfigAutowireable
 @Transactional
 public interface MessageDao {
-    @Select
-    List<Message> selectAll();
+	@Select
+	List<Message> selectAll();
 
-    @Insert
-    int insert(Message message);
+	@Insert
+	int insert(Message message);
 }

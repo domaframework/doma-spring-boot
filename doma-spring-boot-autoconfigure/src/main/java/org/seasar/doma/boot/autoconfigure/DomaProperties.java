@@ -18,126 +18,114 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
  */
 @ConfigurationProperties(prefix = DOMA_PREFIX)
 public class DomaProperties {
-    public static final String DOMA_PREFIX = "doma";
+	public static final String DOMA_PREFIX = "doma";
 
-    /**
-     * Dialect of database used by Doma.
-     */
-    private DialectType dialect = DialectType.STANDARD;
+	/**
+	 * Dialect of database used by Doma.
+	 */
+	private DialectType dialect = DialectType.STANDARD;
 
-    /**
-     * Type of {@link SqlFileRepository}.
-     */
-    private SqlFileRepositoryType sqlFileRepository = SqlFileRepositoryType.GREEDY_CACHE;
+	/**
+	 * Type of {@link SqlFileRepository}.
+	 */
+	private SqlFileRepositoryType sqlFileRepository = SqlFileRepositoryType.GREEDY_CACHE;
 
-    /**
-     * Type of {@link Naming}.
-     */
-    private NamingType naming = NamingType.DEFAULT;
+	/**
+	 * Type of {@link Naming}.
+	 */
+	private NamingType naming = NamingType.DEFAULT;
 
-    /**
-     * Whether convert {@link org.seasar.doma.jdbc.JdbcException} into {@link org.springframework.dao.DataAccessException}.
-     */
-    private boolean exceptionTranslationEnabled = true;
+	/**
+	 * Whether convert {@link org.seasar.doma.jdbc.JdbcException} into
+	 * {@link org.springframework.dao.DataAccessException}.
+	 */
+	private boolean exceptionTranslationEnabled = true;
 
-    public DialectType getDialect() {
-        return dialect;
-    }
+	public DialectType getDialect() {
+		return dialect;
+	}
 
-    public void setDialect(DialectType dialect) {
-        this.dialect = dialect;
-    }
+	public void setDialect(DialectType dialect) {
+		this.dialect = dialect;
+	}
 
-    public SqlFileRepositoryType getSqlFileRepository() {
-        return sqlFileRepository;
-    }
+	public SqlFileRepositoryType getSqlFileRepository() {
+		return sqlFileRepository;
+	}
 
-    public void setSqlFileRepository(SqlFileRepositoryType sqlFileRepository) {
-        this.sqlFileRepository = sqlFileRepository;
-    }
+	public void setSqlFileRepository(SqlFileRepositoryType sqlFileRepository) {
+		this.sqlFileRepository = sqlFileRepository;
+	}
 
-    public NamingType getNaming() {
-        return naming;
-    }
+	public NamingType getNaming() {
+		return naming;
+	}
 
-    public void setNaming(NamingType naming) {
-        this.naming = naming;
-    }
+	public void setNaming(NamingType naming) {
+		this.naming = naming;
+	}
 
-    public boolean isExceptionTranslationEnabled() {
-        return exceptionTranslationEnabled;
-    }
+	public boolean isExceptionTranslationEnabled() {
+		return exceptionTranslationEnabled;
+	}
 
-    public void setExceptionTranslationEnabled(
-            boolean exceptionTranslationEnabled) {
-        this.exceptionTranslationEnabled = exceptionTranslationEnabled;
-    }
+	public void setExceptionTranslationEnabled(boolean exceptionTranslationEnabled) {
+		this.exceptionTranslationEnabled = exceptionTranslationEnabled;
+	}
 
-    public static enum DialectType {
-        STANDARD(StandardDialect::new),
-        SQLITE(SqliteDialect::new),
-        DB2(Db2Dialect::new),
-        MSSQL(MssqlDialect::new),
-        MYSQL(MysqlDialect::new),
-        POSTGRES(PostgresDialect::new),
-        ORACLE(OracleDialect::new),
-        H2(H2Dialect::new),
-        HSQL(HsqldbDialect::new);
+	public static enum DialectType {
+		STANDARD(StandardDialect::new), SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
+				MssqlDialect::new), MYSQL(MysqlDialect::new), POSTGRES(
+				PostgresDialect::new), ORACLE(OracleDialect::new), H2(H2Dialect::new), HSQL(
+				HsqldbDialect::new);
 
-        private final Supplier<Dialect> constructor;
+		private final Supplier<Dialect> constructor;
 
-        DialectType(Supplier<Dialect> constructor) {
-            this.constructor = constructor;
-        }
+		DialectType(Supplier<Dialect> constructor) {
+			this.constructor = constructor;
+		}
 
-        public Dialect create() {
-            return this.constructor.get();
-        }
-    }
+		public Dialect create() {
+			return this.constructor.get();
+		}
+	}
 
-    public static enum SqlFileRepositoryType {
-        NO_CACHE(NoCacheSqlFileRepository::new),
-        GREEDY_CACHE(GreedyCacheSqlFileRepository::new);
+	public static enum SqlFileRepositoryType {
+		NO_CACHE(NoCacheSqlFileRepository::new), GREEDY_CACHE(
+				GreedyCacheSqlFileRepository::new);
 
-        private final Supplier<SqlFileRepository> constructor;
+		private final Supplier<SqlFileRepository> constructor;
 
-        SqlFileRepositoryType(Supplier<SqlFileRepository> constructor) {
-            this.constructor = constructor;
-        }
+		SqlFileRepositoryType(Supplier<SqlFileRepository> constructor) {
+			this.constructor = constructor;
+		}
 
-        public SqlFileRepository create() {
-            return this.constructor.get();
-        }
-    }
+		public SqlFileRepository create() {
+			return this.constructor.get();
+		}
+	}
 
-    public static enum NamingType {
-        NONE(Naming.NONE),
-        LOWER_CASE(Naming.LOWER_CASE),
-        UPPER_CASE(Naming.UPPER_CASE),
-        SNAKE_LOWER_CASE(Naming.SNAKE_LOWER_CASE),
-        SNAKE_UPPER_CASE(Naming.SNAKE_UPPER_CASE),
-        LENIENT_SNAKE_LOWER_CASE(Naming.LENIENT_SNAKE_LOWER_CASE),
-        LENIENT_SNAKE_UPPER_CASE(Naming.LENIENT_SNAKE_UPPER_CASE),
-        DEFAULT(Naming.DEFAULT);
+	public static enum NamingType {
+		NONE(Naming.NONE), LOWER_CASE(Naming.LOWER_CASE), UPPER_CASE(Naming.UPPER_CASE), SNAKE_LOWER_CASE(
+				Naming.SNAKE_LOWER_CASE), SNAKE_UPPER_CASE(Naming.SNAKE_UPPER_CASE), LENIENT_SNAKE_LOWER_CASE(
+				Naming.LENIENT_SNAKE_LOWER_CASE), LENIENT_SNAKE_UPPER_CASE(
+				Naming.LENIENT_SNAKE_UPPER_CASE), DEFAULT(Naming.DEFAULT);
 
-        private final Naming naming;
+		private final Naming naming;
 
-        NamingType(Naming naming) {
-            this.naming = naming;
-        }
+		NamingType(Naming naming) {
+			this.naming = naming;
+		}
 
-        public Naming naming() {
-            return this.naming;
-        }
-    }
+		public Naming naming() {
+			return this.naming;
+		}
+	}
 
-    @Override
-    public String toString() {
-        return "DomaProperties{" +
-                "dialect=" + dialect +
-                ", sqlFileRepository=" + sqlFileRepository +
-                ", naming=" + naming +
-                ", exceptionTranslationEnabled=" + exceptionTranslationEnabled +
-                '}';
-    }
+	@Override
+	public String toString() {
+		return "DomaProperties{" + "dialect=" + dialect + ", sqlFileRepository="
+				+ sqlFileRepository + ", naming=" + naming
+				+ ", exceptionTranslationEnabled=" + exceptionTranslationEnabled + '}';
+	}
 }

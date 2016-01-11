@@ -17,4 +17,8 @@
     <modules>
         <module>doma-spring-boot-sample-simple</module>
     </modules>
+
+    <properties>
+        <rootDir>${project.basedir}/..</rootDir>
+    </properties>
 </project>

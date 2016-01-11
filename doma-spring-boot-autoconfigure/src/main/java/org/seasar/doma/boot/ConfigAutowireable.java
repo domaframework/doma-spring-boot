@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 /**
- * Annotate {@link Repository} on the generated Dao class and {@link Autowired} on the constructor.
+ * Annotate {@link Repository} on the generated Dao class and {@link Autowired} on the
+ * constructor.
  * @author Toshiaki Maki
  */
 @AnnotateWith(annotations = {
-        @Annotation(target = AnnotationTarget.CLASS, type = Repository.class),
-        @Annotation(target = AnnotationTarget.CONSTRUCTOR, type = Autowired.class) })
+		@Annotation(target = AnnotationTarget.CLASS, type = Repository.class),
+		@Annotation(target = AnnotationTarget.CONSTRUCTOR, type = Autowired.class) })
 public @interface ConfigAutowireable {
 }

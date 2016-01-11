@@ -16,6 +16,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <properties>
+        <rootDir>${project.basedir}/..</rootDir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
