@@ -27,7 +27,7 @@ doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.0.0.RC1</version>
+    <version>1.0.0.RC2</version>
 </dependency>
 ```
 
