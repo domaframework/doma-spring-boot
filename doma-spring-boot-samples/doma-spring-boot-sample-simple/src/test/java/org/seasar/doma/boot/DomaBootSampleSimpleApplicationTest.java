@@ -38,7 +38,8 @@ import static org.junit.Assert.assertThat;
 @WebIntegrationTest(randomPort = true)
 public class DomaBootSampleSimpleApplicationTest {
 	RestTemplate restTemplate = new TestRestTemplate();
-
+	ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
+	};
 	@Value("${local.server.port}")
 	int port;
 
@@ -59,8 +60,7 @@ public class DomaBootSampleSimpleApplicationTest {
 			List<Message> messages = restTemplate.exchange(
 					UriComponentsBuilder.fromUriString("http://localhost").port(port)
 							.build().toUri(), HttpMethod.GET, HttpEntity.EMPTY,
-					new ParameterizedTypeReference<List<Message>>() {
-					}).getBody();
+					typedReference).getBody();
 			assertThat(messages.size(), is(2));
 			assertThat(messages.get(0).id, is(message1.id));
 			assertThat(messages.get(0).text, is(message1.text));
@@ -72,9 +72,8 @@ public class DomaBootSampleSimpleApplicationTest {
 			List<Message> messages = restTemplate.exchange(
 					UriComponentsBuilder.fromUriString("http://localhost").port(port)
 							.queryParam("page", "1").queryParam("size", "1").build()
-							.toUri(), HttpMethod.GET, HttpEntity.EMPTY,
-					new ParameterizedTypeReference<List<Message>>() {
-					}).getBody();
+							.toUri(), HttpMethod.GET, HttpEntity.EMPTY, typedReference)
+					.getBody();
 			assertThat(messages.size(), is(1));
 			assertThat(messages.get(0).id, is(message2.id));
 			assertThat(messages.get(0).text, is(message2.text));
