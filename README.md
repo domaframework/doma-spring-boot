@@ -16,6 +16,7 @@ doma.batch-size=0 # Size in executing PreparedStatement#addBatch(). Regarded as 
 doma.data-source-name= # Datasource name.
 doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED, NONE)
 ```
+[![Build Status](https://travis-ci.org/domaframework/doma-spring-boot.svg?branch=master)](https://travis-ci.org/domaframework/doma-spring-boot)
 
 ## Issue Tracking
 
