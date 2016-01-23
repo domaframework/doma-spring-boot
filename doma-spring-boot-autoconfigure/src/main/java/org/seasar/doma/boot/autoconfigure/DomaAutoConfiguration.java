@@ -15,9 +15,7 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
-import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.Naming;
-import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -33,6 +31,8 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 
 import javax.sql.DataSource;
 
+import java.util.Optional;
+
 import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 /**
@@ -44,10 +44,13 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 @Configuration
 @ConditionalOnClass(Config.class)
 @EnableConfigurationProperties(DomaProperties.class)
-@AutoConfigureAfter(DataSourceAutoConfiguration.class)
+@AutoConfigureAfter({ DataSourceAutoConfiguration.class,
+		DomaDevToolsAutoConfiguration.class })
 public class DomaAutoConfiguration {
 	@Autowired
 	DomaProperties domaProperties;
+	@Autowired
+	Optional<ClassHelper> classHelper;
 
 	@Bean
 	@ConditionalOnMissingBean
@@ -97,6 +100,7 @@ public class DomaAutoConfiguration {
 		if (domaConfigBuilder.naming() == null) {
 			domaConfigBuilder.naming(naming);
 		}
+		classHelper.ifPresent(domaConfigBuilder::classHelper);
 		return new DomaConfig(domaConfigBuilder);
 	}
 

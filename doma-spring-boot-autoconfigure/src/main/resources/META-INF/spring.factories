@@ -1,3 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.seasar.doma.boot.autoconfigure.DomaAutoConfiguration
+org.seasar.doma.boot.autoconfigure.DomaAutoConfiguration,\
+org.seasar.doma.boot.autoconfigure.DomaDevToolsAutoConfiguration
