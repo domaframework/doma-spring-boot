@@ -90,7 +90,7 @@ public class DomaProperties {
 
 	public static enum DialectType {
 		STANDARD(StandardDialect::new), SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
-				MssqlDialect::new), MYSQL(MysqlDialect::new), POSTGRES(
+				MssqlDialect::new), MSSQL2008(Mssql2008Dialect::new), MYSQL(MysqlDialect::new), POSTGRES(
 				PostgresDialect::new), ORACLE(OracleDialect::new), H2(H2Dialect::new), HSQL(
 				HsqldbDialect::new);
 
