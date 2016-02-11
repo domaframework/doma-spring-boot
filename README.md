@@ -1,6 +1,6 @@
 # doma-spring-boot
 
-Spring Boot Support for Doma
+Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 
 ## Properties file configuration
 
