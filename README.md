@@ -29,7 +29,7 @@ doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.0.0.RC2</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -64,7 +64,7 @@ Add the following dependency to `pom.xml` so that we can use Doma with Spring Bo
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.0.0.RC2</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
