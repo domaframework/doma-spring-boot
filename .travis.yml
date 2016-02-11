@@ -3,6 +3,9 @@ jdk: oraclejdk8
 branches:
   only:
   - master
+cache:
+  directories:
+  - "$HOME/.m2"
 after_success:
 - chmod +x publish.sh
 - "./publish.sh"
