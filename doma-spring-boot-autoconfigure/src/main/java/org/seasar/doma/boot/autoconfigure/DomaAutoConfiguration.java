@@ -80,7 +80,7 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean
+	@ConditionalOnMissingBean(Config.class)
 	@ConfigurationProperties(prefix = DOMA_PREFIX)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
 			SqlFileRepository sqlFileRepository, Naming naming,

@@ -19,13 +19,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
+import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
+import javax.sql.DataSource;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -70,6 +74,22 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
 	}
 
+	@Test
+	public void testConfigWithConfig() {
+		this.context.register(ConfigConfigure.class, DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertThat(config, is(notNullValue()));
+		assertThat(config.getDataSource(),
+				is(instanceOf(TransactionAwareDataSourceProxy.class)));
+		assertThat(config.getDialect(), is(instanceOf(PostgresDialect.class)));
+		assertThat(config.getSqlFileRepository(),
+				is(instanceOf(NoCacheSqlFileRepository.class)));
+		assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
+		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+	}
+
 	@After
 	public void tearDown() {
 		if (this.context != null) {
@@ -86,4 +106,33 @@ public class DomaAutoConfigurationTest {
 					.naming(Naming.SNAKE_UPPER_CASE);
 		}
 	}
+
+	@Configuration
+	public static class ConfigConfigure {
+		@Bean
+		Config myConfig(DataSource dataSource) {
+			return new Config() {
+				@Override
+				public DataSource getDataSource() {
+					return new TransactionAwareDataSourceProxy(dataSource);
+				}
+
+				@Override
+				public Dialect getDialect() {
+					return new PostgresDialect();
+				}
+
+				@Override
+				public SqlFileRepository getSqlFileRepository() {
+					return new NoCacheSqlFileRepository();
+				}
+
+				@Override
+				public Naming getNaming() {
+					return Naming.SNAKE_LOWER_CASE;
+				}
+			};
+		}
+	}
+
 }
