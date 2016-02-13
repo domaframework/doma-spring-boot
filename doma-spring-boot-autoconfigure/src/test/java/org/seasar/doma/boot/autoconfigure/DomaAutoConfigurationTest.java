@@ -15,8 +15,75 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.dialect.MysqlDialect;
+import org.seasar.doma.jdbc.dialect.StandardDialect;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 public class DomaAutoConfigurationTest {
+	AnnotationConfigApplicationContext context;
 
+	@Before
+	public void setUp() {
+		this.context = new AnnotationConfigApplicationContext();
+	}
+
+	@Test
+	public void testAutoRegisteredConfig() {
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertThat(config, is(notNullValue()));
+		assertThat(config.getDataSource(),
+				is(instanceOf(TransactionAwareDataSourceProxy.class)));
+		assertThat(config.getDialect(), is(instanceOf(StandardDialect.class)));
+		assertThat(config.getSqlFileRepository(),
+				is(instanceOf(GreedyCacheSqlFileRepository.class)));
+		assertThat(config.getNaming(), is(Naming.DEFAULT));
+		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+	}
+
+	@Test
+	public void testConfigWithDomaConfigBuilder() {
+		this.context.register(ConfigBuilderConfigure.class, DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertThat(config, is(notNullValue()));
+		assertThat(config.getDataSource(),
+				is(instanceOf(TransactionAwareDataSourceProxy.class)));
+		assertThat(config.getDialect(), is(instanceOf(MysqlDialect.class)));
+		assertThat(config.getSqlFileRepository(),
+				is(instanceOf(NoCacheSqlFileRepository.class)));
+		assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
+		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+	}
+
+	@After
+	public void tearDown() {
+		if (this.context != null) {
+			this.context.close();
+		}
+	}
+
+	@Configuration
+	public static class ConfigBuilderConfigure {
+		@Bean
+		DomaConfigBuilder myDomaConfigBuilder() {
+			return new DomaConfigBuilder().dialect(new MysqlDialect())
+					.sqlFileRepository(new NoCacheSqlFileRepository())
+					.naming(Naming.SNAKE_UPPER_CASE);
+		}
+	}
 }
