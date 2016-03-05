@@ -31,7 +31,8 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 
 	private final SQLExceptionTranslator translator;
 
-	public DomaPersistenceExceptionTranslator(SQLExceptionTranslator sqlExceptionTranslator) {
+	public DomaPersistenceExceptionTranslator(
+			SQLExceptionTranslator sqlExceptionTranslator) {
 		this.translator = sqlExceptionTranslator;
 	}
 

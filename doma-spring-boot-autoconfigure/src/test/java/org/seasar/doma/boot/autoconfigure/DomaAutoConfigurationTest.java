@@ -65,8 +65,9 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
-		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+		PersistenceExceptionTranslator translator = this.context
+				.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
 	@Test
@@ -83,8 +84,9 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
-		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+		PersistenceExceptionTranslator translator = this.context
+				.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
 	@Test
@@ -101,8 +103,9 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
-		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+		PersistenceExceptionTranslator translator = this.context
+				.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
 	@Test
@@ -110,24 +113,31 @@ public class DomaAutoConfigurationTest {
 		this.context.register(DomaAutoConfiguration.class,
 				DataSourceAutoConfiguration.class);
 		this.context.refresh();
-		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
+		PersistenceExceptionTranslator translator = this.context
+				.getBean(PersistenceExceptionTranslator.class);
 		{
 			// Translated by SQLErrorCodeSQLExceptionTranslator
-			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-					new JdbcException(Message.DOMA2008, new SQLException("Acquire Lock on H2", "SqlState", 50200, null)));
-			assertThat(dataAccessException, is(instanceOf(CannotAcquireLockException.class)));
+			DataAccessException dataAccessException = translator
+					.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+							new SQLException("Acquire Lock on H2", "SqlState", 50200,
+									null)));
+			assertThat(dataAccessException,
+					is(instanceOf(CannotAcquireLockException.class)));
 		}
 		{
 			// Translated by SQLExceptionSubclassTranslator(fallback)
-			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-					new JdbcException(Message.DOMA2008, new SQLTimeoutException("Timeout", "SqlState", -1, null)));
+			DataAccessException dataAccessException = translator
+					.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+							new SQLTimeoutException("Timeout", "SqlState", -1, null)));
 			assertThat(dataAccessException, is(instanceOf(QueryTimeoutException.class)));
 		}
 		{
 			// Translated by SQLStateSQLExceptionTranslator (fallback)
-			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-					new JdbcException(Message.DOMA2008, new SQLException("With check violation", "44", -1, null)));
-			assertThat(dataAccessException, is(instanceOf(DataIntegrityViolationException.class)));
+			DataAccessException dataAccessException = translator
+					.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+							new SQLException("With check violation", "44", -1, null)));
+			assertThat(dataAccessException,
+					is(instanceOf(DataIntegrityViolationException.class)));
 		}
 	}
 
