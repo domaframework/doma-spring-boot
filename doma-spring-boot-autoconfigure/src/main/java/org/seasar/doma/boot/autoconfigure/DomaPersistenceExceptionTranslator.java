@@ -20,15 +20,20 @@ import java.sql.SQLException;
 import org.seasar.doma.jdbc.*;
 import org.springframework.dao.*;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
-import org.springframework.jdbc.support.SQLExceptionSubclassTranslator;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 
 /**
  * Converts Doma's {@link JdbcException} into Spring's {@link DataAccessException}.
  * @author Toshiaki Maki
+ * @author Kazuki Shimizu
  */
 public class DomaPersistenceExceptionTranslator implements PersistenceExceptionTranslator {
-	private final SQLExceptionTranslator translator = new SQLExceptionSubclassTranslator();
+
+	private final SQLExceptionTranslator translator;
+
+	public DomaPersistenceExceptionTranslator(SQLExceptionTranslator sqlExceptionTranslator) {
+		this.translator = sqlExceptionTranslator;
+	}
 
 	@Override
 	public DataAccessException translateExceptionIfPossible(RuntimeException ex) {

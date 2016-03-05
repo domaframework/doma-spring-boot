@@ -23,13 +23,22 @@ import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
+import org.seasar.doma.message.Message;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.QueryTimeoutException;
+import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 import javax.sql.DataSource;
+
+import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -56,6 +65,8 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
 	@Test
@@ -72,6 +83,8 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
 	@Test
@@ -88,6 +101,34 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator,is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+	}
+
+	@Test
+	public void testSQLExceptionTranslator() {
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		PersistenceExceptionTranslator translator = this.context.getBean(PersistenceExceptionTranslator.class);
+		{
+			// Translated by SQLErrorCodeSQLExceptionTranslator
+			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
+					new JdbcException(Message.DOMA2008, new SQLException("Acquire Lock on H2", "SqlState", 50200, null)));
+			assertThat(dataAccessException, is(instanceOf(CannotAcquireLockException.class)));
+		}
+		{
+			// Translated by SQLExceptionSubclassTranslator(fallback)
+			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
+					new JdbcException(Message.DOMA2008, new SQLTimeoutException("Timeout", "SqlState", -1, null)));
+			assertThat(dataAccessException, is(instanceOf(QueryTimeoutException.class)));
+		}
+		{
+			// Translated by SQLStateSQLExceptionTranslator (fallback)
+			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
+					new JdbcException(Message.DOMA2008, new SQLException("With check violation", "44", -1, null)));
+			assertThat(dataAccessException, is(instanceOf(DataIntegrityViolationException.class)));
+		}
 	}
 
 	@After

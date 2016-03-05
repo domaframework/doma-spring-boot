@@ -30,6 +30,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 
 import javax.sql.DataSource;
 
@@ -40,6 +41,7 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
  * Auto-configuration} for Doma.
  *
  * @author Toshiaki Maki
+ * @author Kazuki Shimizu
  */
 @Configuration
 @ConditionalOnClass(Config.class)
@@ -57,8 +59,8 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnProperty(prefix = DomaProperties.DOMA_PREFIX, name = "exception-translation-enabled", matchIfMissing = true)
-	public PersistenceExceptionTranslator exceptionTranslator() {
-		return new DomaPersistenceExceptionTranslator();
+	public PersistenceExceptionTranslator exceptionTranslator(Config config) {
+		return new DomaPersistenceExceptionTranslator(new SQLErrorCodeSQLExceptionTranslator(config.getDataSource()));
 	}
 
 	@Bean
