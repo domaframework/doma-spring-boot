@@ -124,7 +124,7 @@ public class DomaAutoConfigurationTest {
 			assertThat(dataAccessException, is(instanceOf(QueryTimeoutException.class)));
 		}
 		{
-			// Translated by SQLExceptionSubclassTranslator (fallback)
+			// Translated by SQLStateSQLExceptionTranslator (fallback)
 			DataAccessException dataAccessException = translator.translateExceptionIfPossible(
 					new JdbcException(Message.DOMA2008, new SQLException("With check violation", "44", -1, null)));
 			assertThat(dataAccessException, is(instanceOf(DataIntegrityViolationException.class)));
