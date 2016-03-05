@@ -40,7 +40,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <doma.version>2.6.2</doma.version>
+        <doma.version>2.7.0</doma.version>
         <spring-boot.version>1.3.3.RELEASE</spring-boot.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
