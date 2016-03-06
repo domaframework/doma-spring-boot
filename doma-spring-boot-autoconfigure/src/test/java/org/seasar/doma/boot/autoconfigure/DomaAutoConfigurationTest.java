@@ -24,7 +24,9 @@ import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.message.Message;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.test.EnvironmentTestUtils;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -103,6 +105,28 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		PersistenceExceptionTranslator translator = this.context
+				.getBean(PersistenceExceptionTranslator.class);
+		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+	}
+
+	@Test(expected = NoSuchBeanDefinitionException.class)
+	public void testExceptionTranslationEnabledSpecifyFalse() {
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.exception-translation-enabled:false");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		this.context.getBean(PersistenceExceptionTranslator.class);
+	}
+
+	@Test
+	public void testExceptionTranslationEnabledSpecifyTrue() {
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.exception-translation-enabled:true");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
