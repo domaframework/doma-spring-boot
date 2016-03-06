@@ -43,17 +43,6 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 			return null;
 		}
 
-		if (ex.getCause() instanceof SQLException) {
-			SQLException e = (SQLException) ex.getCause();
-			String sql = null;
-			if (ex instanceof SqlExecutionException) {
-				sql = ((SqlExecutionException) ex).getRawSql();
-			}
-			else if (ex instanceof UniqueConstraintException) {
-				sql = ((UniqueConstraintException) ex).getRawSql();
-			}
-			return translator.translate(ex.getMessage(), sql, e);
-		}
 		if (ex instanceof OptimisticLockException) {
 			return new OptimisticLockingFailureException(ex.getMessage(), ex);
 		}
@@ -70,6 +59,15 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 		else if (ex instanceof UnknownColumnException
 				|| ex instanceof ResultMappingException) {
 			return new TypeMismatchDataAccessException(ex.getMessage(), ex);
+		}
+
+		if (ex.getCause() instanceof SQLException) {
+			SQLException e = (SQLException) ex.getCause();
+			String sql = null;
+			if (ex instanceof SqlExecutionException) {
+				sql = ((SqlExecutionException) ex).getRawSql();
+			}
+			return translator.translate(ex.getMessage(), sql, e);
 		}
 
 		return new UncategorizedDataAccessException(ex.getMessage(), ex) {
