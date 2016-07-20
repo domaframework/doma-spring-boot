@@ -48,7 +48,7 @@ public class DomaConfigBuilder {
 	private Naming naming;
 	private MapKeyNaming mapKeyNaming = ConfigSupport.defaultMapKeyNaming;
 	private Commenter commenter = ConfigSupport.defaultCommenter;
-	private EntityListenerProvider entityListenerProvider = ConfigSupport.defaultEntityListenerProvider;
+	private EntityListenerProvider entityListenerProvider;
 
 	public DataSource dataSource() {
 		return dataSource;

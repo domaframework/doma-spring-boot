@@ -67,6 +67,8 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		assertThat(config.getEntityListenerProvider(),
+				is(instanceOf(TryLookupEntityListenerProvider.class)));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -86,6 +88,8 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		assertThat(config.getEntityListenerProvider(),
+				is(instanceOf(TestEntityListenerProvider.class)));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -105,6 +109,8 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(NoCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		assertThat(config.getEntityListenerProvider(),
+				is(instanceOf(TestEntityListenerProvider.class)));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -178,7 +184,8 @@ public class DomaAutoConfigurationTest {
 		DomaConfigBuilder myDomaConfigBuilder() {
 			return new DomaConfigBuilder().dialect(new MysqlDialect())
 					.sqlFileRepository(new NoCacheSqlFileRepository())
-					.naming(Naming.SNAKE_UPPER_CASE);
+					.naming(Naming.SNAKE_UPPER_CASE)
+					.entityListenerProvider(new TestEntityListenerProvider());
 		}
 	}
 
@@ -206,8 +213,15 @@ public class DomaAutoConfigurationTest {
 				public Naming getNaming() {
 					return Naming.SNAKE_LOWER_CASE;
 				}
+
+				@Override
+				public EntityListenerProvider getEntityListenerProvider() {
+					return new TestEntityListenerProvider();
+				}
 			};
 		}
 	}
 
+	static class TestEntityListenerProvider implements EntityListenerProvider {
+	}
 }
