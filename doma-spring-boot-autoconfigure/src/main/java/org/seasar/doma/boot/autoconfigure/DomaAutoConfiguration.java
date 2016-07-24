@@ -28,7 +28,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
@@ -80,9 +79,8 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public EntityListenerProvider entityListenerProvider(
-			ApplicationContext context) {
-		return new TryLookupEntityListenerProvider(context);
+	public EntityListenerProvider entityListenerProvider() {
+		return new TryLookupEntityListenerProvider();
 	}
 
     @Bean
