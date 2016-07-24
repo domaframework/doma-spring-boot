@@ -83,7 +83,7 @@ public class DomaAutoConfiguration {
 		return new TryLookupEntityListenerProvider();
 	}
 
-    @Bean
+	@Bean
 	@ConditionalOnMissingBean
 	public DomaConfigBuilder domaConfigBuilder() {
 		return new DomaConfigBuilder();

@@ -43,8 +43,9 @@ public class DomaPersistenceExceptionTranslatorTest {
 
 	@Test
 	public void testOccurSqlExecutionException() {
-		DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-				new SqlExecutionException(SqlLogType.FORMATTED, SqlKind.SELECT,
+		DataAccessException dataAccessException = translator
+				.translateExceptionIfPossible(new SqlExecutionException(
+						SqlLogType.FORMATTED, SqlKind.SELECT,
 						"select * from todo where todo_id = ?",
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql", new SQLException(), null));
@@ -55,8 +56,10 @@ public class DomaPersistenceExceptionTranslatorTest {
 
 	@Test
 	public void testOccurUniqueConstraintException() {
-		DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-				new UniqueConstraintException(SqlLogType.FORMATTED, SqlKind.INSERT,
+		DataAccessException dataAccessException = translator
+				.translateExceptionIfPossible(new UniqueConstraintException(
+						SqlLogType.FORMATTED,
+						SqlKind.INSERT,
 						"insert into todo (todo_id, title) values (?, ?)",
 						"insert into todo (todo_id, title) values ('000000001', 'Title')",
 						"TodoDao/insert.sql", new SQLException()));
@@ -67,8 +70,10 @@ public class DomaPersistenceExceptionTranslatorTest {
 
 	@Test
 	public void testThrowOptimisticLockingFailureException() {
-		DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-				new OptimisticLockException(SqlLogType.FORMATTED, SqlKind.SELECT,
+		DataAccessException dataAccessException = translator
+				.translateExceptionIfPossible(new OptimisticLockException(
+						SqlLogType.FORMATTED,
+						SqlKind.SELECT,
 						"update todo set title = ? where todo_id = ? and version = ?",
 						"update todo set title = 'Modified Title' where todo_id = '000000001' and version = 1",
 						"TodoDao/update.sql"));
@@ -78,8 +83,10 @@ public class DomaPersistenceExceptionTranslatorTest {
 
 	@Test
 	public void testThrowDuplicateKeyException() {
-		DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-				new UniqueConstraintException(SqlLogType.FORMATTED, SqlKind.INSERT,
+		DataAccessException dataAccessException = translator
+				.translateExceptionIfPossible(new UniqueConstraintException(
+						SqlLogType.FORMATTED,
+						SqlKind.INSERT,
 						"insert into todo (todo_id, title) values (?, ?)",
 						"insert into todo (todo_id, title) values ('000000001', 'Title')",
 						"TodoDao/insert.sql", null));
@@ -101,7 +108,8 @@ public class DomaPersistenceExceptionTranslatorTest {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new NonSingleColumnException(
-							SqlLogType.FORMATTED, SqlKind.SELECT,
+							SqlLogType.FORMATTED,
+							SqlKind.SELECT,
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
@@ -136,9 +144,11 @@ public class DomaPersistenceExceptionTranslatorTest {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new ResultMappingException(
-							SqlLogType.FORMATTED, "Todo",
+							SqlLogType.FORMATTED,
+							"Todo",
 							Collections.singletonList("finished"),
-							Collections.singletonList("modified_at"), SqlKind.SELECT,
+							Collections.singletonList("modified_at"),
+							SqlKind.SELECT,
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
@@ -149,8 +159,9 @@ public class DomaPersistenceExceptionTranslatorTest {
 
 	@Test
 	public void testThrowUncategorizedDataAccessException() {
-		DataAccessException dataAccessException = translator.translateExceptionIfPossible(
-				new ConfigException("DomaConfig", "configure"));
+		DataAccessException dataAccessException = translator
+				.translateExceptionIfPossible(new ConfigException("DomaConfig",
+						"configure"));
 		assertThat(dataAccessException,
 				is(instanceOf(UncategorizedDataAccessException.class)));
 	}

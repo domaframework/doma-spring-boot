@@ -35,8 +35,7 @@ public class TryLookupEntityListenerProviderTest {
 		context.refresh();
 		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 		provider.setApplicationContext(context);
-		FooListener listener = provider
-				.get(FooListener.class, FooListener::new);
+		FooListener listener = provider.get(FooListener.class, FooListener::new);
 		assertThat(listener.managed, is(true));
 	}
 
@@ -55,8 +54,7 @@ public class TryLookupEntityListenerProviderTest {
 		context.refresh();
 		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 		provider.setApplicationContext(context);
-		FooListener listener = provider
-				.get(FooListener.class, FooListener::new);
+		FooListener listener = provider.get(FooListener.class, FooListener::new);
 		assertThat(listener.managed, is(false));
 	}
 
@@ -65,12 +63,12 @@ public class TryLookupEntityListenerProviderTest {
 
 		final boolean managed;
 
-		//Invoked by Doma
+		// Invoked by Doma
 		public FooListener() {
 			managed = false;
 		}
 
-		//Invoked by Spring
+		// Invoked by Spring
 		@Autowired
 		public FooListener(ApplicationContext context) {
 			managed = true;

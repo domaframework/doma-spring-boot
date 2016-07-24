@@ -8,8 +8,8 @@ import java.time.LocalDate;
 
 @Component
 public class MessageListener implements EntityListener<Message> {
-    @Override
-    public void preInsert(Message message, PreInsertContext<Message> context) {
-        message.createdAt = LocalDate.now();
-    }
+	@Override
+	public void preInsert(Message message, PreInsertContext<Message> context) {
+		message.createdAt = LocalDate.now();
+	}
 }
