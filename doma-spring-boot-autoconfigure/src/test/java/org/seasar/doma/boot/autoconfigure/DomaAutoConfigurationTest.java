@@ -67,8 +67,7 @@ public class DomaAutoConfigurationTest {
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-		assertThat(config.getEntityListenerProvider(),
-				is(instanceOf(TryLookupEntityListenerProvider.class)));
+		assertThat(config.getEntityListenerProvider(), is(notNullValue()));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));

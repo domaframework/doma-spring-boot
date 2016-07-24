@@ -15,13 +15,19 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import java.util.function.Supplier;
+
 import javax.sql.DataSource;
 
+import org.seasar.doma.boot.event.AnnotatedDomaEventHandlerInvoker;
+import org.seasar.doma.boot.event.DomaEventEntityListener;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.entity.EntityListener;
+import org.seasar.doma.jdbc.entity.NullEntityListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,6 +37,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 
@@ -75,9 +82,39 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean
-	public EntityListenerProvider entityListenerProvider() {
+	public AnnotatedDomaEventHandlerInvoker eventHandlerInvoker() {
+		return new AnnotatedDomaEventHandlerInvoker();
+	}
+
+	@Bean
+	public DomaEventEntityListener domaEventEntityListener() {
+		return new DomaEventEntityListener();
+	}
+
+	@Bean
+	public TryLookupEntityListenerProvider tryLookupEntityListenerProvider() {
 		return new TryLookupEntityListenerProvider();
+	}
+
+	@Bean
+	@Primary
+	@ConditionalOnMissingBean
+	public <ENTITY> EntityListenerProvider entityListenerProvider(
+			DomaEventEntityListener<ENTITY> domaEventEntityListener,
+			TryLookupEntityListenerProvider tryLookupEntityListenerProvider) {
+		return new EntityListenerProvider() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <ENTITY, LISTENER extends EntityListener<ENTITY>> LISTENER get(
+					Class<LISTENER> listenerClass, Supplier<LISTENER> listenerSupplier) {
+				if (NullEntityListener.class.equals(listenerClass)) {
+					return tryLookupEntityListenerProvider.get(listenerClass,
+							listenerSupplier);
+				}
+				return (LISTENER) domaEventEntityListener;
+			}
+		};
 	}
 
 	@Bean
