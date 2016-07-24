@@ -55,20 +55,6 @@ public class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testOccurUniqueConstraintException() {
-		DataAccessException dataAccessException = translator
-				.translateExceptionIfPossible(new UniqueConstraintException(
-						SqlLogType.FORMATTED,
-						SqlKind.INSERT,
-						"insert into todo (todo_id, title) values (?, ?)",
-						"insert into todo (todo_id, title) values ('000000001', 'Title')",
-						"TodoDao/insert.sql", new SQLException()));
-		assertThat(dataAccessException, is(instanceOf(UncategorizedSQLException.class)));
-		assertThat(UncategorizedSQLException.class.cast(dataAccessException).getSql(),
-				is("insert into todo (todo_id, title) values (?, ?)"));
-	}
-
-	@Test
 	public void testThrowOptimisticLockingFailureException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new OptimisticLockException(
@@ -89,7 +75,7 @@ public class DomaPersistenceExceptionTranslatorTest {
 						SqlKind.INSERT,
 						"insert into todo (todo_id, title) values (?, ?)",
 						"insert into todo (todo_id, title) values ('000000001', 'Title')",
-						"TodoDao/insert.sql", null));
+						"TodoDao/insert.sql", new SQLException()));
 		assertThat(dataAccessException, is(instanceOf(DuplicateKeyException.class)));
 	}
 
