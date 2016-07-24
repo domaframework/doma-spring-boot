@@ -16,6 +16,7 @@
 
     <modules>
         <module>doma-spring-boot-sample-simple</module>
+        <module>doma-spring-boot-sample-entity-listener</module>
     </modules>
 
     <properties>
