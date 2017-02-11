@@ -178,4 +178,8 @@ public class DomaConfigBuilder {
 		this.entityListenerProvider = entityListenerProvider;
 		return this;
 	}
+
+	public DomaConfig build() {
+	    return new DomaConfig(this);
+	}
 }
