@@ -88,6 +88,13 @@ public class DomaProperties {
 		this.exceptionTranslationEnabled = exceptionTranslationEnabled;
 	}
 
+    public DomaConfigBuilder initializeDomaConfigBuilder() {
+        return new DomaConfigBuilder()
+                .dialect(dialect.create())
+                .sqlFileRepository(sqlFileRepository.create())
+                .naming(naming.naming());
+    }
+
 	public static enum DialectType {
 		STANDARD(StandardDialect::new), SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
 				MssqlDialect::new), MSSQL2008(Mssql2008Dialect::new), MYSQL(
