@@ -91,7 +91,6 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(Config.class)
-	@ConfigurationProperties(prefix = DOMA_PREFIX)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
 			SqlFileRepository sqlFileRepository, Naming naming,
 			EntityListenerProvider entityListenerProvider,
