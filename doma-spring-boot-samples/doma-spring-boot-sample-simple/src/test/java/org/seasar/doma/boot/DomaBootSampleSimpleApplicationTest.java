@@ -33,7 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class DomaBootSampleSimpleApplicationTest {
-    TestRestTemplate restTemplate = new TestRestTemplate();
+	TestRestTemplate restTemplate = new TestRestTemplate();
 	ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
 	};
 	@Value("${local.server.port}")

@@ -168,9 +168,9 @@ public class DomaAutoConfigurationTest {
 		{
 			// Translated by SQLErrorCodeSQLExceptionTranslator
 			DataAccessException dataAccessException = translator
-					.translateExceptionIfPossible(
-							new JdbcException(Message.DOMA2008, new SQLException(
-									"Acquire Lock on H2", "SqlState", 50200, null)));
+					.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+							new SQLException("Acquire Lock on H2", "SqlState", 50200,
+									null)));
 			assertThat(dataAccessException,
 					is(instanceOf(CannotAcquireLockException.class)));
 		}
