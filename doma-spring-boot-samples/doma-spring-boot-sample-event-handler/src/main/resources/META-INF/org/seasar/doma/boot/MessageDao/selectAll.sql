@@ -1,0 +1,1 @@
+SELECT id,text, createdAt FROM messages ORDER BY id;
