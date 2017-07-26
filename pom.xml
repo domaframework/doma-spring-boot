@@ -40,8 +40,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <doma.version>2.15.0</doma.version>
-        <spring-boot.version>1.5.1.RELEASE</spring-boot.version>
+        <doma.version>2.16.1</doma.version>
+        <spring-boot.version>1.5.4.RELEASE</spring-boot.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
 
@@ -187,6 +187,22 @@
     </distributionManagement>
 
     <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <snapshots>
                 <enabled>false</enabled>
