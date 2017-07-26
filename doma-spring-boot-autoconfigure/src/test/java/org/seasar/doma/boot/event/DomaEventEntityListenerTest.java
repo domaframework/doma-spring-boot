@@ -340,6 +340,34 @@ public class DomaEventEntityListenerTest {
 		assertThat(event.getContext()).isSameAs(ctx);
 	}
 
+	@Test
+	public void springConditionalEventListener() throws Exception {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(DomaEventEntityListener.class);
+		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(TodoListener.class);
+		context.register(PreInsertHandler.class);
+		context.refresh();
+
+		DomaEventEntityListener<Todo> entityListener = context
+				.getBean(DomaEventEntityListener.class);
+		TodoListener todoListener = context.getBean(TodoListener.class);
+
+		PreInsertContext ctx = mock(PreInsertContext.class);
+		Todo entity = new Todo();
+
+		entity.createdBy = "someone";
+		entityListener.preInsert(entity, ctx);
+		Todo todo = todoListener.todo;
+		assertThat(todo).isNull();
+
+		entity.createdBy = "making";
+		entityListener.preInsert(entity, ctx);
+		todo = todoListener.todo;
+		assertThat(todo).isNotNull();
+		assertThat(todo).isSameAs(entity);
+	}
+
 	@org.seasar.doma.Entity
 	public static class Entity {
 
@@ -532,6 +560,24 @@ public class DomaEventEntityListenerTest {
 		@EventListener
 		public void listen(DomaEvent event) {
 			this.event = event;
+		}
+	}
+
+	@org.seasar.doma.Entity
+	public static class Todo {
+		String createdBy;
+
+		public String getCreatedBy() {
+			return createdBy;
+		}
+	}
+
+	static class TodoListener {
+		Todo todo;
+
+		@EventListener(condition = "#root.event.source.createdBy == 'making'")
+		public void handlePreInsert(PreInsertEvent<Todo> event) {
+			this.todo = event.getSource();
 		}
 	}
 }
