@@ -335,6 +335,7 @@ public class DomaEventEntityListenerTest {
 		entityListener.preInsert(entity, ctx);
 		DomaEvent event = springListener.event;
 		assertThat(event).isNotNull();
+		assertThat(event).isInstanceOf(PreInsertEvent.class);
 		assertThat(event.getSource()).isSameAs(entity);
 		assertThat(event.getContext()).isSameAs(ctx);
 	}
