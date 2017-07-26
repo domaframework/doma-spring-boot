@@ -15,6 +15,14 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
+
+import java.sql.SQLException;
+import java.sql.SQLTimeoutException;
+
+import javax.sql.DataSource;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,14 +44,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-
-import javax.sql.DataSource;
-
-import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 
 public class DomaAutoConfigurationTest {
 	AnnotationConfigApplicationContext context;
@@ -139,6 +139,26 @@ public class DomaAutoConfigurationTest {
 	}
 
 	@Test
+	public void testChangeDialect() {
+		EnvironmentTestUtils.addEnvironment(this.context, "doma.dialect:MYSQL");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Dialect dialect = this.context.getBean(Dialect.class);
+		assertThat(dialect, is(instanceOf(MysqlDialect.class)));
+	}
+
+	@Test
+	public void testChangeMaxRows() {
+		EnvironmentTestUtils.addEnvironment(this.context, "doma.max-rows:100");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertThat(config.getMaxRows(), is(100));
+	}
+
+	@Test
 	public void testSQLExceptionTranslator() {
 		this.context.register(DomaAutoConfiguration.class,
 				DataSourceAutoConfiguration.class);
@@ -148,9 +168,9 @@ public class DomaAutoConfigurationTest {
 		{
 			// Translated by SQLErrorCodeSQLExceptionTranslator
 			DataAccessException dataAccessException = translator
-					.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
-							new SQLException("Acquire Lock on H2", "SqlState", 50200,
-									null)));
+					.translateExceptionIfPossible(
+							new JdbcException(Message.DOMA2008, new SQLException(
+									"Acquire Lock on H2", "SqlState", 50200, null)));
 			assertThat(dataAccessException,
 					is(instanceOf(CannotAcquireLockException.class)));
 		}
