@@ -8,6 +8,7 @@ import org.seasar.doma.boot.event.annotation.*;
 import org.seasar.doma.jdbc.entity.*;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.event.EventListener;
 
 @SuppressWarnings("unchecked")
 public class DomaEventEntityListenerTest {
@@ -316,6 +317,28 @@ public class DomaEventEntityListenerTest {
 		context.refresh();
 	}
 
+	@Test
+	public void springEventListener() throws Exception {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(DomaEventEntityListener.class);
+		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(SpringListener.class);
+		context.register(PreInsertHandler.class);
+		context.refresh();
+
+		DomaEventEntityListener<Entity> entityListener = context
+				.getBean(DomaEventEntityListener.class);
+		SpringListener springListener = context.getBean(SpringListener.class);
+
+		PreInsertContext ctx = mock(PreInsertContext.class);
+		Entity entity = new Entity();
+		entityListener.preInsert(entity, ctx);
+		DomaEvent event = springListener.event;
+		assertThat(event).isNotNull();
+		assertThat(event.getSource()).isSameAs(entity);
+		assertThat(event.getContext()).isSameAs(ctx);
+	}
+
 	@org.seasar.doma.Entity
 	public static class Entity {
 
@@ -499,6 +522,15 @@ public class DomaEventEntityListenerTest {
 	static class NoArgHandler {
 		@HandlePreInsert
 		public void noarg() {
+		}
+	}
+
+	static class SpringListener {
+		DomaEvent event;
+
+		@EventListener
+		public void listen(DomaEvent event) {
+			this.event = event;
 		}
 	}
 }
