@@ -1,10 +1,10 @@
 package org.seasar.doma.boot;
 
+import java.time.LocalDate;
+
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.seasar.doma.jdbc.entity.PreInsertContext;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 public class MessageListener implements EntityListener<Message> {

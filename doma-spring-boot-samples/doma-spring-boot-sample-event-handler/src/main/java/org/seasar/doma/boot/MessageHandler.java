@@ -1,9 +1,9 @@
 package org.seasar.doma.boot;
 
+import java.time.LocalDate;
+
 import org.seasar.doma.boot.event.annotation.DomaEventHandler;
 import org.seasar.doma.boot.event.annotation.HandlePreInsert;
-
-import java.time.LocalDate;
 
 @DomaEventHandler
 public class MessageHandler {

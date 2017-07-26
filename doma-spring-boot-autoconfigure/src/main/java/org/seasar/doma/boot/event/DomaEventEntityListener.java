@@ -4,8 +4,19 @@ import org.seasar.doma.jdbc.entity.*;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
-public class DomaEventEntityListener<T> extends /* ugly hack */NullEntityListener<T>
-		implements ApplicationEventPublisherAware {
+/**
+ * {@link EntityListener} implementation that publishes {@link DomaEvent} and delegates
+ * actual processing on the event lister class which is annoteted with
+ * {@link org.seasar.doma.boot.event.annotation.DomaEventHandler}. <br>
+ * <br>
+ * This class extends {@link NullEntityListener} so that {@link org.seasar.doma.Entity} is
+ * available with default parameters.
+ *
+ * @param <T> Entity class
+ * @author Toshiaki Maki
+ */
+public class DomaEventEntityListener<T> extends NullEntityListener<T> implements
+		ApplicationEventPublisherAware {
 
 	private ApplicationEventPublisher eventPublisher;
 

@@ -15,9 +15,9 @@
  */
 package org.seasar.doma.boot;
 
-import org.seasar.doma.*;
-
 import java.time.LocalDate;
+
+import org.seasar.doma.*;
 
 @Entity
 @Table(name = "messages")
