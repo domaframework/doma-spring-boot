@@ -15,6 +15,8 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import javax.sql.DataSource;
+
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.Naming;
@@ -26,16 +28,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
-
-import javax.sql.DataSource;
-
-import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -91,11 +88,10 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean(Config.class)
-	@ConfigurationProperties(prefix = DOMA_PREFIX)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
 			SqlFileRepository sqlFileRepository, Naming naming,
 			EntityListenerProvider entityListenerProvider,
-			DomaConfigBuilder domaConfigBuilder) {
+			DomaConfigBuilder domaConfigBuilder, DomaProperties domaProperties) {
 		if (domaConfigBuilder.dataSource() == null) {
 			domaConfigBuilder.dataSource(dataSource);
 		}
@@ -111,7 +107,7 @@ public class DomaAutoConfiguration {
 		if (domaConfigBuilder.entityListenerProvider() == null) {
 			domaConfigBuilder.entityListenerProvider(entityListenerProvider);
 		}
-		return new DomaConfig(domaConfigBuilder);
+		return domaConfigBuilder.build(domaProperties);
 	}
 
 }

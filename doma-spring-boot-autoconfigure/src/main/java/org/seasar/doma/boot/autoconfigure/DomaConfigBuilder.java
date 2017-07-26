@@ -15,11 +15,11 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import javax.sql.DataSource;
+
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-
-import javax.sql.DataSource;
 
 /**
  * Builder to create {@link DomaConfig}.
@@ -179,7 +179,7 @@ public class DomaConfigBuilder {
 		return this;
 	}
 
-	public DomaConfig build() {
-	    return new DomaConfig(this);
+	public DomaConfig build(DomaProperties domaProperties) {
+		return new DomaConfig(this, domaProperties);
 	}
 }

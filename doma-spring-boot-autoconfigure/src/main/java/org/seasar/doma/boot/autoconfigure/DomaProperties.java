@@ -15,16 +15,13 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
-import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
-import org.seasar.doma.jdbc.Naming;
-import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
-import org.seasar.doma.jdbc.SqlFileRepository;
-import org.seasar.doma.jdbc.dialect.*;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 import java.util.function.Supplier;
 
-import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
+import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.dialect.*;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * {@link ConfigurationProperties} for configuring Doma.
@@ -55,6 +52,36 @@ public class DomaProperties {
 	 * {@link org.springframework.dao.DataAccessException}.
 	 */
 	private boolean exceptionTranslationEnabled = true;
+
+	/**
+	 * Datasource name.
+	 */
+	private String dataSourceName = Config.class.getName();
+
+	/**
+	 * Type of SQL log in the exception.
+	 */
+	private SqlLogType exceptionSqlLogType = SqlLogType.NONE;
+
+	/**
+	 * Limit for the maximum number of rows. Ignored unless this value is greater than 0.
+	 */
+	private int maxRows = 0;
+	/**
+	 * Hint to the number of rows that should be fetched. Ignored unless this value is
+	 * greater than 0.
+	 */
+	private int fetchSize = 0;
+	/**
+	 * Number of seconds the driver will wait for a <code>Statement</code> object to
+	 * execute. Ignored unless this value is greater than 0.
+	 */
+	private int queryTimeout = 0;
+	/**
+	 * Size in executing <code>PreparedStatement#addBatch()</code>. Regarded as 1 unless
+	 * this value is greater than 1.
+	 */
+	private int batchSize = 0;
 
 	public DialectType getDialect() {
 		return dialect;
@@ -88,12 +115,58 @@ public class DomaProperties {
 		this.exceptionTranslationEnabled = exceptionTranslationEnabled;
 	}
 
-    public DomaConfigBuilder initializeDomaConfigBuilder() {
-        return new DomaConfigBuilder()
-                .dialect(dialect.create())
-                .sqlFileRepository(sqlFileRepository.create())
-                .naming(naming.naming());
-    }
+	public String getDataSourceName() {
+		return dataSourceName;
+	}
+
+	public void setDataSourceName(String dataSourceName) {
+		this.dataSourceName = dataSourceName;
+	}
+
+	public SqlLogType getExceptionSqlLogType() {
+		return exceptionSqlLogType;
+	}
+
+	public void setExceptionSqlLogType(SqlLogType exceptionSqlLogType) {
+		this.exceptionSqlLogType = exceptionSqlLogType;
+	}
+
+	public int getMaxRows() {
+		return maxRows;
+	}
+
+	public void setMaxRows(int maxRows) {
+		this.maxRows = maxRows;
+	}
+
+	public int getFetchSize() {
+		return fetchSize;
+	}
+
+	public void setFetchSize(int fetchSize) {
+		this.fetchSize = fetchSize;
+	}
+
+	public int getQueryTimeout() {
+		return queryTimeout;
+	}
+
+	public void setQueryTimeout(int queryTimeout) {
+		this.queryTimeout = queryTimeout;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
+	}
+
+	public DomaConfigBuilder initializeDomaConfigBuilder() {
+		return new DomaConfigBuilder().dialect(dialect.create())
+				.sqlFileRepository(sqlFileRepository.create()).naming(naming.naming());
+	}
 
 	public static enum DialectType {
 		STANDARD(StandardDialect::new), SQLITE(SqliteDialect::new), DB2(Db2Dialect::new), MSSQL(
@@ -148,6 +221,10 @@ public class DomaProperties {
 	public String toString() {
 		return "DomaProperties{" + "dialect=" + dialect + ", sqlFileRepository="
 				+ sqlFileRepository + ", naming=" + naming
-				+ ", exceptionTranslationEnabled=" + exceptionTranslationEnabled + '}';
+				+ ", exceptionTranslationEnabled=" + exceptionTranslationEnabled
+				+ ", dataSourceName='" + dataSourceName + '\'' + ", exceptionSqlLogType="
+				+ exceptionSqlLogType + ", maxRows=" + maxRows + ", fetchSize="
+				+ fetchSize + ", queryTimeout=" + queryTimeout + ", batchSize="
+				+ batchSize + '}';
 	}
 }

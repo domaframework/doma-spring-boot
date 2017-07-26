@@ -15,10 +15,10 @@
  */
 package org.seasar.doma.boot.autoconfigure;
 
+import javax.sql.DataSource;
+
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
-
-import javax.sql.DataSource;
 
 /**
  * {@link Config} implementation used in doma-spring-boot.
@@ -26,35 +26,6 @@ import javax.sql.DataSource;
  * @author Toshiaki Maki
  */
 public class DomaConfig implements Config {
-	/**
-	 * Datasource name.
-	 */
-	private String dataSourceName = Config.class.getName();
-
-	/**
-	 * Type of SQL log in the exception.
-	 */
-	private SqlLogType exceptionSqlLogType = SqlLogType.NONE;
-
-	/**
-	 * Limit for the maximum number of rows. Ignored unless this value is greater than 0.
-	 */
-	private int maxRows = 0;
-	/**
-	 * Hint to the number of rows that should be fetched. Ignored unless this value is
-	 * greater than 0.
-	 */
-	private int fetchSize = 0;
-	/**
-	 * Number of seconds the driver will wait for a <code>Statement</code> object to
-	 * execute. Ignored unless this value is greater than 0.
-	 */
-	private int queryTimeout = 0;
-	/**
-	 * Size in executing <code>PreparedStatement#addBatch()</code>. Regarded as 1 unless
-	 * this value is greater than 1.
-	 */
-	private int batchSize = 0;
 
 	private final DataSource dataSource;
 	private final Dialect dialect;
@@ -69,8 +40,9 @@ public class DomaConfig implements Config {
 	private final MapKeyNaming mapKeyNaming;
 	private final Commenter commenter;
 	private final EntityListenerProvider entityListenerProvider;
+	private final DomaProperties domaProperties;
 
-	public DomaConfig(DomaConfigBuilder builder) {
+	public DomaConfig(DomaConfigBuilder builder, DomaProperties domaProperties) {
 		this.dataSource = builder.dataSource();
 		this.dialect = builder.dialect();
 		this.jdbcLogger = builder.jdbcLogger();
@@ -84,6 +56,7 @@ public class DomaConfig implements Config {
 		this.mapKeyNaming = builder.mapKeyNaming();
 		this.commenter = builder.commenter();
 		this.entityListenerProvider = builder.entityListenerProvider();
+		this.domaProperties = domaProperties;
 	}
 
 	@Override
@@ -98,11 +71,7 @@ public class DomaConfig implements Config {
 
 	@Override
 	public String getDataSourceName() {
-		return this.dataSourceName;
-	}
-
-	public void setDataSourceName(String dataSourceName) {
-		this.dataSourceName = dataSourceName;
+		return this.domaProperties.getDataSourceName();
 	}
 
 	@Override
@@ -135,13 +104,9 @@ public class DomaConfig implements Config {
 		return this.queryImplementors;
 	}
 
-	public void setExceptionSqlLogType(SqlLogType exceptionSqlLogType) {
-		this.exceptionSqlLogType = exceptionSqlLogType;
-	}
-
 	@Override
 	public SqlLogType getExceptionSqlLogType() {
-		return this.exceptionSqlLogType;
+		return this.domaProperties.getExceptionSqlLogType();
 	}
 
 	@Override
@@ -166,42 +131,39 @@ public class DomaConfig implements Config {
 
 	@Override
 	public int getMaxRows() {
-		return this.maxRows;
-	}
-
-	public void setMaxRows(int maxRows) {
-		this.maxRows = maxRows;
+		return this.domaProperties.getMaxRows();
 	}
 
 	@Override
 	public int getFetchSize() {
-		return this.fetchSize;
-	}
-
-	public void setFetchSize(int fetchSize) {
-		this.fetchSize = fetchSize;
+		return this.domaProperties.getFetchSize();
 	}
 
 	@Override
 	public int getQueryTimeout() {
-		return this.queryTimeout;
-	}
-
-	public void setQueryTimeout(int queryTimeout) {
-		this.queryTimeout = queryTimeout;
+		return this.domaProperties.getQueryTimeout();
 	}
 
 	@Override
 	public int getBatchSize() {
-		return this.batchSize;
-	}
-
-	public void setBatchSize(int batchSize) {
-		this.batchSize = batchSize;
+		return this.domaProperties.getBatchSize();
 	}
 
 	@Override
 	public EntityListenerProvider getEntityListenerProvider() {
 		return this.entityListenerProvider;
+	}
+
+	@Override
+	public String toString() {
+		return "DomaConfig{" + "dataSource=" + dataSource + ", dialect=" + dialect
+				+ ", jdbcLogger=" + jdbcLogger + ", sqlFileRepository="
+				+ sqlFileRepository + ", requiresNewController=" + requiresNewController
+				+ ", classHelper=" + classHelper + ", commandImplementors="
+				+ commandImplementors + ", queryImplementors=" + queryImplementors
+				+ ", unknownColumnHandler=" + unknownColumnHandler + ", naming=" + naming
+				+ ", mapKeyNaming=" + mapKeyNaming + ", commenter=" + commenter
+				+ ", entityListenerProvider=" + entityListenerProvider
+				+ ", domaProperties=" + domaProperties + '}';
 	}
 }
