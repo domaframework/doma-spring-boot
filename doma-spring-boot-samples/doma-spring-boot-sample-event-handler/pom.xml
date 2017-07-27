@@ -6,7 +6,7 @@
     <artifactId>doma-spring-boot-sample-event-handler</artifactId>
     <packaging>jar</packaging>
 
-    <name>doma-spring-boot-sample-simple</name>
+    <name>doma-spring-boot-sample-event-handler</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>

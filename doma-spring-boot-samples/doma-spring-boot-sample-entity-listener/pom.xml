@@ -6,7 +6,7 @@
     <artifactId>doma-spring-boot-sample-entity-listener</artifactId>
     <packaging>jar</packaging>
 
-    <name>doma-spring-boot-sample-simple</name>
+    <name>doma-spring-boot-sample-entity-listener</name>
     <description>Demo project for Spring Boot</description>
 
     <parent>
