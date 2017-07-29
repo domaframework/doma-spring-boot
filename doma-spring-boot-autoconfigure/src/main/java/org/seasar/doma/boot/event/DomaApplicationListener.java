@@ -67,6 +67,8 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
             }
         }
 
+        ReflectionUtils.makeAccessible(method);
+
         this.contextClasses = Objects.requireNonNull(contextClasses);
         this.beanName = Objects.requireNonNull(beanName);
         this.method = Objects.requireNonNull(method);
@@ -86,7 +88,6 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
                 args = new Object[] { entity, context };
             }
             Object target = beanFactory.getBean(beanName);
-            ReflectionUtils.makeAccessible(method);
             ReflectionUtils.invokeMethod(method, target, args);
         }
     }
