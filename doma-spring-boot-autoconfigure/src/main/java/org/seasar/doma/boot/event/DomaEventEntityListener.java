@@ -5,9 +5,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
 /**
- * {@link EntityListener} implementation that publishes {@link DomaEvent} and delegates
- * actual processing on the event lister class which is annoteted with
- * {@link org.seasar.doma.boot.event.annotation.DomaEventHandler}. <br>
+ * {@link EntityListener} implementation that publishes {@link DomaEvent}. <br>
  * <br>
  * This class extends {@link NullEntityListener} so that {@link org.seasar.doma.Entity} is
  * available with default parameters.
