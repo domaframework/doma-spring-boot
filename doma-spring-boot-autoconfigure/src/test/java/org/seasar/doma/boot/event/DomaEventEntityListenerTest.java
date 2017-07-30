@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import org.junit.Test;
 import org.seasar.doma.boot.event.annotation.*;
 import org.seasar.doma.jdbc.entity.*;
-import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.event.EventListener;
 
@@ -16,7 +16,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreInsert() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreInsertHandler.class);
 		context.refresh();
 
@@ -34,7 +34,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreInsertWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreInsertHandlerWithContext.class);
 		context.refresh();
 
@@ -54,7 +54,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreUpdate() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreUpdateHandler.class);
 		context.refresh();
 
@@ -72,7 +72,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreUpdateWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreUpdateHandlerWithContext.class);
 		context.refresh();
 
@@ -92,7 +92,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreDelete() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreDeleteHandler.class);
 		context.refresh();
 
@@ -110,7 +110,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePreDeleteWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreDeleteHandlerWithContext.class);
 		context.refresh();
 
@@ -130,7 +130,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostInsert() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostInsertHandler.class);
 		context.refresh();
 
@@ -148,7 +148,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostInsertWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostInsertHandlerWithContext.class);
 		context.refresh();
 
@@ -168,7 +168,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostUpdate() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostUpdateHandler.class);
 		context.refresh();
 
@@ -186,7 +186,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostUpdateWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostUpdateHandlerWithContext.class);
 		context.refresh();
 
@@ -206,7 +206,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostDelete() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostDeleteHandler.class);
 		context.refresh();
 
@@ -224,7 +224,7 @@ public class DomaEventEntityListenerTest {
 	public void handlePostDeleteWithContext() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PostDeleteHandlerWithContext.class);
 		context.refresh();
 
@@ -244,7 +244,7 @@ public class DomaEventEntityListenerTest {
 	public void anotherEntity() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PreInsertHandler.class);
 		context.register(PreInsertHandler2.class);
 		context.refresh();
@@ -267,7 +267,7 @@ public class DomaEventEntityListenerTest {
 	public void multiHandlers() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(PrePostInsertHandler.class);
 		context.refresh();
 
@@ -289,7 +289,7 @@ public class DomaEventEntityListenerTest {
 	public void multiAnnotations() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(InsertHandler.class);
 		context.refresh();
 
@@ -308,11 +308,11 @@ public class DomaEventEntityListenerTest {
 		assertThat(handler.entity).isSameAs(entity2);
 	}
 
-	@Test(expected = BeanCreationException.class)
+	@Test(expected = BeanInitializationException.class)
 	public void noArg() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(NoArgHandler.class);
 		context.refresh();
 	}
@@ -321,7 +321,7 @@ public class DomaEventEntityListenerTest {
 	public void springEventListener() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(SpringListener.class);
 		context.register(PreInsertHandler.class);
 		context.refresh();
@@ -344,7 +344,7 @@ public class DomaEventEntityListenerTest {
 	public void springConditionalEventListener() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
-		context.register(AnnotatedDomaEventHandlerInvoker.class);
+		context.register(DomaEventListenerFactory.class);
 		context.register(TodoListener.class);
 		context.register(PreInsertHandler.class);
 		context.refresh();
@@ -378,7 +378,6 @@ public class DomaEventEntityListenerTest {
 
 	}
 
-	@DomaEventHandler
 	static class PreInsertHandler {
 		Entity entity;
 
@@ -388,7 +387,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreInsertHandler2 {
 		Entity2 entity;
 
@@ -398,7 +396,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreInsertHandlerWithContext {
 		Entity entity;
 		PreInsertContext ctx;
@@ -410,7 +407,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreUpdateHandler {
 		Entity entity;
 
@@ -420,7 +416,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreUpdateHandlerWithContext {
 		Entity entity;
 		PreUpdateContext ctx;
@@ -432,7 +427,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreDeleteHandler {
 		Entity entity;
 
@@ -442,7 +436,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PreDeleteHandlerWithContext {
 		Entity entity;
 		PreDeleteContext ctx;
@@ -454,7 +447,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostInsertHandler {
 		Entity entity;
 
@@ -464,7 +456,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostInsertHandlerWithContext {
 		Entity entity;
 		PostInsertContext ctx;
@@ -476,7 +467,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostUpdateHandler {
 		Entity entity;
 
@@ -486,7 +476,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostUpdateHandlerWithContext {
 		Entity entity;
 		PostUpdateContext ctx;
@@ -498,7 +487,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostDeleteHandler {
 		Entity entity;
 
@@ -508,7 +496,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PostDeleteHandlerWithContext {
 		Entity entity;
 		PostDeleteContext ctx;
@@ -520,7 +507,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class PrePostInsertHandler {
 		Entity preEntity;
 		Entity postEntity;
@@ -536,7 +522,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class InsertHandler {
 		Entity entity;
 
@@ -547,7 +532,6 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@DomaEventHandler
 	static class NoArgHandler {
 		@HandlePreInsert
 		public void noarg() {

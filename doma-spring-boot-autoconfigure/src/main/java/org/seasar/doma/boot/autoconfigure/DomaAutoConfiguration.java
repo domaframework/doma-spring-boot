@@ -16,9 +16,8 @@
 package org.seasar.doma.boot.autoconfigure;
 
 import javax.sql.DataSource;
-
-import org.seasar.doma.boot.event.AnnotatedDomaEventHandlerInvoker;
 import org.seasar.doma.boot.event.DomaEventEntityListener;
+import org.seasar.doma.boot.event.DomaEventListenerFactory;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.Naming;
@@ -77,8 +76,8 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	public AnnotatedDomaEventHandlerInvoker eventHandlerInvoker() {
-		return new AnnotatedDomaEventHandlerInvoker();
+    public DomaEventListenerFactory domaEventListenerFactory() {
+        return new DomaEventListenerFactory();
 	}
 
 	@Bean
