@@ -10,5 +10,5 @@ import org.springframework.context.event.EventListener;
 @Target({ ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HandleDomaEvent {
-    Class<?> contextClass();
+	Class<?> contextClass();
 }
