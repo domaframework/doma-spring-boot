@@ -267,12 +267,37 @@ public class DomaApplicationListenerTest {
 			assertThat(handler.entity).isNull();
 		}
 
+
+		@Test
+		public void handleSubEntity() throws Exception {
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+			context.register(SuperClassHandler.class);
+			context.refresh();
+
+			DomaApplicationListener listener = new DomaApplicationListener(
+					"superClassHandler", SuperClassHandler.class
+							.getDeclaredMethod("handle", TestEntity1.class),
+					context);
+
+			TestEntity3 entity = new TestEntity3();
+			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
+			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
+			listener.onApplicationEvent(event);
+
+			SuperClassHandler handler = context.getBean(SuperClassHandler.class);
+			assertThat(handler.entity).isSameAs(entity);
+		}
+
 		@Entity
 		public static class TestEntity1 {
 		}
 
 		@Entity
 		public static class TestEntity2 {
+		}
+
+		@Entity
+		public static class TestEntity3 extends TestEntity1 {
 		}
 
 		@Component("entityOnlyHandler")
@@ -294,6 +319,16 @@ public class DomaApplicationListenerTest {
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
 				this.entity = entity;
 				this.context = context;
+			}
+		}
+
+		@Component("superClassHandler")
+		static class SuperClassHandler {
+			TestEntity1 entity;
+
+			@HandlePreInsert
+			void handle(TestEntity1 entity) {
+				this.entity = entity;
 			}
 		}
 

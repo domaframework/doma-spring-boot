@@ -81,7 +81,7 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
 		Object entity = event.getSource();
 		Object context = event.getContext();
 		if (shouldHandle(context.getClass())
-				&& entity.getClass() == method.getParameterTypes()[0]) {
+				&& method.getParameterTypes()[0].isAssignableFrom(entity.getClass())) {
 			Object[] args;
 			if (method.getParameterCount() == 1) {
 				args = new Object[] { entity };
