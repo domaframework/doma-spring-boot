@@ -46,6 +46,7 @@
     </properties>
 
     <modules>
+        <module>doma-spring-boot-core</module>
         <module>doma-spring-boot-autoconfigure</module>
         <module>doma-spring-boot-starter</module>
         <module>doma-spring-boot-samples</module>
