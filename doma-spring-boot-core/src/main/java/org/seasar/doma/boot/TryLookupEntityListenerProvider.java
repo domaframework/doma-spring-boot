@@ -13,7 +13,7 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.doma.boot.autoconfigure;
+package org.seasar.doma.boot;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -31,7 +31,7 @@ import org.springframework.context.ApplicationContextAware;
  * @author backpaper0
  *
  */
-class TryLookupEntityListenerProvider implements EntityListenerProvider,
+public class TryLookupEntityListenerProvider implements EntityListenerProvider,
 		ApplicationContextAware {
 
 	private ApplicationContext context;

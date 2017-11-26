@@ -16,6 +16,8 @@
 package org.seasar.doma.boot.autoconfigure;
 
 import javax.sql.DataSource;
+import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
+import org.seasar.doma.boot.TryLookupEntityListenerProvider;
 import org.seasar.doma.boot.event.DomaEventEntityListener;
 import org.seasar.doma.boot.event.DomaEventListenerFactory;
 import org.seasar.doma.jdbc.Config;

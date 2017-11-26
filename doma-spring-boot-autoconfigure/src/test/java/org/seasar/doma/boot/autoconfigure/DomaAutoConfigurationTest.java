@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
