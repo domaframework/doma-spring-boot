@@ -46,6 +46,7 @@
     </properties>
 
     <modules>
+        <module>doma-spring-boot-core</module>
         <module>doma-spring-boot-autoconfigure</module>
         <module>doma-spring-boot-starter</module>
         <module>doma-spring-boot-samples</module>
@@ -62,18 +63,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
