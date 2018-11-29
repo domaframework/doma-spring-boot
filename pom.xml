@@ -28,6 +28,12 @@
             <email>makingx@gmail.com</email>
             <url>https://twitter.com/making</url>
         </developer>
+        <developer>
+            <id>backpaper0</id>
+            <name>Taichi Uragami</name>
+            <email>backpaper0@gmail.com</email>
+            <url>https://github.com/backpaper0</url>
+        </developer>
     </developers>
 
     <scm>
