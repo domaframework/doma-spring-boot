@@ -267,7 +267,6 @@ public class DomaApplicationListenerTest {
 			assertThat(handler.entity).isNull();
 		}
 
-
 		@Test
 		public void handleSubEntity() throws Exception {
 			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
@@ -275,9 +274,8 @@ public class DomaApplicationListenerTest {
 			context.refresh();
 
 			DomaApplicationListener listener = new DomaApplicationListener(
-					"superClassHandler", SuperClassHandler.class
-							.getDeclaredMethod("handle", TestEntity1.class),
-					context);
+					"superClassHandler", SuperClassHandler.class.getDeclaredMethod(
+							"handle", TestEntity1.class), context);
 
 			TestEntity3 entity = new TestEntity3();
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);

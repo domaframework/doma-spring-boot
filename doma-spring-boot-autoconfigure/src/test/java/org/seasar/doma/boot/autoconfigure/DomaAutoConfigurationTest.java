@@ -248,13 +248,16 @@ public class DomaAutoConfigurationTest {
 	static class TestEntityListenerProvider implements EntityListenerProvider {
 	}
 
-    private static class EnvironmentTestUtils {
-        public static void addEnvironment(ConfigurableApplicationContext context, String pair) {
-            MutablePropertySources sources = context.getEnvironment().getPropertySources();
-            String[] split = pair.split(":");
-            String key = split[0];
-            String value = split[1];
-            sources.addFirst(new MapPropertySource("test", Collections.singletonMap(key, value)));
-        }
-    }
+	private static class EnvironmentTestUtils {
+		public static void addEnvironment(ConfigurableApplicationContext context,
+				String pair) {
+			MutablePropertySources sources = context.getEnvironment()
+					.getPropertySources();
+			String[] split = pair.split(":");
+			String key = split[0];
+			String value = split[1];
+			sources.addFirst(new MapPropertySource("test", Collections.singletonMap(key,
+					value)));
+		}
+	}
 }
