@@ -78,7 +78,7 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	public DomaEventListenerFactory domaEventListenerFactory() {
+	public static DomaEventListenerFactory domaEventListenerFactory() {
 		return new DomaEventListenerFactory();
 	}
 

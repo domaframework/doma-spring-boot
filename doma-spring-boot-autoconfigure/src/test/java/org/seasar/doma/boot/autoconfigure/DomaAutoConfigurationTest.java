@@ -20,6 +20,7 @@ import static org.junit.Assert.assertThat;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
+import java.util.Collections;
 
 import javax.sql.DataSource;
 
@@ -35,10 +36,12 @@ import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.message.Message;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.test.util.EnvironmentTestUtils;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -243,5 +246,18 @@ public class DomaAutoConfigurationTest {
 	}
 
 	static class TestEntityListenerProvider implements EntityListenerProvider {
+	}
+
+	private static class EnvironmentTestUtils {
+		public static void addEnvironment(ConfigurableApplicationContext context,
+				String pair) {
+			MutablePropertySources sources = context.getEnvironment()
+					.getPropertySources();
+			String[] split = pair.split(":");
+			String key = split[0];
+			String value = split[1];
+			sources.addFirst(new MapPropertySource("test", Collections.singletonMap(key,
+					value)));
+		}
 	}
 }
