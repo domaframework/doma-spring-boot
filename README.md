@@ -91,7 +91,7 @@ public class Reservation {
 
 ### Create a DAO interface
 
-Then, create the following DAO interface. We will add search and insert method.
+Then, create the following DAO interface. We will add select and insert method.
 
 ``` java
 package com.example;
@@ -119,7 +119,7 @@ public interface ReservationDao {
 
 ### Generate the DAO imlementation class
 
-After create a DAO interface, build by IDE or Maven, then the implementation class will be generated. However, update methods need the corresponding SQL files **at the compile time**. Unless SQL files exist, compilation will fail.
+After create a DAO interface, build by IDE or Maven, then the implementation class will be generated. However, select methods need the corresponding SQL files **at the compile time**. Unless SQL files exist, compilation will fail.
 Usually, SQL corresponding to the method will be written in `src/main/resources/META-INF/(FQCN)/(class name)/(method name).sql`. In this case, it's `src/main/resources/META-INF/com/example/ReservationDao/selectAll.sql`.
 
 <img width="80%" src="https://qiita-image-store.s3.amazonaws.com/0/1852/bc75a9c8-fdb4-aafc-e5a5-0921575b556d.png" />
