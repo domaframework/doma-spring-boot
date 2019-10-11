@@ -1,15 +1,30 @@
 language: java
-jdk: oraclejdk8
-branches:
-  only:
-  - master
+jdk:
+- oraclejdk8
+- openjdk11
+stages:
+- test
+- name: deploy
+  if: branch = master
 cache:
   directories:
   - "$HOME/.m2"
-after_success:
-- chmod +x publish.sh
-- "./publish.sh"
+jobs:
+  include:
+  - stage: test
+    script:
+    - ./mvnw test -B -Dspring-boot.version=$SPRING_BOOT_VERSION
+  - stage: deploy
+    jdk: oraclejdk8
+    env:
+    - SPRING_BOOT_VERSION=1.5.22.RELEASE
+    script:
+    - chmod +x publish.sh
+    - "./publish.sh"
 env:
+  matrix:
+  - SPRING_BOOT_VERSION=1.5.22.RELEASE
+  - SPRING_BOOT_VERSION=2.1.9.RELEASE
   global:
   - secure: bYPaH5vwMRVoN8AL4/ZQ7cruB5so+pGi2K6XmRLNJRDmvVKb5I1KstAOrocZB6jZbTv28v1gGexqXasSWWZN1vo2OU3/XE7JQcEorvftLu90qqn9vXiVDmClLlZe/iwnGSDsl5rg/CU5Vfoz5VruumklP4drazWX/K/JeA5uE5CTplVx6EVNt8QI1tqO2uXaqsJ+S4Q5vpWnkeN+bk6yGU7IInIHxsuV0L1sMB604GM+goedbZLguolJLFyJj12nYgzvjqFgz2jCuEgygMY7CphWI3KlG2vzXtLVxXKIhzHjq7RzI4IPOG+7yQvKXbFTfYEHKDclm9XgKPX3Ig62ZDpQawEQXwMUzMsixjEv/Stt1L3B1qVAsTGIQuConk8YLyhSzel+dv6d4NbTRLtNLv/2XzpP4zUPjbZbnn9M1ut2H4BdPfD0GBaspC8lojb71hzxmREFUBOdwiFxsMBAIkRWuk+2EdA2vmoFRmkrpbz1QgplYQSDUMBUpIWQI/jTuftDrJGdKA2zzZ2UoQ0IU7Bbs8aIJVoBV/GbvT9oGjoGUDc8Lnipcv/YN+awDk56XXED7ssPm9m7IuV19knAfNF4VGP1vRKiNxKUPjF3KQkvKmE5DbBKA5uoih8GOZrA3X3zZXIlBEfsahktqFzq4/VnixT+CDqcpSRd5ATvB1k=
   - secure: hnFozSb6L2qDa0QJb/kYjqB0OFNb/p+wns/Ry++0FtdUbylLkr4+UHItSsIYXJDXBpsF1zxDwKipm0DM3360A6WwNDRySd7DO4JPY9zqU/SN8G6Uwe5uw90itt8LR2TjgMrEdlY1Qbo4HhU4wbQTn3d4xSpS4gy1BJHDf1u+ffWJj7bMTHBJClD1MCMkh9pGSZTkyQM1GkaIb8yz54zuYemz3k4nSBRLnaMz8Q21j0/Hki4PM88XKtDQxM4YeTwlO0b4PS1YHVGBvqYW+4YikBfZONHPLQuQKTlE/WHWgXvuI7s/AOo3dFy5m4REkewwoEGZTlDGoJOl/RFqdaEmizfgllTrF0WOkVYxvKXDYi8RDohPNoNCoKiamXNxGftOnh7WMk8TGFjMLtN+qvgyIR3QhH87sPRzj8VokeVuy1AlZ59Cuvc4pnxRsg6BP+jFL26UfLFLARNrxKovKF0l4EZs3iFlY3C+Juc72VnRQmgYk2DWdr+iHuQgFoPAB2x8Qpa3+rKc5Z92kCQkqpZHPKI8zrgEX0aTjuqDFggJM8B6qPFsSUVEbzoBphwMpIQdyuFafcbvga7ZXkqMp58UVx+aKwbkN6dPoimqJq3as+AwqF1XR6hH4KUf4T+M4DVVjb7bN+16KG84rkQ1HkTuWz7O10RBQnTOfoSyEkCuaKE=
