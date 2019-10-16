@@ -15,7 +15,7 @@ jobs:
     script:
     - ./mvnw test -B -Dspring-boot.version=$SPRING_BOOT_VERSION
   - stage: deploy
-    jdk: oraclejdk8
+    jdk: openjdk8
     env:
     - SPRING_BOOT_VERSION=1.5.22.RELEASE
     script:
