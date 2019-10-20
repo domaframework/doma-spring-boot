@@ -5,7 +5,10 @@ jdk:
 stages:
 - test
 - name: deploy
-  if: branch = master
+  if: type != pull_request
+branches:
+  only:
+  - master
 cache:
   directories:
   - "$HOME/.m2"
