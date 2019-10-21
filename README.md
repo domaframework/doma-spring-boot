@@ -29,7 +29,7 @@ doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -64,7 +64,7 @@ Add the following dependency to `pom.xml` so that we can use Doma with Spring Bo
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
+    <version>1.2.1</version>
 </dependency>
 ```
 
@@ -284,7 +284,7 @@ Add the following method to Controller and call `ReservationDao#selectByName`.
 
 <img width="80%" src="https://qiita-image-store.s3.amazonaws.com/0/1852/d8f0ff19-f88b-dcee-e478-9a7ae7bae549.png" />
 
-[Source code](https://github.com/making/doma2-spring-boot-demo)
+[Source code](https://github.com/backpaper0/doma-spring-boot-demo)
 
 
 ## License
