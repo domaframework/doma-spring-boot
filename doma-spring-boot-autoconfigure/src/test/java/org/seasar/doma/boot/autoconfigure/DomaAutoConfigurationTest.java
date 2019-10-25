@@ -204,8 +204,8 @@ public class DomaAutoConfigurationTest {
 	@Configuration
 	public static class ConfigBuilderConfigure {
 		@Bean
-		DomaConfigBuilder myDomaConfigBuilder() {
-			return new DomaConfigBuilder().dialect(new MysqlDialect())
+		DomaConfigBuilder myDomaConfigBuilder(DomaProperties domaProperties) {
+			return new DomaConfigBuilder(domaProperties).dialect(new MysqlDialect())
 					.sqlFileRepository(new NoCacheSqlFileRepository())
 					.naming(Naming.SNAKE_UPPER_CASE)
 					.entityListenerProvider(new TestEntityListenerProvider());

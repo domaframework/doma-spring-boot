@@ -164,7 +164,7 @@ public class DomaProperties {
 	}
 
 	public DomaConfigBuilder initializeDomaConfigBuilder() {
-		return new DomaConfigBuilder().dialect(dialect.create())
+		return new DomaConfigBuilder(this).dialect(dialect.create())
 				.sqlFileRepository(sqlFileRepository.create()).naming(naming.naming());
 	}
 

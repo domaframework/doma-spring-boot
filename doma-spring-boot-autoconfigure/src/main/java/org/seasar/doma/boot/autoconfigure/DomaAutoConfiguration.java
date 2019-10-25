@@ -50,7 +50,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class DomaAutoConfiguration {
 	@Autowired
-	DomaProperties domaProperties;
+	private DomaProperties domaProperties;
 
 	@Bean
 	@ConditionalOnMissingBean
@@ -96,7 +96,7 @@ public class DomaAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public DomaConfigBuilder domaConfigBuilder() {
-		return new DomaConfigBuilder();
+		return new DomaConfigBuilder(domaProperties);
 	}
 
 	@Bean
@@ -104,7 +104,7 @@ public class DomaAutoConfiguration {
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
 			SqlFileRepository sqlFileRepository, Naming naming,
 			EntityListenerProvider entityListenerProvider,
-			DomaConfigBuilder domaConfigBuilder, DomaProperties domaProperties) {
+			DomaConfigBuilder domaConfigBuilder) {
 		if (domaConfigBuilder.dataSource() == null) {
 			domaConfigBuilder.dataSource(dataSource);
 		}
@@ -120,7 +120,10 @@ public class DomaAutoConfiguration {
 		if (domaConfigBuilder.entityListenerProvider() == null) {
 			domaConfigBuilder.entityListenerProvider(entityListenerProvider);
 		}
-		return domaConfigBuilder.build(domaProperties);
+		if (domaConfigBuilder.domaProperties() == null) {
+			return domaConfigBuilder.build(domaProperties);
+		}
+		return domaConfigBuilder.build();
 	}
 
 }
