@@ -46,14 +46,18 @@ public class PageablesTest {
 		assertThat(SelectOptionsAccessor.getLimit(options), is(5L));
 	}
 
-    private static PageRequest pageRequest(int page, int size) throws Exception {
-        try {
-            // Try PageRequest.of(int, int) added since Spring Data Commons 2.0
-            return (PageRequest) PageRequest.class.getMethod("of", int.class, int.class).invoke(null, page, size);
-        } catch (NoSuchMethodException e) {
-            // If 'of' method is missing (In other words, Spring Data Commons version is less than 2.0),
-            // then it use constructor with two int arguments.
-            return PageRequest.class.getConstructor(int.class, int.class).newInstance(page, size);
-        }
-    }
+	private static PageRequest pageRequest(int page, int size) throws Exception {
+		try {
+			// Try PageRequest.of(int, int) added since Spring Data Commons 2.0
+			return (PageRequest) PageRequest.class.getMethod("of", int.class, int.class)
+					.invoke(null, page, size);
+		}
+		catch (NoSuchMethodException e) {
+			// If 'of' method is missing (In other words, Spring Data Commons version is
+			// less than 2.0),
+			// then it use constructor with two int arguments.
+			return PageRequest.class.getConstructor(int.class, int.class).newInstance(
+					page, size);
+		}
+	}
 }

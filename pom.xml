@@ -149,7 +149,7 @@
                 <configuration>
                     <configFile>${rootDir}/eclipse/eclipse-code-formatter.xml
                     </configFile>
-                    <lineEnding>CRLF</lineEnding>
+                    <lineEnding>LF</lineEnding>
                 </configuration>
             </plugin>
             <plugin>
