@@ -13,13 +13,13 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.doma.boot;
-
-import java.time.LocalDate;
+package org.seasar.doma.boot.sample;
 
 import org.seasar.doma.*;
 
-@Entity
+import java.time.LocalDate;
+
+@Entity(listener = MessageListener.class)
 @Table(name = "messages")
 public class Message {
 	@Id

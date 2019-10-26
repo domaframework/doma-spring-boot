@@ -1,4 +1,4 @@
-package org.seasar.doma.boot;
+package org.seasar.doma.boot.sample;
 
 import java.time.LocalDate;
 

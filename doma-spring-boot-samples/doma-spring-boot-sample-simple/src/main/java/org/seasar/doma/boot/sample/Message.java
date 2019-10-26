@@ -13,13 +13,11 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package org.seasar.doma.boot;
+package org.seasar.doma.boot.sample;
 
 import org.seasar.doma.*;
 
-import java.time.LocalDate;
-
-@Entity(listener = MessageListener.class)
+@Entity
 @Table(name = "messages")
 public class Message {
 	@Id
@@ -27,6 +25,4 @@ public class Message {
 	public Integer id;
 
 	public String text;
-
-	public LocalDate createdAt;
 }
