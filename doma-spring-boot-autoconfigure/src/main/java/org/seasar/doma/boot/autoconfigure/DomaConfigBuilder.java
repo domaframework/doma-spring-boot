@@ -27,6 +27,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
  * @author Toshiaki Maki
  */
 public class DomaConfigBuilder {
+	private DomaProperties domaProperties;
 	private DataSource dataSource;
 	/**
 	 * Default value is set in {@link DomaProperties}
@@ -49,6 +50,18 @@ public class DomaConfigBuilder {
 	private MapKeyNaming mapKeyNaming = ConfigSupport.defaultMapKeyNaming;
 	private Commenter commenter = ConfigSupport.defaultCommenter;
 	private EntityListenerProvider entityListenerProvider;
+
+	@Deprecated
+	public DomaConfigBuilder() {
+	}
+
+	public DomaConfigBuilder(DomaProperties domaProperties) {
+		this.domaProperties = domaProperties;
+	}
+
+	DomaProperties domaProperties() {
+		return domaProperties;
+	}
 
 	public DataSource dataSource() {
 		return dataSource;
@@ -179,7 +192,13 @@ public class DomaConfigBuilder {
 		return this;
 	}
 
+	@Deprecated
 	public DomaConfig build(DomaProperties domaProperties) {
+		this.domaProperties = domaProperties;
+		return build();
+	}
+
+	public DomaConfig build() {
 		return new DomaConfig(this, domaProperties);
 	}
 }
