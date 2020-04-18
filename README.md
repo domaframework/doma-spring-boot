@@ -29,7 +29,7 @@ doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -58,13 +58,40 @@ Enter and select "Web", "JDBC" and "H2" in「Search for dependencies」.
 Then click 「Generate Project」 and `demo.zip` will be downloaded. Extract the zip and import the Maven project into IDE.
 In this tutorial we will use IntelliJ IDEA. In case of IDEA, only you have to do is just open `pom.xml`.
 
-Add the following dependency to `pom.xml` so that we can use Doma with Spring Boot.
+Add the following dependencies to `pom.xml` so that we can use Doma with Spring Boot.
 
 ``` xml
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
+</dependency>
+<dependency>
+    <groupId>org.seasar.doma</groupId>
+    <artifactId>doma-processor</artifactId>
+    <version>2.30.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+If you use Doma 2.29.0 or lower, the dependencies are as follows.
+
+```xml
+<dependency>
+    <groupId>org.seasar.doma.boot</groupId>
+    <artifactId>doma-spring-boot-starter</artifactId>
+    <version>1.3.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.seasar.doma</groupId>
+            <artifactId>doma-core</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.seasar.doma</groupId>
+    <artifactId>doma</artifactId>
+    <version>2.29.0</version>
 </dependency>
 ```
 
