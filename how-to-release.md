@@ -61,6 +61,13 @@ The CI job running after the merge releases a new version artifact to the Maven 
 
 Check https://repo.maven.apache.org/maven2/org/seasar/doma/boot/doma-spring-boot/ .
 
+
+## Update doma-spring-boot-demo
+
+Update pom.xml of [doma-spring-boot-demo](https://github.com/backpaper0/doma-spring-boot-demo) to set a new version of doma-spring-boot.
+
+Note: doma-spring-boot-demo is a personal repository for backpaper0.
+
 ## Prepare a next SNAPSHOT version
 
 First, pull the master branch.
