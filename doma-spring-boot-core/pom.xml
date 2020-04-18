@@ -25,7 +25,7 @@
     <dependencies>
         <dependency>
             <groupId>org.seasar.doma</groupId>
-            <artifactId>doma</artifactId>
+            <artifactId>doma-core</artifactId>
             <version>${doma.version}</version>
         </dependency>
         <dependency>
