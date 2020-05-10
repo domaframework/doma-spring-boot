@@ -35,7 +35,7 @@ public class DomaProperties {
 	/**
 	 * Dialect of database used by Doma.
 	 */
-	private DialectType dialect = DialectType.STANDARD;
+	private DialectType dialect;
 
 	/**
 	 * Type of {@link SqlFileRepository}.
