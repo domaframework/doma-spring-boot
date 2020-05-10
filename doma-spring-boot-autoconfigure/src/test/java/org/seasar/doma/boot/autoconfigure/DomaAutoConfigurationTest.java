@@ -16,11 +16,12 @@
 package org.seasar.doma.boot.autoconfigure;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.util.Collections;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -29,6 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
 import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.criteria.Entityql;
+import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
@@ -194,6 +197,29 @@ public class DomaAutoConfigurationTest {
 		}
 	}
 
+    @Test
+    public void testAutoRegisteredCriteriaAPI() {
+        this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+        this.context.refresh();
+        Entityql entityql = this.context.getBean(Entityql.class);
+        assertNotNull(entityql);
+        NativeSql nativeSql = this.context.getBean(NativeSql.class);
+        assertNotNull(nativeSql);
+    }
+
+    @Test
+    public void testCriteriaAPIWithConfig() {
+        this.context.register(MyCriteriaAPIConfig.class, DomaAutoConfiguration.class,
+                DataSourceAutoConfiguration.class);
+        this.context.refresh();
+        Map<String, Entityql> entityqlBeans = this.context.getBeansOfType(Entityql.class);
+        assertEquals(1, entityqlBeans.size());
+        assertNotNull(entityqlBeans.get("myEntityql"));
+        Map<String, NativeSql> nativeSqlBeans = this.context.getBeansOfType(NativeSql.class);
+        assertEquals(1, nativeSqlBeans.size());
+        assertNotNull(nativeSqlBeans.get("myNativeSql"));
+    }
+
 	@After
 	public void tearDown() {
 		if (this.context != null) {
@@ -260,4 +286,18 @@ public class DomaAutoConfigurationTest {
 					value)));
 		}
 	}
+
+    @Configuration
+    public static class MyCriteriaAPIConfig {
+
+        @Bean
+        public Entityql myEntityql(Config config) {
+            return new Entityql(config);
+        }
+
+        @Bean
+        public NativeSql myNativeSql(Config config) {
+            return new NativeSql(config);
+        }
+    }
 }
