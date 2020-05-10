@@ -64,6 +64,7 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 @EnableConfigurationProperties(DomaProperties.class)
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class DomaAutoConfiguration {
+
 	@Autowired
 	private DomaProperties domaProperties;
 
