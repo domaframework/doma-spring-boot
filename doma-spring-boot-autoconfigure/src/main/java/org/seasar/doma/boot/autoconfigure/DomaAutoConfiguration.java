@@ -17,6 +17,8 @@ package org.seasar.doma.boot.autoconfigure;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
 import org.seasar.doma.boot.TryLookupEntityListenerProvider;
 import org.seasar.doma.boot.autoconfigure.DomaProperties.DialectType;
@@ -65,6 +67,8 @@ import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class DomaAutoConfiguration {
 
+	private static final Log logger = LogFactory.getLog(DomaAutoConfiguration.class);
+
 	@Autowired
 	private DomaProperties domaProperties;
 
@@ -99,6 +103,10 @@ public class DomaAutoConfiguration {
 			default:
 				break;
 			}
+		}
+		if (logger.isWarnEnabled()) {
+			logger.warn(
+					"StandardDialect was selected because no explicit configuration and it is not possible to guess from 'spring.datasource.url property'");
 		}
 		return new StandardDialect();
 	}
