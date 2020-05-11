@@ -77,12 +77,6 @@ git switch master
 git pull
 ```
 
-Create a new branch.
-
-```
-git switch -c prepare-next-snapshot-version
-```
-
 Set a next SNAPSHOT version to pom.xml and commit.
 
 ```
@@ -97,6 +91,4 @@ git add .
 git commit -m "Prepare a next SNAPSHOT version"
 git push origin master
 ```
-
-Finally, create a new PR and merge it into the master branch.
 
