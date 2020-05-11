@@ -21,6 +21,7 @@ import static org.junit.Assert.*;
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -29,10 +30,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
-import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.EntityListenerProvider;
+import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
+import org.seasar.doma.jdbc.JdbcException;
+import org.seasar.doma.jdbc.Naming;
+import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
+import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
@@ -197,28 +206,54 @@ public class DomaAutoConfigurationTest {
 		}
 	}
 
-    @Test
-    public void testAutoRegisteredCriteriaAPI() {
-        this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
-        this.context.refresh();
-        Entityql entityql = this.context.getBean(Entityql.class);
-        assertNotNull(entityql);
-        NativeSql nativeSql = this.context.getBean(NativeSql.class);
-        assertNotNull(nativeSql);
-    }
+	@Test
+	public void testAutoRegisteredCriteriaAPI() {
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Entityql entityql = this.context.getBean(Entityql.class);
+		assertNotNull(entityql);
+		NativeSql nativeSql = this.context.getBean(NativeSql.class);
+		assertNotNull(nativeSql);
+	}
 
-    @Test
-    public void testCriteriaAPIWithConfig() {
-        this.context.register(MyCriteriaAPIConfig.class, DomaAutoConfiguration.class,
-                DataSourceAutoConfiguration.class);
-        this.context.refresh();
-        Map<String, Entityql> entityqlBeans = this.context.getBeansOfType(Entityql.class);
-        assertEquals(1, entityqlBeans.size());
-        assertNotNull(entityqlBeans.get("myEntityql"));
-        Map<String, NativeSql> nativeSqlBeans = this.context.getBeansOfType(NativeSql.class);
-        assertEquals(1, nativeSqlBeans.size());
-        assertNotNull(nativeSqlBeans.get("myNativeSql"));
-    }
+	@Test
+	public void testCriteriaAPIWithConfig() {
+		this.context.register(MyCriteriaAPIConfig.class, DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Map<String, Entityql> entityqlBeans = this.context.getBeansOfType(Entityql.class);
+		assertEquals(1, entityqlBeans.size());
+		assertNotNull(entityqlBeans.get("myEntityql"));
+		Map<String, NativeSql> nativeSqlBeans = this.context.getBeansOfType(NativeSql.class);
+		assertEquals(1, nativeSqlBeans.size());
+		assertNotNull(nativeSqlBeans.get("myNativeSql"));
+	}
+
+	@Test
+	public void testDialectByDataSourceUrl() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		sources.addFirst(new MapPropertySource("test",
+				Collections.singletonMap("spring.datasource.url", "jdbc:h2:mem:example")));
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Dialect dialect = this.context.getBean(Dialect.class);
+		assertThat(dialect, is(instanceOf(H2Dialect.class)));
+	}
+
+	@Test
+	public void testDialectByDomaPropertiesIgnoreDataSourceUrl() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		Map<String, Object> source = new HashMap<>();
+		source.put("spring.datasource.url", "jdbc:h2:mem:example");
+		source.put("doma.dialect", "POSTGRES");
+		sources.addFirst(new MapPropertySource("test", source));
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Dialect dialect = this.context.getBean(Dialect.class);
+		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+	}
 
 	@After
 	public void tearDown() {
@@ -287,17 +322,17 @@ public class DomaAutoConfigurationTest {
 		}
 	}
 
-    @Configuration
-    public static class MyCriteriaAPIConfig {
+	@Configuration
+	public static class MyCriteriaAPIConfig {
 
-        @Bean
-        public Entityql myEntityql(Config config) {
-            return new Entityql(config);
-        }
+		@Bean
+		public Entityql myEntityql(Config config) {
+			return new Entityql(config);
+		}
 
-        @Bean
-        public NativeSql myNativeSql(Config config) {
-            return new NativeSql(config);
-        }
-    }
+		@Bean
+		public NativeSql myNativeSql(Config config) {
+			return new NativeSql(config);
+		}
+	}
 }
