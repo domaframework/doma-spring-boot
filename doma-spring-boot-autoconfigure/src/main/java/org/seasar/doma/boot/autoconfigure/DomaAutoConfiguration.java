@@ -24,6 +24,8 @@ import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.criteria.Entityql;
+import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -126,4 +128,20 @@ public class DomaAutoConfiguration {
 		return domaConfigBuilder.build();
 	}
 
+    @Configuration
+    @ConditionalOnClass({ Entityql.class, NativeSql.class })
+    public static class CriteriaConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean(Entityql.class)
+        public Entityql entityql(Config config) {
+            return new Entityql(config);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean(NativeSql.class)
+        public NativeSql nativeSql(Config config) {
+            return new NativeSql(config);
+        }
+    }
 }
