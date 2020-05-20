@@ -29,7 +29,7 @@ doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
@@ -64,7 +64,7 @@ Add the following dependencies to `pom.xml` so that we can use Doma with Spring 
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
 </dependency>
 <dependency>
     <groupId>org.seasar.doma</groupId>
@@ -80,7 +80,7 @@ If you use Doma 2.29.0 or lower, the dependencies are as follows.
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <exclusions>
         <exclusion>
             <groupId>org.seasar.doma</groupId>
