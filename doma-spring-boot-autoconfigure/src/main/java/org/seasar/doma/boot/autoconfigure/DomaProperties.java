@@ -64,6 +64,11 @@ public class DomaProperties {
 	private SqlLogType exceptionSqlLogType = SqlLogType.NONE;
 
 	/**
+	 * Type of {@link JdbcLogger}.
+	 */
+	private JdbcLoggerType jdbcLogger = JdbcLoggerType.SLF4J;
+
+	/**
 	 * Limit for the maximum number of rows. Ignored unless this value is greater than 0.
 	 */
 	private int maxRows = 0;
@@ -129,6 +134,14 @@ public class DomaProperties {
 
 	public void setExceptionSqlLogType(SqlLogType exceptionSqlLogType) {
 		this.exceptionSqlLogType = exceptionSqlLogType;
+	}
+
+	public JdbcLoggerType getJdbcLogger() {
+		return jdbcLogger;
+	}
+
+	public void setJdbcLogger(JdbcLoggerType jdbcLogger) {
+		this.jdbcLogger = jdbcLogger;
 	}
 
 	public int getMaxRows() {
@@ -227,13 +240,29 @@ public class DomaProperties {
 		}
 	}
 
+	public static enum JdbcLoggerType {
+		JUL(UtilLoggingJdbcLogger::new),
+		SLF4J(Slf4jJdbcLogger::new);
+
+		private final Supplier<JdbcLogger> constructor;
+
+		JdbcLoggerType(Supplier<JdbcLogger> constructor) {
+			this.constructor = constructor;
+		}
+
+		public JdbcLogger create() {
+			return this.constructor.get();
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "DomaProperties{" + "dialect=" + dialect + ", sqlFileRepository="
 				+ sqlFileRepository + ", naming=" + naming
 				+ ", exceptionTranslationEnabled=" + exceptionTranslationEnabled
 				+ ", dataSourceName='" + dataSourceName + '\'' + ", exceptionSqlLogType="
-				+ exceptionSqlLogType + ", maxRows=" + maxRows + ", fetchSize="
+				+ exceptionSqlLogType + ", jdbcLogger="
+				+ jdbcLogger + ", maxRows=" + maxRows + ", fetchSize="
 				+ fetchSize + ", queryTimeout=" + queryTimeout + ", batchSize="
 				+ batchSize + '}';
 	}

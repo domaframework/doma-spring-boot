@@ -26,6 +26,7 @@ import org.seasar.doma.boot.event.DomaEventEntityListener;
 import org.seasar.doma.boot.event.DomaEventListenerFactory;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
+import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.criteria.Entityql;
@@ -131,6 +132,12 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
+	public JdbcLogger jdbcLogger() {
+		return domaProperties.getJdbcLogger().create();
+	}
+
+	@Bean
 	public static DomaEventListenerFactory domaEventListenerFactory() {
 		return new DomaEventListenerFactory();
 	}
@@ -155,7 +162,7 @@ public class DomaAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(Config.class)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
-			SqlFileRepository sqlFileRepository, Naming naming,
+			SqlFileRepository sqlFileRepository, Naming naming, JdbcLogger jdbcLogger,
 			EntityListenerProvider entityListenerProvider,
 			DomaConfigBuilder domaConfigBuilder) {
 		if (domaConfigBuilder.dataSource() == null) {
@@ -169,6 +176,9 @@ public class DomaAutoConfiguration {
 		}
 		if (domaConfigBuilder.naming() == null) {
 			domaConfigBuilder.naming(naming);
+		}
+		if (domaConfigBuilder.jdbcLogger() == null) {
+			domaConfigBuilder.jdbcLogger(jdbcLogger);
 		}
 		if (domaConfigBuilder.entityListenerProvider() == null) {
 			domaConfigBuilder.entityListenerProvider(entityListenerProvider);
