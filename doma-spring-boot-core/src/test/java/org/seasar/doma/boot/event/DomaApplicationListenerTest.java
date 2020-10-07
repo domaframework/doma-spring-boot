@@ -193,7 +193,8 @@ public class DomaApplicationListenerTest {
 
 			DomaApplicationListener listener = new DomaApplicationListener(
 					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class), context);
+							"handle", TestEntity1.class),
+					context);
 
 			TestEntity1 entity = new TestEntity1();
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
@@ -217,7 +218,8 @@ public class DomaApplicationListenerTest {
 
 			DomaApplicationListener listener = new DomaApplicationListener(
 					"withContextHandler", WithContextHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class, PreInsertContext.class), context);
+							"handle", TestEntity1.class, PreInsertContext.class),
+					context);
 
 			TestEntity1 entity = new TestEntity1();
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
@@ -237,7 +239,8 @@ public class DomaApplicationListenerTest {
 
 			DomaApplicationListener listener = new DomaApplicationListener(
 					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class), context);
+							"handle", TestEntity1.class),
+					context);
 
 			TestEntity1 entity = new TestEntity1();
 			PostInsertContext<TestEntity1> ctx = mock(PostInsertContext.class);
@@ -256,7 +259,8 @@ public class DomaApplicationListenerTest {
 
 			DomaApplicationListener listener = new DomaApplicationListener(
 					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class), context);
+							"handle", TestEntity1.class),
+					context);
 
 			TestEntity2 entity = new TestEntity2();
 			PreInsertContext<TestEntity2> ctx = mock(PreInsertContext.class);
@@ -275,7 +279,8 @@ public class DomaApplicationListenerTest {
 
 			DomaApplicationListener listener = new DomaApplicationListener(
 					"superClassHandler", SuperClassHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class), context);
+							"handle", TestEntity1.class),
+					context);
 
 			TestEntity3 entity = new TestEntity3();
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);

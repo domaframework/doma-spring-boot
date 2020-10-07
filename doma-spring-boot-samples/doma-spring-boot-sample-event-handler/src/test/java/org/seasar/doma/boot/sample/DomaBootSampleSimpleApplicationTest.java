@@ -46,13 +46,15 @@ public class DomaBootSampleSimpleApplicationTest {
 		LocalDate now = LocalDate.now();
 		Message message1 = restTemplate.getForObject(
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
-						.queryParam("text", "hello").build().toUri(), Message.class);
+						.queryParam("text", "hello").build().toUri(),
+				Message.class);
 		assertThat(message1.id, is(1));
 		assertThat(message1.text, is("hello"));
 		assertThat(message1.createdAt, is(now));
 		Message message2 = restTemplate.getForObject(
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
-						.queryParam("text", "world").build().toUri(), Message.class);
+						.queryParam("text", "world").build().toUri(),
+				Message.class);
 		assertThat(message2.id, is(2));
 		assertThat(message2.text, is("world"));
 		assertThat(message2.createdAt, is(now));
@@ -60,7 +62,8 @@ public class DomaBootSampleSimpleApplicationTest {
 		{
 			List<Message> messages = restTemplate.exchange(
 					UriComponentsBuilder.fromUriString("http://localhost").port(port)
-							.build().toUri(), HttpMethod.GET, HttpEntity.EMPTY,
+							.build().toUri(),
+					HttpMethod.GET, HttpEntity.EMPTY,
 					typedReference).getBody();
 			assertThat(messages.size(), is(2));
 			assertThat(messages.get(0).id, is(message1.id));
@@ -73,7 +76,8 @@ public class DomaBootSampleSimpleApplicationTest {
 			List<Message> messages = restTemplate.exchange(
 					UriComponentsBuilder.fromUriString("http://localhost").port(port)
 							.queryParam("page", "1").queryParam("size", "1").build()
-							.toUri(), HttpMethod.GET, HttpEntity.EMPTY, typedReference)
+							.toUri(),
+					HttpMethod.GET, HttpEntity.EMPTY, typedReference)
 					.getBody();
 			assertThat(messages.size(), is(1));
 			assertThat(messages.get(0).id, is(message2.id));
