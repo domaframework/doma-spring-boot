@@ -270,7 +270,7 @@ public class DomaAutoConfigurationTest {
 		DomaConfigBuilder myDomaConfigBuilder(DomaProperties domaProperties) {
 			return new DomaConfigBuilder(domaProperties).dialect(new MysqlDialect())
 					.sqlFileRepository(new NoCacheSqlFileRepository())
-                    .jdbcLogger(new UtilLoggingJdbcLogger())
+					.jdbcLogger(new UtilLoggingJdbcLogger())
 					.naming(Naming.SNAKE_UPPER_CASE)
 					.entityListenerProvider(new TestEntityListenerProvider());
 		}

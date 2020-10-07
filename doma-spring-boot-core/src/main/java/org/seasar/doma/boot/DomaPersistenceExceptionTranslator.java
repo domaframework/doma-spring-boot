@@ -45,18 +45,14 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 
 		if (ex instanceof OptimisticLockException) {
 			return new OptimisticLockingFailureException(ex.getMessage(), ex);
-		}
-		else if (ex instanceof UniqueConstraintException) {
+		} else if (ex instanceof UniqueConstraintException) {
 			return new DuplicateKeyException(ex.getMessage(), ex);
-		}
-		else if (ex instanceof NonUniqueResultException
+		} else if (ex instanceof NonUniqueResultException
 				|| ex instanceof NonSingleColumnException) {
 			return new IncorrectResultSizeDataAccessException(ex.getMessage(), 1, ex);
-		}
-		else if (ex instanceof NoResultException) {
+		} else if (ex instanceof NoResultException) {
 			return new EmptyResultDataAccessException(ex.getMessage(), 1, ex);
-		}
-		else if (ex instanceof UnknownColumnException
+		} else if (ex instanceof UnknownColumnException
 				|| ex instanceof ResultMappingException) {
 			return new TypeMismatchDataAccessException(ex.getMessage(), ex);
 		}

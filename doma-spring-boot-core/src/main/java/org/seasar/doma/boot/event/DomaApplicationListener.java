@@ -27,8 +27,7 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
 		int parameterCount = method.getParameterCount();
 		if (parameterCount < 1) {
 			throw new IllegalArgumentException("Must receive an entity");
-		}
-		else if (parameterCount > 2) {
+		} else if (parameterCount > 2) {
 			throw new IllegalArgumentException("Too many parameters");
 		}
 
@@ -85,8 +84,7 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
 			Object[] args;
 			if (method.getParameterCount() == 1) {
 				args = new Object[] { entity };
-			}
-			else {
+			} else {
 				args = new Object[] { entity, context };
 			}
 			Object target = beanFactory.getBean(beanName);
