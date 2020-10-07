@@ -17,6 +17,7 @@ doma.fetch-size=0 # Hint to the number of rows that should be fetched. Ignored u
 doma.batch-size=0 # Size in executing PreparedStatement#addBatch(). Regarded as 1 unless this value is greater than 1.
 doma.data-source-name= # Datasource name.
 doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED, NONE)
+doma.jdbc-logger= # Type of JdbcLogger. (SLF4J, JUL)
 ```
 
 ## Issue Tracking

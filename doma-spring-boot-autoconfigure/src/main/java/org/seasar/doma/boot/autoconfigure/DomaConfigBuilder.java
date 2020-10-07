@@ -33,7 +33,10 @@ public class DomaConfigBuilder {
 	 * Default value is set in {@link DomaProperties}
 	 */
 	private Dialect dialect;
-	private JdbcLogger jdbcLogger = ConfigSupport.defaultJdbcLogger;
+	/**
+	 * Default value is set in {@link DomaProperties}
+	 */
+	private JdbcLogger jdbcLogger;
 	/**
 	 * Default value is set in {@link DomaProperties}
 	 */
