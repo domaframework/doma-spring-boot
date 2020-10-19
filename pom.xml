@@ -48,6 +48,12 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <doma.version>2.43.0</doma.version>
         <spring-boot.version>1.5.22.RELEASE</spring-boot.version>
+        <source-plugin.version>3.2.0</source-plugin.version>
+        <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
+        <nexus-staging-plugin.version>1.6.2</nexus-staging-plugin.version>
+        <formatter-maven-plugin.version>2.13.0</formatter-maven-plugin.version>
+        <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
+        <gpg-plugin.version>1.5</gpg-plugin.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
 
@@ -84,7 +90,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>${gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -105,6 +111,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -117,6 +124,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -129,7 +137,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.2</version>
+                <version>${nexus-staging-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
@@ -140,12 +148,12 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.2</version>
+                <version>${versions-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
-                <version>2.13.0</version>
+                <version>${formatter-maven-plugin.version}</version>
                 <configuration>
                     <configFile>${rootDir}/eclipse/eclipse-code-formatter.xml</configFile>
                     <lineEnding>LF</lineEnding>
