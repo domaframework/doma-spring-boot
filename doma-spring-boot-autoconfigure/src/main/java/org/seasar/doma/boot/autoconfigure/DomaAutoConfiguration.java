@@ -159,6 +159,7 @@ public class DomaAutoConfiguration {
 		return new DomaConfigBuilder(domaProperties);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Bean
 	@ConditionalOnMissingBean(Config.class)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
