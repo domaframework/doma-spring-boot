@@ -78,12 +78,9 @@
 
     <profiles>
         <profile>
-            <id>sign-artifacts</id>
+            <id>deploy</id>
             <activation>
-                <property>
-                    <name>performSign</name>
-                    <value>true</value>
-                </property>
+                <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
