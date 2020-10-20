@@ -197,6 +197,7 @@ public class DomaApplicationListenerTest {
 					context);
 
 			TestEntity1 entity = new TestEntity1();
+			@SuppressWarnings("unchecked")
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
 			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
 			listener.onApplicationEvent(event);
@@ -222,6 +223,7 @@ public class DomaApplicationListenerTest {
 					context);
 
 			TestEntity1 entity = new TestEntity1();
+			@SuppressWarnings("unchecked")
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
 			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
 			listener.onApplicationEvent(event);
@@ -243,6 +245,7 @@ public class DomaApplicationListenerTest {
 					context);
 
 			TestEntity1 entity = new TestEntity1();
+			@SuppressWarnings("unchecked")
 			PostInsertContext<TestEntity1> ctx = mock(PostInsertContext.class);
 			PostInsertEvent<TestEntity1> event = new PostInsertEvent<>(entity, ctx);
 			listener.onApplicationEvent(event);
@@ -263,6 +266,7 @@ public class DomaApplicationListenerTest {
 					context);
 
 			TestEntity2 entity = new TestEntity2();
+			@SuppressWarnings("unchecked")
 			PreInsertContext<TestEntity2> ctx = mock(PreInsertContext.class);
 			PreInsertEvent<TestEntity2> event = new PreInsertEvent<>(entity, ctx);
 			listener.onApplicationEvent(event);
@@ -283,6 +287,7 @@ public class DomaApplicationListenerTest {
 					context);
 
 			TestEntity3 entity = new TestEntity3();
+			@SuppressWarnings("unchecked")
 			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
 			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
 			listener.onApplicationEvent(event);

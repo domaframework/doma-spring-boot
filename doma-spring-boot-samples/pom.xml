@@ -21,6 +21,7 @@
     </modules>
 
     <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
         <rootDir>${project.basedir}/..</rootDir>
     </properties>
 </project>
