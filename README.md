@@ -2,7 +2,7 @@
 
 Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 
-[![Build Status](https://travis-ci.org/domaframework/doma-spring-boot.svg?branch=master)](https://travis-ci.org/domaframework/doma-spring-boot)
+[![Java CI with Maven](https://github.com/domaframework/doma-spring-boot/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/domaframework/doma-spring-boot/actions?query=workflow%3A%22Java+CI+with+Maven%22)
 
 ## Properties file configuration
 
