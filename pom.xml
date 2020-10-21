@@ -50,10 +50,10 @@
         <spring-boot.version>1.5.22.RELEASE</spring-boot.version>
         <source-plugin.version>3.2.0</source-plugin.version>
         <javadoc-plugin.version>3.2.0</javadoc-plugin.version>
-        <nexus-staging-plugin.version>1.6.2</nexus-staging-plugin.version>
+        <nexus-staging-plugin.version>1.6.8</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.13.0</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
-        <gpg-plugin.version>1.5</gpg-plugin.version>
+        <gpg-plugin.version>1.6</gpg-plugin.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
 
@@ -95,6 +95,13 @@
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
+                                <configuration>
+                                    <!-- Prevent `gpg` from using pinentry programs -->
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
