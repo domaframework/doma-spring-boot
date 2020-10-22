@@ -9,7 +9,3 @@ target
 .settings
 .factorypath
 .apt_generated
-pom.xml.next
-pom.xml.tag
-pom.xml.releaseBackup
-release.properties
