@@ -37,7 +37,7 @@ import org.seasar.doma.jdbc.JdbcException;
 import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
-import org.seasar.doma.jdbc.Slf4jJdbcLogger;
+import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
@@ -84,7 +84,7 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getSqlFileRepository(),
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
-		assertThat(config.getJdbcLogger(), is(instanceOf(Slf4jJdbcLogger.class)));
+		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
 		assertThat(config.getEntityListenerProvider(), is(notNullValue()));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
