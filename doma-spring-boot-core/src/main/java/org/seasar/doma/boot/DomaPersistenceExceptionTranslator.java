@@ -17,9 +17,24 @@ package org.seasar.doma.boot;
 
 import java.sql.SQLException;
 
-import org.seasar.doma.jdbc.*;
-import org.springframework.dao.*;
+import org.seasar.doma.jdbc.JdbcException;
+import org.seasar.doma.jdbc.NoResultException;
+import org.seasar.doma.jdbc.NonSingleColumnException;
+import org.seasar.doma.jdbc.NonUniqueResultException;
+import org.seasar.doma.jdbc.OptimisticLockException;
+import org.seasar.doma.jdbc.ResultMappingException;
+import org.seasar.doma.jdbc.SqlExecutionException;
+import org.seasar.doma.jdbc.UniqueConstraintException;
+import org.seasar.doma.jdbc.UnknownColumnException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.dao.TypeMismatchDataAccessException;
+import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.support.SQLExceptionTranslator;
 
 /**
@@ -63,7 +78,8 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 			if (ex instanceof SqlExecutionException) {
 				sql = ((SqlExecutionException) ex).getRawSql();
 			}
-			return translator.translate(ex.getMessage(), sql, e);
+			DataAccessException dae = translator.translate(ex.getMessage(), sql, e);
+			return (dae != null ? dae : new UncategorizedSQLException("", sql, e));
 		}
 
 		return new UncategorizedDataAccessException(ex.getMessage(), ex) {
