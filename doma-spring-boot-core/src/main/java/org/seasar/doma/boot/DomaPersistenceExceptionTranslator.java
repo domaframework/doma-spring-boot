@@ -79,7 +79,7 @@ public class DomaPersistenceExceptionTranslator implements PersistenceExceptionT
 				sql = ((SqlExecutionException) ex).getRawSql();
 			}
 			DataAccessException dae = translator.translate(ex.getMessage(), sql, e);
-			return (dae != null ? dae : new UncategorizedSQLException("", sql, e));
+			return (dae != null ? dae : new UncategorizedSQLException(ex.getMessage(), sql, e));
 		}
 
 		return new UncategorizedDataAccessException(ex.getMessage(), ex) {
