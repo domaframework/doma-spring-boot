@@ -1,9 +1,10 @@
 package org.seasar.doma.boot.event;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.boot.event.annotation.*;
 import org.seasar.doma.jdbc.entity.*;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -308,13 +309,13 @@ public class DomaEventEntityListenerTest {
 		assertThat(handler.entity).isSameAs(entity2);
 	}
 
-	@Test(expected = BeanInitializationException.class)
+	@Test
 	public void noArg() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 		context.register(DomaEventEntityListener.class);
 		context.register(DomaEventListenerFactory.class);
 		context.register(NoArgHandler.class);
-		context.refresh();
+		assertThrows(BeanInitializationException.class, () -> context.refresh());
 	}
 
 	@Test

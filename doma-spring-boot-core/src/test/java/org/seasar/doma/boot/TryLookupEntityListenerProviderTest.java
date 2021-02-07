@@ -15,10 +15,11 @@
  */
 package org.seasar.doma.boot;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -39,13 +40,14 @@ public class TryLookupEntityListenerProviderTest {
 		assertThat(listener.managed, is(true));
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testManaged_notUnique() throws Exception {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				FooConfig.class);
 		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 		provider.setApplicationContext(context);
-		provider.get(FooListener.class, FooListener::new);
+		assertThrows(IllegalStateException.class,
+				() -> provider.get(FooListener.class, FooListener::new));
 	}
 
 	@Test

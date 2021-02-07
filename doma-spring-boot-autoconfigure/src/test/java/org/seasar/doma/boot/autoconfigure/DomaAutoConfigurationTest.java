@@ -16,7 +16,8 @@
 package org.seasar.doma.boot.autoconfigure;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
@@ -26,9 +27,10 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.EntityListenerProvider;
@@ -66,7 +68,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 public class DomaAutoConfigurationTest {
 	AnnotationConfigApplicationContext context;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.context = new AnnotationConfigApplicationContext();
 	}
@@ -133,14 +135,15 @@ public class DomaAutoConfigurationTest {
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
 	}
 
-	@Test(expected = NoSuchBeanDefinitionException.class)
+	@Test
 	public void testExceptionTranslationEnabledSpecifyFalse() {
 		EnvironmentTestUtils.addEnvironment(this.context,
 				"doma.exception-translation-enabled:false");
 		this.context.register(DomaAutoConfiguration.class,
 				DataSourceAutoConfiguration.class);
 		this.context.refresh();
-		this.context.getBean(PersistenceExceptionTranslator.class);
+		assertThrows(NoSuchBeanDefinitionException.class,
+				() -> this.context.getBean(PersistenceExceptionTranslator.class));
 	}
 
 	@Test
@@ -257,7 +260,7 @@ public class DomaAutoConfigurationTest {
 		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		if (this.context != null) {
 			this.context.close();
