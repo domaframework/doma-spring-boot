@@ -39,11 +39,11 @@ jobs:
         run: ./mvnw test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
 
       - name: Upload reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: reports
-          path: ./**/target/surefire-reports
+          path: ./**/target/surefire-reports/*.txt
 
   deploy:
     if: github.event_name == 'push' && contains(github.event.head_commit.message, '[skip ci]') == false
@@ -77,8 +77,8 @@ jobs:
           nexus_password: ${{ secrets.OSSRH_PASSWORD }}
 
       - name: Upload reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: reports
-          path: ./**/target/surefire-reports
+          path: ./**/target/surefire-reports/*.txt
