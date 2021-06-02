@@ -1,0 +1,1 @@
+insert into primary_message (content) values ('primary message');
