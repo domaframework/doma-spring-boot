@@ -1,0 +1,1 @@
+select /*%expand*/* from primary_message
