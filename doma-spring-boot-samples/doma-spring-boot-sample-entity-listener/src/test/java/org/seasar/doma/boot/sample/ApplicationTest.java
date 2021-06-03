@@ -1,29 +1,27 @@
 package org.seasar.doma.boot.sample;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDate;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class DomaBootSampleSimpleApplicationTest {
-	TestRestTemplate restTemplate = new TestRestTemplate();
-	ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
+public class ApplicationTest {
+	private final TestRestTemplate restTemplate = new TestRestTemplate();
+	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
 	};
-	@Value("${local.server.port}")
-	int port;
+	@LocalServerPort
+	private int port;
 
 	@Test
 	public void test() {
@@ -32,16 +30,16 @@ public class DomaBootSampleSimpleApplicationTest {
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
 						.queryParam("text", "hello").build().toUri(),
 				Message.class);
-		assertThat(message1.id, is(1));
-		assertThat(message1.text, is("hello"));
-		assertThat(message1.createdAt, is(now));
+		assertEquals(1, message1.id);
+		assertEquals("hello", message1.text);
+		assertEquals(now, message1.createdAt);
 		Message message2 = restTemplate.getForObject(
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
 						.queryParam("text", "world").build().toUri(),
 				Message.class);
-		assertThat(message2.id, is(2));
-		assertThat(message2.text, is("world"));
-		assertThat(message2.createdAt, is(now));
+		assertEquals(2, message2.id);
+		assertEquals("world", message2.text);
+		assertEquals(now, message2.createdAt);
 
 		{
 			List<Message> messages = restTemplate.exchange(
@@ -49,11 +47,11 @@ public class DomaBootSampleSimpleApplicationTest {
 							.build().toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY,
 					typedReference).getBody();
-			assertThat(messages.size(), is(2));
-			assertThat(messages.get(0).id, is(message1.id));
-			assertThat(messages.get(0).text, is(message1.text));
-			assertThat(messages.get(1).id, is(message2.id));
-			assertThat(messages.get(1).text, is(message2.text));
+			assertEquals(2, messages.size());
+			assertEquals(message1.id, messages.get(0).id);
+			assertEquals(message1.text, messages.get(0).text);
+			assertEquals(message2.id, messages.get(1).id);
+			assertEquals(message2.text, messages.get(1).text);
 		}
 
 		{
@@ -63,9 +61,9 @@ public class DomaBootSampleSimpleApplicationTest {
 							.toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY, typedReference)
 					.getBody();
-			assertThat(messages.size(), is(1));
-			assertThat(messages.get(0).id, is(message2.id));
-			assertThat(messages.get(0).text, is(message2.text));
+			assertEquals(1, messages.size());
+			assertEquals(message2.id, messages.get(0).id);
+			assertEquals(message2.text, messages.get(0).text);
 		}
 	}
 
