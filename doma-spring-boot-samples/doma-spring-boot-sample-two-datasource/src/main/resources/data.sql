@@ -1,1 +1,1 @@
-insert into primary_message (content) values ('primary message');
+insert into primary_message (id, content) values (1, 'primary message');

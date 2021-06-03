@@ -1,1 +1,1 @@
-insert into secondary_message (content) values ('secondary message');
+insert into secondary_message (id, content) values (2, 'secondary message');
