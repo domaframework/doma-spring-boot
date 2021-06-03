@@ -1,1 +1,0 @@
-select /*%expand*/* from secondary_message

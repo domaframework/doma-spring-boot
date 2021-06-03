@@ -1,17 +1,19 @@
 package org.seasar.doma.boot.sample.entity;
 
 import org.seasar.doma.Entity;
-import org.seasar.doma.GeneratedValue;
-import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
 
-@Entity
+@Entity(immutable = true)
 public class SecondaryMessage {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public Long id;
-	public String content;
+	public final Integer id;
+	public final String content;
+
+	public SecondaryMessage(Integer id, String content) {
+		this.id = id;
+		this.content = content;
+	}
 
 	@Override
 	public String toString() {
