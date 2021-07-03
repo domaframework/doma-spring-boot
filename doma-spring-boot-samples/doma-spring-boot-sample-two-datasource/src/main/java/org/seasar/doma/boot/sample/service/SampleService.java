@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class SampleService {
 
 	private final PrimaryDao primaryDao;
@@ -29,10 +28,17 @@ public class SampleService {
 		return secondaryDao.selectById(id);
 	}
 
-	public void insert(PrimaryMessage primaryMessage, SecondaryMessage secondaryMessage,
-			boolean thrownException) {
-		primaryDao.insert(primaryMessage);
-		secondaryDao.insert(secondaryMessage);
+	@Transactional(transactionManager = "primaryTransactionManager")
+	public void insertPrimary(PrimaryMessage message, boolean thrownException) {
+		primaryDao.insert(message);
+		if (thrownException) {
+			throw new RuntimeException();
+		}
+	}
+
+	@Transactional(transactionManager = "secondaryTransactionManager")
+	public void insertSecondary(SecondaryMessage message, boolean thrownException) {
+		secondaryDao.insert(message);
 		if (thrownException) {
 			throw new RuntimeException();
 		}
