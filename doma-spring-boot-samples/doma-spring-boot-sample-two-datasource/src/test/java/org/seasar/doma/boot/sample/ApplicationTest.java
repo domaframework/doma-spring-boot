@@ -30,20 +30,43 @@ public class ApplicationTest {
 	}
 
 	@Test
-	void commit() {
+	void commitPrimary() {
 		{
-			PrimaryMessage primaryMessage = new PrimaryMessage(10, "primary commit");
-
-			SecondaryMessage secondaryMessage = new SecondaryMessage(20, "secondary commit");
+			PrimaryMessage message = new PrimaryMessage(10, "primary commit");
 
 			boolean thrownException = false;
 
-			service.insert(primaryMessage, secondaryMessage, thrownException);
+			service.insertPrimary(message, thrownException);
 		}
 		{
 			PrimaryMessage message = service.primaryMessage(10).orElseGet(() -> fail());
 			assertEquals(10, message.id);
 			assertEquals("primary commit", message.content);
+		}
+	}
+
+	@Test
+	void rollbackPrimary() {
+		{
+			PrimaryMessage message = new PrimaryMessage(100, "primary rollback");
+
+			boolean thrownException = true;
+
+			assertThrows(RuntimeException.class,
+					() -> service.insertPrimary(message, thrownException));
+		}
+
+		assertFalse(service.primaryMessage(100).isPresent());
+	}
+
+	@Test
+	void commitSecondary() {
+		{
+			SecondaryMessage message = new SecondaryMessage(20, "secondary commit");
+
+			boolean thrownException = false;
+
+			service.insertSecondary(message, thrownException);
 		}
 		{
 			SecondaryMessage message = service.secondaryMessage(20).orElseGet(() -> fail());
@@ -53,19 +76,16 @@ public class ApplicationTest {
 	}
 
 	@Test
-	void rollback() {
+	void rollbackSecondary() {
 		{
-			PrimaryMessage primaryMessage = new PrimaryMessage(100, "primary rollback");
-
-			SecondaryMessage secondaryMessage = new SecondaryMessage(200, "secondary rollback");
+			SecondaryMessage message = new SecondaryMessage(200, "secondary rollback");
 
 			boolean thrownException = true;
 
 			assertThrows(RuntimeException.class,
-					() -> service.insert(primaryMessage, secondaryMessage, thrownException));
+					() -> service.insertSecondary(message, thrownException));
 		}
 
-		assertFalse(service.primaryMessage(100).isPresent());
 		assertFalse(service.secondaryMessage(200).isPresent());
 	}
 }
