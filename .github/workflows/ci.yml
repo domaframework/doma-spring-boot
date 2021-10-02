@@ -25,16 +25,10 @@ jobs:
         with:
           distribution: zulu
           java-version: ${{ matrix.java }}
+          cache: maven
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
-
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
 
       - name: Test with Maven
         run: ./mvnw test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
