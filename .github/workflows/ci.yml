@@ -57,7 +57,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Test with Maven for breaking change in Slf4jJdbcLogger
-        run: ./mvnw -B compile && ./mvnw -B test -Ddoma.version=4.49.0 -Dmaven.main.skip=true
+        run: ./mvnw -B compile && ./mvnw -B test -Ddoma.version=2.49.0 -Dmaven.main.skip=true
 
       - name: Upload reports
         if: failure()
