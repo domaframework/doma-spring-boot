@@ -16,7 +16,6 @@ jobs:
       matrix:
         java: [ 8, 11, 17 ]
         spring-boot-version: [ 2.2.13.RELEASE, 2.3.12.RELEASE, 2.4.12, 2.5.6 ]
-        doma-version: [ 2.50.0, 2.49.0 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +31,33 @@ jobs:
         run: chmod +x mvnw
 
       - name: Test with Maven
-        run: ./mvnw -B compile && ./mvnw -B test -Dspring-boot.version=${{ matrix.spring-boot-version }} -Ddoma.version=${{ matrix.doma-version }} -Dmaven.main.skip=true
+        run: ./mvnw test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
+
+      - name: Upload reports
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: ./**/target/surefire-reports
+
+  test-backward-compatible:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: zulu
+          java-version: 17
+          cache: maven
+
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
+      - name: Test with Maven for breaking change in Slf4jJdbcLogger
+        run: ./mvnw -B compile && ./mvnw -B test -Ddoma.version=4.49.0 -Dmaven.main.skip=true
 
       - name: Upload reports
         if: failure()
