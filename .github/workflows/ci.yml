@@ -15,7 +15,8 @@ jobs:
     strategy:
       matrix:
         java: [ 8, 11, 17 ]
-        spring-boot-version: [ 2.2.13.RELEASE, 2.3.12.RELEASE, 2.4.10, 2.5.4 ]
+        spring-boot-version: [ 2.2.13.RELEASE, 2.3.12.RELEASE, 2.4.12, 2.5.6 ]
+        doma-version: [ 2.50.0, 2.49.0 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +32,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Test with Maven
-        run: ./mvnw test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
+        run: ./mvnw -B compile && ./mvnw -B test -Dspring-boot.version=${{ matrix.spring-boot-version }} -Ddoma.version=${{ matrix.doma-version }} -Dmaven.main.skip=true
 
       - name: Upload reports
         if: failure()
@@ -53,16 +54,10 @@ jobs:
         with:
           distribution: zulu
           java-version: 8
+          cache: maven
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
-
-      - name: Cache Maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
 
       - name: Release Maven package
         uses: samuelmeuli/action-maven-publish@v1
