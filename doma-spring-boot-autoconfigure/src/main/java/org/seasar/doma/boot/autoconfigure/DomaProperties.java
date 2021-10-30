@@ -228,7 +228,7 @@ public class DomaProperties {
 
 	public static enum JdbcLoggerType {
 		JUL(UtilLoggingJdbcLogger::new),
-		SLF4J(Slf4jJdbcLogger::new);
+		SLF4J(() -> new Slf4jJdbcLogger());
 
 		private final Supplier<JdbcLogger> constructor;
 
