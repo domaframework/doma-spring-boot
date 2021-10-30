@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.*;
+import org.seasar.doma.slf4j.Slf4jJdbcLogger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
