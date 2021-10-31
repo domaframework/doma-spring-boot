@@ -21,10 +21,6 @@
         <module>doma-spring-boot-sample-two-datasource</module>
     </modules>
 
-    <properties>
-        <rootDir>${project.basedir}/..</rootDir>
-    </properties>
-
     <profiles>
         <profile>
             <id>backward-compatible</id>

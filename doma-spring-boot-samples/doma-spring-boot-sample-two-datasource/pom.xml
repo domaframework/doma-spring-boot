@@ -16,12 +16,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
-		<rootDir>${project.basedir}/../..</rootDir>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.seasar.doma</groupId>
