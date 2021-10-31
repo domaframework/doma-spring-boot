@@ -24,7 +24,6 @@ import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
 import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.SqlFileRepository;
-import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.dialect.Dialect;
@@ -242,6 +241,19 @@ public class DomaAutoConfigurationTest {
 		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
 	}
 
+	@Test
+	public void testJdbcLoggerSlf4J() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		Map<String, Object> source = new HashMap<>();
+		source.put("doma.jdbcLogger", "SLF4J");
+		sources.addFirst(new MapPropertySource("test", source));
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		JdbcLogger jdbcLogger = this.context.getBean(JdbcLogger.class);
+		assertThat(jdbcLogger.getClass().getSimpleName(), is("Slf4jJdbcLogger"));
+	}
+	
 	@After
 	public void tearDown() {
 		if (this.context != null) {
