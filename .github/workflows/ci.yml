@@ -62,7 +62,7 @@ jobs:
         run: cp doma-spring-boot-core/src/module/java/module-info.java doma-spring-boot-core/src/main/java/ && cp doma-spring-boot-autoconfigure/src/module/java/module-info.java doma-spring-boot-autoconfigure/src/main/java/
 
       - name: Test with Maven
-        run: ./mvnw test -B -pl doma-spring-boot-core,doma-spring-boot-autoconfigure
+        run: ./mvnw test -B -pl doma-spring-boot-core,doma-spring-boot-autoconfigure -Dmaven.compiler.source=17 -Dmaven.compiler.target=17
 
       - name: Upload reports
         if: failure()
