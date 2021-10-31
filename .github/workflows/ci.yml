@@ -89,9 +89,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Copy module-info.java
-        run: |
-          cp doma-spring-boot-core/src/module/java/module-info.java doma-spring-boot-core/src/main/java/ && \\
-          cp doma-spring-boot-autoconfigure/src/module/java/module-info.java doma-spring-boot-autoconfigure/src/main/java/
+        run: cp doma-spring-boot-core/src/module/java/module-info.java doma-spring-boot-core/src/main/java/ && cp doma-spring-boot-autoconfigure/src/module/java/module-info.java doma-spring-boot-autoconfigure/src/main/java/
 
       - name: Test with Maven
         run: ./mvnw test -B -pl doma-spring-boot-core,doma-spring-boot-autoconfigure -Dmaven.compiler.source=11 -Dmaven.compiler.target=11
