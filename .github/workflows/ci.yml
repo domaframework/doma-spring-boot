@@ -90,7 +90,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Test with Maven
-        run: ./mvnw -B compile -pl doma-spring-boot-core,doma-spring-boot-autoconfigure && ./mvnw -B test -pl doma-spring-boot-core,doma-spring-boot-autoconfigure -Dmaven.main.skip=true -Ddoma.version=2.49.0
+        run: ./mvnw -B compile -Pbackward-compatible && ./mvnw -B test -Dmaven.main.skip=true -Ddoma.version=2.49.0
 
       - name: Upload reports
         if: failure()
