@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         java: [ 8, 11, 17 ]
-        spring-boot-version: [ 2.2.13.RELEASE, 2.3.12.RELEASE, 2.4.10, 2.5.4 ]
+        spring-boot-version: [ 2.2.13.RELEASE, 2.3.12.RELEASE, 2.4.12, 2.5.6 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
         run: cp doma-spring-boot-core/src/module/java/module-info.java doma-spring-boot-core/src/main/java/ && cp doma-spring-boot-autoconfigure/src/module/java/module-info.java doma-spring-boot-autoconfigure/src/main/java/
 
       - name: Test with Maven
-        run: ./mvnw test -B -Dspring-boot.version=2.5.6 -pl doma-spring-boot-core,doma-spring-boot-autoconfigure
+        run: ./mvnw test -B -pl doma-spring-boot-core,doma-spring-boot-autoconfigure
 
       - name: Upload reports
         if: failure()
