@@ -27,7 +27,7 @@
             <groupId>org.seasar.doma</groupId>
             <artifactId>doma-processor</artifactId>
             <version>${doma.version}</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.seasar.doma.boot</groupId>

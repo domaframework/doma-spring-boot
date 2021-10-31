@@ -71,7 +71,7 @@ Add the following dependencies to `pom.xml` so that we can use Doma with Spring 
     <groupId>org.seasar.doma</groupId>
     <artifactId>doma-processor</artifactId>
     <version>2.30.0</version>
-    <scope>provided</scope>
+    <optional>true</optional>
 </dependency>
 ```
 

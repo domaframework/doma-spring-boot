@@ -27,7 +27,6 @@
 			<groupId>org.seasar.doma</groupId>
 			<artifactId>doma-processor</artifactId>
 			<version>${doma.version}</version>
-			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
