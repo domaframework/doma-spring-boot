@@ -24,4 +24,23 @@
     <properties>
         <rootDir>${project.basedir}/..</rootDir>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>backward-compatible</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-Adoma.version.validation=false</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
