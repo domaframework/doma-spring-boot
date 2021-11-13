@@ -71,7 +71,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>org.seasar.doma.boot.sample.entitylistener</Automatic-Module-Name>
+                            <Automatic-Module-Name>doma.spring.boot.sample.entity.listener</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

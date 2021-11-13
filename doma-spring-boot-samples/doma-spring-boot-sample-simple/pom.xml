@@ -67,7 +67,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>org.seasar.doma.boot.sample.simple</Automatic-Module-Name>
+                            <Automatic-Module-Name>doma.spring.boot.sample.simple</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

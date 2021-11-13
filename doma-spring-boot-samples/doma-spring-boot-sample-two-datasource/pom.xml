@@ -53,7 +53,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>org.seasar.doma.boot.sample.twodatasource</Automatic-Module-Name>
+                            <Automatic-Module-Name>doma.spring.boot.sample.two.datasource</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

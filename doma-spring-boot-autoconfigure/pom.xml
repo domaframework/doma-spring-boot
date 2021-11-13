@@ -76,7 +76,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>org.seasar.doma.boot.autoconfigure</Automatic-Module-Name>
+                            <Automatic-Module-Name>doma.spring.boot.autoconfigure</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>
