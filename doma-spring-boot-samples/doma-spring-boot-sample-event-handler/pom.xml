@@ -16,18 +16,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <rootDir>${project.basedir}/../..</rootDir>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.seasar.doma</groupId>
             <artifactId>doma-processor</artifactId>
             <version>${doma.version}</version>
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.seasar.doma.boot</groupId>
@@ -73,6 +67,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

@@ -4,8 +4,11 @@ import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 import java.util.function.Supplier;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.*;
+import org.seasar.doma.slf4j.Slf4jJdbcLogger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -227,7 +230,24 @@ public class DomaProperties {
 
 	public static enum JdbcLoggerType {
 		JUL(UtilLoggingJdbcLogger::new),
-		SLF4J(Slf4jJdbcLogger::new);
+		SLF4J(JdbcLoggerType::slf4jJdbcLogger);
+
+		private static JdbcLogger slf4jJdbcLogger() {
+			try {
+				return new Slf4jJdbcLogger();
+			} catch (NoClassDefFoundError e) {
+				Log logger = LogFactory.getLog(JdbcLoggerType.class);
+				logger.info(
+						"org.seasar.doma.slf4j.Slf4jJdbcLogger is not found, fallback to org.seasar.doma.jdbc.Slf4jJdbcLogger");
+				try {
+					return (JdbcLogger) Class.forName("org.seasar.doma.jdbc.Slf4jJdbcLogger")
+							.getConstructor().newInstance();
+				} catch (ReflectiveOperationException roe) {
+					logger.warn("org.seasar.doma.jdbc.Slf4jJdbcLogger could not be instantiated either.", roe);
+				}
+				throw e;
+			}
+		}
 
 		private final Supplier<JdbcLogger> constructor;
 
