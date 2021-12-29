@@ -46,7 +46,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <doma.version>2.50.0</doma.version>
+        <doma.version>2.51.0</doma.version>
         <spring-boot.version>2.6.0</spring-boot.version>
         <source-plugin.version>3.2.1</source-plugin.version>
         <javadoc-plugin.version>3.3.1</javadoc-plugin.version>
