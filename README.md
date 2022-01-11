@@ -31,12 +31,12 @@ doma.jdbc-logger= # Type of JdbcLogger. (SLF4J, JUL)
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
     <version>1.6.0</version>
-    <dependency>
-        <groupId>org.seasar.doma</groupId>
-        <artifactId>doma-processor</artifactId>
-        <version>2.50.0</version>
-        <optional>true</optional>
-    </dependency>
+</dependency>
+<dependency>
+    <groupId>org.seasar.doma</groupId>
+    <artifactId>doma-processor</artifactId>
+    <version>2.50.0</version>
+    <optional>true</optional>
 </dependency>
 ```
 
