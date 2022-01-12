@@ -53,7 +53,7 @@
         <nexus-staging-plugin.version>1.6.8</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.17.1</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
-        <gpg-plugin.version>1.6</gpg-plugin.version>
+        <gpg-plugin.version>3.0.1</gpg-plugin.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
 
