@@ -44,7 +44,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11, 17 ]
-        spring-boot-version: [ 2.3.12.RELEASE, 2.5.13, 2.5.7, 2.6.7 ]
+        spring-boot-version: [ 2.3.12.RELEASE, 2.4.13, 2.5.14, 2.6.8, 2.7.0 ]
 
     steps:
       - uses: actions/checkout@v3
