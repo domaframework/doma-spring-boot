@@ -1,7 +1,8 @@
 package org.seasar.doma.boot.autoconfigure;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
@@ -22,8 +23,8 @@ import org.seasar.doma.jdbc.JdbcException;
 import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
-import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.dialect.Dialect;
@@ -253,7 +254,7 @@ public class DomaAutoConfigurationTest {
 		JdbcLogger jdbcLogger = this.context.getBean(JdbcLogger.class);
 		assertThat(jdbcLogger.getClass().getSimpleName(), is("Slf4jJdbcLogger"));
 	}
-	
+
 	@After
 	public void tearDown() {
 		if (this.context != null) {

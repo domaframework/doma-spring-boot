@@ -98,7 +98,8 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = DomaProperties.DOMA_PREFIX, name = "exception-translation-enabled", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = DomaProperties.DOMA_PREFIX, name = "exception-translation-enabled",
+			matchIfMissing = true)
 	public PersistenceExceptionTranslator exceptionTranslator(Config config) {
 		return new DomaPersistenceExceptionTranslator(
 				new SQLErrorCodeSQLExceptionTranslator(config.getDataSource()));
@@ -127,6 +128,7 @@ public class DomaAutoConfiguration {
 		return new DomaEventListenerFactory();
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Bean
 	public DomaEventEntityListener domaEventEntityListener() {
 		return new DomaEventEntityListener();

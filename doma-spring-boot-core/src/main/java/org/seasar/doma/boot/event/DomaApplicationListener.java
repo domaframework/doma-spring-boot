@@ -8,11 +8,14 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Objects;
 import java.util.Set;
+
 import org.seasar.doma.Entity;
 import org.seasar.doma.boot.event.annotation.HandleDomaEvent;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.MergedAnnotation;
+import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.util.ReflectionUtils;
 
 public class DomaApplicationListener implements ApplicationListener<DomaEvent<?, ?>> {
@@ -37,10 +40,10 @@ public class DomaApplicationListener implements ApplicationListener<DomaEvent<?,
 		}
 
 		Set<Class<?>> contextClasses = Collections.newSetFromMap(new IdentityHashMap<>());
-		Annotation[] annotations = AnnotationUtils.getAnnotations(method);
-		for (Annotation annotation : annotations) {
+		MergedAnnotations annotations = MergedAnnotations.from(method);
+		for (MergedAnnotation<Annotation> annotation : annotations) {
 			HandleDomaEvent handleDomaEvent = AnnotationUtils.findAnnotation(
-					annotation.annotationType(), HandleDomaEvent.class);
+					annotation.getType(), HandleDomaEvent.class);
 			if (handleDomaEvent != null) {
 				contextClasses.add(handleDomaEvent.contextClass());
 			}

@@ -1,13 +1,30 @@
 package org.seasar.doma.boot.autoconfigure;
 
-import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
+import static org.seasar.doma.boot.autoconfigure.DomaProperties.*;
 
 import java.util.function.Supplier;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.seasar.doma.jdbc.*;
-import org.seasar.doma.jdbc.dialect.*;
+import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
+import org.seasar.doma.jdbc.JdbcLogger;
+import org.seasar.doma.jdbc.Naming;
+import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
+import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.SqlLogType;
+import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
+import org.seasar.doma.jdbc.dialect.Db2Dialect;
+import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.dialect.H2Dialect;
+import org.seasar.doma.jdbc.dialect.HsqldbDialect;
+import org.seasar.doma.jdbc.dialect.Mssql2008Dialect;
+import org.seasar.doma.jdbc.dialect.MssqlDialect;
+import org.seasar.doma.jdbc.dialect.MysqlDialect;
+import org.seasar.doma.jdbc.dialect.OracleDialect;
+import org.seasar.doma.jdbc.dialect.PostgresDialect;
+import org.seasar.doma.jdbc.dialect.SqliteDialect;
+import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.slf4j.Slf4jJdbcLogger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -169,7 +186,7 @@ public class DomaProperties {
 				.sqlFileRepository(sqlFileRepository.create()).naming(naming.naming());
 	}
 
-	public static enum DialectType {
+	public enum DialectType {
 		STANDARD(StandardDialect::new),
 		SQLITE(SqliteDialect::new),
 		DB2(Db2Dialect::new),
@@ -192,7 +209,7 @@ public class DomaProperties {
 		}
 	}
 
-	public static enum SqlFileRepositoryType {
+	public enum SqlFileRepositoryType {
 		NO_CACHE(NoCacheSqlFileRepository::new),
 		GREEDY_CACHE(GreedyCacheSqlFileRepository::new);
 
@@ -207,13 +224,15 @@ public class DomaProperties {
 		}
 	}
 
-	public static enum NamingType {
+	public enum NamingType {
 		NONE(Naming.NONE),
 		LOWER_CASE(Naming.LOWER_CASE),
 		UPPER_CASE(Naming.UPPER_CASE),
 		SNAKE_LOWER_CASE(Naming.SNAKE_LOWER_CASE),
 		SNAKE_UPPER_CASE(Naming.SNAKE_UPPER_CASE),
+		@Deprecated
 		LENIENT_SNAKE_LOWER_CASE(Naming.LENIENT_SNAKE_LOWER_CASE),
+		@Deprecated
 		LENIENT_SNAKE_UPPER_CASE(Naming.LENIENT_SNAKE_UPPER_CASE),
 		DEFAULT(Naming.DEFAULT);
 
@@ -228,7 +247,7 @@ public class DomaProperties {
 		}
 	}
 
-	public static enum JdbcLoggerType {
+	public enum JdbcLoggerType {
 		JUL(UtilLoggingJdbcLogger::new),
 		SLF4J(JdbcLoggerType::slf4jJdbcLogger);
 
