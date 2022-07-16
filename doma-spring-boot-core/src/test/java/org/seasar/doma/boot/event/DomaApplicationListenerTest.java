@@ -1,12 +1,13 @@
 package org.seasar.doma.boot.event;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 import java.lang.reflect.Method;
-import org.junit.Rule;
+
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.seasar.doma.Entity;
 import org.seasar.doma.boot.event.annotation.HandlePostInsert;
@@ -25,9 +26,7 @@ public class DomaApplicationListenerTest {
 
 	public static class ConstructorTest {
 
-		@Rule
-		public ExpectedException ee = ExpectedException.none();
-
+		@SuppressWarnings("unused")
 		@Test
 		public void entityOnly() throws Exception {
 			String beanName = "";
@@ -37,6 +36,7 @@ public class DomaApplicationListenerTest {
 			new DomaApplicationListener(beanName, method, beanFactory);
 		}
 
+		@SuppressWarnings("unused")
 		@Test
 		public void entityWithContext() throws Exception {
 			String beanName = "";
@@ -46,6 +46,7 @@ public class DomaApplicationListenerTest {
 			new DomaApplicationListener(beanName, method, beanFactory);
 		}
 
+		@SuppressWarnings("unused")
 		@Test
 		public void multiAnnotations() throws Exception {
 			String beanName = "";
@@ -57,61 +58,61 @@ public class DomaApplicationListenerTest {
 
 		@Test
 		public void notEntity() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = NotEntity.class
 					.getDeclaredMethod("handle", TestEntity3.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
 		public void invalidContextClass() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = InvalidContextClass.class.getDeclaredMethod("handle",
 					TestEntity1.class, PostInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
 		public void invalidContextTypeVar() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = InvalidContextTypeVar.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
 		public void noArg() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = NoArg.class.getDeclaredMethod("handle");
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
 		public void tooManyArgs() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = TooManyArgs.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class, Object.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
 		public void multiAnnotationsWithContext() throws Exception {
-			ee.expect(IllegalArgumentException.class);
 			String beanName = "";
 			Method method = MultiAnnotationsWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			new DomaApplicationListener(beanName, method, beanFactory);
+			assertThrows(IllegalArgumentException.class,
+					() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Entity
@@ -187,113 +188,118 @@ public class DomaApplicationListenerTest {
 
 		@Test
 		public void handleEvent() throws Exception {
-			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-			context.register(EntityOnlyHandler.class);
-			context.refresh();
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(EntityOnlyHandler.class);
+				context.refresh();
 
-			DomaApplicationListener listener = new DomaApplicationListener(
-					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class),
-					context);
+				DomaApplicationListener listener = new DomaApplicationListener(
+						"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
+								"handle", TestEntity1.class),
+						context);
 
-			TestEntity1 entity = new TestEntity1();
-			@SuppressWarnings("unchecked")
-			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
-			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
-			listener.onApplicationEvent(event);
+				TestEntity1 entity = new TestEntity1();
+				@SuppressWarnings("unchecked")
+				PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
+				PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
+				listener.onApplicationEvent(event);
 
-			EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
-			assertThat(handler.entity).isSameAs(entity);
+				EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
+				assertThat(handler.entity).isSameAs(entity);
+			}
 		}
 
 		@Test
 		public void handleEventWithContext() throws Exception {
-			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-			context.register(WithContextHandler.class);
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(WithContextHandler.class);
 
-			// In default, maximum one parameter is allowed for event listener method.
-			// So, use PassthroughEventListenerFactory
-			context.register(PassthroughEventListenerFactory.class);
+				// In default, maximum one parameter is allowed for event listener method.
+				// So, use PassthroughEventListenerFactory
+				context.register(PassthroughEventListenerFactory.class);
 
-			context.refresh();
+				context.refresh();
 
-			DomaApplicationListener listener = new DomaApplicationListener(
-					"withContextHandler", WithContextHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class, PreInsertContext.class),
-					context);
+				DomaApplicationListener listener = new DomaApplicationListener(
+						"withContextHandler", WithContextHandler.class.getDeclaredMethod(
+								"handle", TestEntity1.class, PreInsertContext.class),
+						context);
 
-			TestEntity1 entity = new TestEntity1();
-			@SuppressWarnings("unchecked")
-			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
-			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
-			listener.onApplicationEvent(event);
+				TestEntity1 entity = new TestEntity1();
+				@SuppressWarnings("unchecked")
+				PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
+				PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
+				listener.onApplicationEvent(event);
 
-			WithContextHandler handler = context.getBean(WithContextHandler.class);
-			assertThat(handler.entity).isSameAs(entity);
-			assertThat(handler.context).isSameAs(ctx);
+				WithContextHandler handler = context.getBean(WithContextHandler.class);
+				assertThat(handler.entity).isSameAs(entity);
+				assertThat(handler.context).isSameAs(ctx);
+			}
 		}
 
 		@Test
 		public void differentEventContext() throws Exception {
-			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-			context.register(EntityOnlyHandler.class);
-			context.refresh();
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(EntityOnlyHandler.class);
+				context.refresh();
 
-			DomaApplicationListener listener = new DomaApplicationListener(
-					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class),
-					context);
+				DomaApplicationListener listener = new DomaApplicationListener(
+						"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
+								"handle", TestEntity1.class),
+						context);
 
-			TestEntity1 entity = new TestEntity1();
-			@SuppressWarnings("unchecked")
-			PostInsertContext<TestEntity1> ctx = mock(PostInsertContext.class);
-			PostInsertEvent<TestEntity1> event = new PostInsertEvent<>(entity, ctx);
-			listener.onApplicationEvent(event);
+				TestEntity1 entity = new TestEntity1();
+				@SuppressWarnings("unchecked")
+				PostInsertContext<TestEntity1> ctx = mock(PostInsertContext.class);
+				PostInsertEvent<TestEntity1> event = new PostInsertEvent<>(entity, ctx);
+				listener.onApplicationEvent(event);
 
-			EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
-			assertThat(handler.entity).isNull();
+				EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
+				assertThat(handler.entity).isNull();
+			}
 		}
 
 		@Test
 		public void differentEntity() throws Exception {
-			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-			context.register(EntityOnlyHandler.class);
-			context.refresh();
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(EntityOnlyHandler.class);
+				context.refresh();
 
-			DomaApplicationListener listener = new DomaApplicationListener(
-					"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class),
-					context);
+				DomaApplicationListener listener = new DomaApplicationListener(
+						"entityOnlyHandler", EntityOnlyHandler.class.getDeclaredMethod(
+								"handle", TestEntity1.class),
+						context);
 
-			TestEntity2 entity = new TestEntity2();
-			@SuppressWarnings("unchecked")
-			PreInsertContext<TestEntity2> ctx = mock(PreInsertContext.class);
-			PreInsertEvent<TestEntity2> event = new PreInsertEvent<>(entity, ctx);
-			listener.onApplicationEvent(event);
+				TestEntity2 entity = new TestEntity2();
+				@SuppressWarnings("unchecked")
+				PreInsertContext<TestEntity2> ctx = mock(PreInsertContext.class);
+				PreInsertEvent<TestEntity2> event = new PreInsertEvent<>(entity, ctx);
+				listener.onApplicationEvent(event);
 
-			EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
-			assertThat(handler.entity).isNull();
+				EntityOnlyHandler handler = context.getBean(EntityOnlyHandler.class);
+				assertThat(handler.entity).isNull();
+			}
 		}
 
 		@Test
 		public void handleSubEntity() throws Exception {
-			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-			context.register(SuperClassHandler.class);
-			context.refresh();
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(SuperClassHandler.class);
+				context.refresh();
 
-			DomaApplicationListener listener = new DomaApplicationListener(
-					"superClassHandler", SuperClassHandler.class.getDeclaredMethod(
-							"handle", TestEntity1.class),
-					context);
+				DomaApplicationListener listener = new DomaApplicationListener(
+						"superClassHandler", SuperClassHandler.class.getDeclaredMethod(
+								"handle", TestEntity1.class),
+						context);
 
-			TestEntity3 entity = new TestEntity3();
-			@SuppressWarnings("unchecked")
-			PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
-			PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
-			listener.onApplicationEvent(event);
+				TestEntity3 entity = new TestEntity3();
+				@SuppressWarnings("unchecked")
+				PreInsertContext<TestEntity1> ctx = mock(PreInsertContext.class);
+				PreInsertEvent<TestEntity1> event = new PreInsertEvent<>(entity, ctx);
+				listener.onApplicationEvent(event);
 
-			SuperClassHandler handler = context.getBean(SuperClassHandler.class);
-			assertThat(handler.entity).isSameAs(entity);
+				SuperClassHandler handler = context.getBean(SuperClassHandler.class);
+				assertThat(handler.entity).isSameAs(entity);
+			}
 		}
 
 		@Entity

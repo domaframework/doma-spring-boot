@@ -1,16 +1,32 @@
 package org.seasar.doma.boot;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 
 import java.sql.SQLException;
 import java.util.Collections;
 
 import org.junit.Test;
 import org.seasar.doma.DomaException;
-import org.seasar.doma.jdbc.*;
+import org.seasar.doma.jdbc.ConfigException;
+import org.seasar.doma.jdbc.NoResultException;
+import org.seasar.doma.jdbc.NonSingleColumnException;
+import org.seasar.doma.jdbc.NonUniqueResultException;
+import org.seasar.doma.jdbc.OptimisticLockException;
+import org.seasar.doma.jdbc.ResultMappingException;
+import org.seasar.doma.jdbc.SqlExecutionException;
+import org.seasar.doma.jdbc.SqlKind;
+import org.seasar.doma.jdbc.SqlLogType;
+import org.seasar.doma.jdbc.UniqueConstraintException;
+import org.seasar.doma.jdbc.UnknownColumnException;
 import org.seasar.doma.message.Message;
-import org.springframework.dao.*;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.dao.TypeMismatchDataAccessException;
+import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.support.SQLExceptionSubclassTranslator;
 

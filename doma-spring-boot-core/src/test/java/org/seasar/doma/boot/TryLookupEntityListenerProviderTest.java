@@ -15,32 +15,35 @@ public class TryLookupEntityListenerProviderTest {
 
 	@Test
 	public void testManaged() throws Exception {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.register(FooListener.class);
-		context.refresh();
-		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
-		provider.setApplicationContext(context);
-		FooListener listener = provider.get(FooListener.class, FooListener::new);
-		assertThat(listener.managed, is(true));
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+			context.register(FooListener.class);
+			context.refresh();
+			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
+			provider.setApplicationContext(context);
+			FooListener listener = provider.get(FooListener.class, FooListener::new);
+			assertThat(listener.managed, is(true));
+		}
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testManaged_notUnique() throws Exception {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-				FooConfig.class);
-		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
-		provider.setApplicationContext(context);
-		provider.get(FooListener.class, FooListener::new);
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+				FooConfig.class)) {
+			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
+			provider.setApplicationContext(context);
+			provider.get(FooListener.class, FooListener::new);
+		}
 	}
 
 	@Test
 	public void testNotManaged() throws Exception {
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		context.refresh();
-		TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
-		provider.setApplicationContext(context);
-		FooListener listener = provider.get(FooListener.class, FooListener::new);
-		assertThat(listener.managed, is(false));
+		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+			context.refresh();
+			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
+			provider.setApplicationContext(context);
+			FooListener listener = provider.get(FooListener.class, FooListener::new);
+			assertThat(listener.managed, is(false));
+		}
 	}
 
 	@Component
