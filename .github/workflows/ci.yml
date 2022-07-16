@@ -60,7 +60,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Test with Maven
-        run: ./mvnw test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
+        run: ./mvnw -pl :doma-spring-boot-core,:doma-spring-boot-autoconfigure,:doma-spring-boot-starter test -B -Dspring-boot.version=${{ matrix.spring-boot-version }}
 
       - name: Upload reports
         if: failure()
