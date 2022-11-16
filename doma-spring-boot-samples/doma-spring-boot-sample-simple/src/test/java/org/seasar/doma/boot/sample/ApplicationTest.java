@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -21,19 +20,17 @@ public class ApplicationTest {
 	private TestRestTemplate restTemplate;
 	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
 	};
-	@LocalServerPort
-	private int port;
 
 	@Test
 	public void test() {
 		Message message1 = restTemplate.getForObject(
-				UriComponentsBuilder.fromUriString("http://localhost").port(port)
+				UriComponentsBuilder.fromPath("/")
 						.queryParam("text", "hello").build().toUri(),
 				Message.class);
 		assertEquals(1, message1.id);
 		assertEquals("hello", message1.text);
 		Message message2 = restTemplate.getForObject(
-				UriComponentsBuilder.fromUriString("http://localhost").port(port)
+				UriComponentsBuilder.fromPath("/")
 						.queryParam("text", "world").build().toUri(),
 				Message.class);
 		assertEquals(2, message2.id);
@@ -41,7 +38,7 @@ public class ApplicationTest {
 
 		{
 			List<Message> messages = restTemplate.exchange(
-					UriComponentsBuilder.fromUriString("http://localhost").port(port)
+					UriComponentsBuilder.fromPath("/")
 							.build().toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY,
 					typedReference).getBody();
@@ -54,7 +51,7 @@ public class ApplicationTest {
 
 		{
 			List<Message> messages = restTemplate.exchange(
-					UriComponentsBuilder.fromUriString("http://localhost").port(port)
+					UriComponentsBuilder.fromPath("/")
 							.queryParam("page", "1").queryParam("size", "1").build()
 							.toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY, typedReference)
