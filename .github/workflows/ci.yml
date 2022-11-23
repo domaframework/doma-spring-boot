@@ -21,7 +21,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
+          distribution: liberica
           java-version: 8
           cache: maven
 
@@ -55,7 +55,7 @@ jobs:
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
+          distribution: liberica
           java-version: ${{ matrix.java }}
           cache: maven
 
@@ -84,7 +84,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
+          distribution: liberica
           java-version: 17
           cache: maven
 
@@ -113,7 +113,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
+          distribution: liberica
           java-version: 8
           cache: maven
 
@@ -141,7 +141,7 @@ jobs:
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
-          distribution: zulu
+          distribution: liberica
           java-version: 8
           cache: maven
 
