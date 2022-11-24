@@ -47,7 +47,7 @@ jobs:
     strategy:
       matrix:
         java: [ 11, 17, 19 ]
-        spring-boot-version: [ 2.4.13, 2.5.14, 2.6.13, 2.7.5 ]
+        spring-boot-version: [ 2.4.13, 2.5.14, 2.6.14, 2.7.6 ]
 
     steps:
       - uses: actions/checkout@v3
@@ -72,27 +72,31 @@ jobs:
           name: reports
           path: ./**/target/surefire-reports
 
-  test-spring-boot-3-rc:
+  test-spring-boot-3:
     if: contains(github.event.head_commit.message, '[skip ci]') == false
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: [ test ]
 
+    strategy:
+      matrix:
+        java: [ 17, 19 ]
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK
+      - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           distribution: liberica
-          java-version: 17
+          java-version: ${{ matrix.java }}
           cache: maven
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
 
       - name: Test with Maven
-        run: ./mvnw $MAVEN_CLI_OPTS -pl :doma-spring-boot-core,:doma-spring-boot-autoconfigure,:doma-spring-boot-starter test -Dspring-boot.version=3.0.0-RC2
+        run: ./mvnw $MAVEN_CLI_OPTS -pl :doma-spring-boot-core,:doma-spring-boot-autoconfigure,:doma-spring-boot-starter test -Dspring-boot.version=3.0.0
 
       - name: Upload reports
         if: failure()
