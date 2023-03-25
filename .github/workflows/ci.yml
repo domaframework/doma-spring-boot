@@ -80,7 +80,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ 17, 19 ]
+        java: [ 17, 20 ]
 
     steps:
       - uses: actions/checkout@v3
