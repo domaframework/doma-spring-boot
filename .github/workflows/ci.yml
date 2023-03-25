@@ -46,7 +46,7 @@ jobs:
 
     strategy:
       matrix:
-        java: [ 11, 17, 19 ]
+        java: [ 11, 17, 20 ]
         spring-boot-version: [ 2.4.13, 2.5.14, 2.6.14, 2.7.6 ]
 
     steps:
