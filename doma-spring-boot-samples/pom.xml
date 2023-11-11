@@ -21,6 +21,10 @@
         <module>doma-spring-boot-sample-two-datasource</module>
     </modules>
 
+    <properties>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+    </properties>
+
     <profiles>
         <profile>
             <id>backward-compatible</id>
