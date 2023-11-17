@@ -52,7 +52,7 @@
         <javadoc-plugin.version>3.6.2</javadoc-plugin.version>
         <nexus-staging-plugin.version>1.6.13</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.23.0</formatter-maven-plugin.version>
-        <versions-maven-plugin.version>2.16.1</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
         <gpg-plugin.version>3.1.0</gpg-plugin.version>
         <rootDir>${project.basedir}</rootDir>
     </properties>
