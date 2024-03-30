@@ -1,6 +1,6 @@
 package org.seasar.doma.boot.autoconfigure;
 
-import static org.seasar.doma.boot.autoconfigure.DomaProperties.*;
+import static org.seasar.doma.boot.autoconfigure.DomaProperties.DOMA_PREFIX;
 
 import java.util.function.Supplier;
 
@@ -16,11 +16,15 @@ import org.seasar.doma.jdbc.SqlLogType;
 import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.dialect.Db2Dialect;
 import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.dialect.H212126Dialect;
+import org.seasar.doma.jdbc.dialect.H214199Dialect;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.dialect.HsqldbDialect;
 import org.seasar.doma.jdbc.dialect.Mssql2008Dialect;
 import org.seasar.doma.jdbc.dialect.MssqlDialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
+import org.seasar.doma.jdbc.dialect.MysqlDialect.MySqlVersion;
+import org.seasar.doma.jdbc.dialect.Oracle11Dialect;
 import org.seasar.doma.jdbc.dialect.OracleDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.SqliteDialect;
@@ -193,9 +197,14 @@ public class DomaProperties {
 		MSSQL(MssqlDialect::new),
 		MSSQL2008(Mssql2008Dialect::new),
 		MYSQL(MysqlDialect::new),
+		MYSQLV5(() -> new MysqlDialect(MySqlVersion.V5)),
+		MYSQLV8(() -> new MysqlDialect(MySqlVersion.V8)),
 		POSTGRES(PostgresDialect::new),
+		ORACLE11(Oracle11Dialect::new),
 		ORACLE(OracleDialect::new),
 		H2(H2Dialect::new),
+		H212126(H212126Dialect::new),
+		H214199(H214199Dialect::new),
 		HSQL(HsqldbDialect::new);
 
 		private final Supplier<Dialect> constructor;
