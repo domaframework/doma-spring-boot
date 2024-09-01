@@ -171,9 +171,6 @@ public class DomaAutoConfiguration {
 		if (domaConfigBuilder.entityListenerProvider() == null) {
 			domaConfigBuilder.entityListenerProvider(entityListenerProvider);
 		}
-		if (domaConfigBuilder.domaProperties() == null) {
-			return domaConfigBuilder.build(domaProperties);
-		}
 		return domaConfigBuilder.build();
 	}
 
