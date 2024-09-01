@@ -1,5 +1,7 @@
 package org.seasar.doma.boot.autoconfigure;
 
+import java.util.Objects;
+
 import javax.sql.DataSource;
 
 import org.seasar.doma.jdbc.*;
@@ -39,16 +41,8 @@ public class DomaConfigBuilder {
 	private Commenter commenter = ConfigSupport.defaultCommenter;
 	private EntityListenerProvider entityListenerProvider;
 
-	@Deprecated
-	public DomaConfigBuilder() {
-	}
-
 	public DomaConfigBuilder(DomaProperties domaProperties) {
-		this.domaProperties = domaProperties;
-	}
-
-	DomaProperties domaProperties() {
-		return domaProperties;
+		this.domaProperties = Objects.requireNonNull(domaProperties);
 	}
 
 	public DataSource dataSource() {
@@ -178,12 +172,6 @@ public class DomaConfigBuilder {
 			EntityListenerProvider entityListenerProvider) {
 		this.entityListenerProvider = entityListenerProvider;
 		return this;
-	}
-
-	@Deprecated
-	public DomaConfig build(DomaProperties domaProperties) {
-		this.domaProperties = domaProperties;
-		return build();
 	}
 
 	public DomaConfig build() {
