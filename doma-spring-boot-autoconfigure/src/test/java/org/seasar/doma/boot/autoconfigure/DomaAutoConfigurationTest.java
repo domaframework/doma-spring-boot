@@ -1,8 +1,11 @@
 package org.seasar.doma.boot.autoconfigure;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
@@ -27,6 +30,7 @@ import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
+import org.seasar.doma.jdbc.criteria.QueryDsl;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
@@ -255,6 +259,24 @@ public class DomaAutoConfigurationTest {
 		assertThat(jdbcLogger.getClass().getSimpleName(), is("Slf4jJdbcLogger"));
 	}
 
+	@Test
+	public void testAutoRegisteredQueryDsl() {
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		QueryDsl queryDsl = this.context.getBean(QueryDsl.class);
+		assertNotNull(queryDsl);
+	}
+
+	@Test
+	public void testQueryDslWithConfig() {
+		this.context.register(MyQueryDslConfig.class, DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Map<String, QueryDsl> queryDslBeans = this.context.getBeansOfType(QueryDsl.class);
+		assertEquals(1, queryDslBeans.size());
+		assertNotNull(queryDslBeans.get("myQueryDsl"));
+	}
+
 	@After
 	public void tearDown() {
 		if (this.context != null) {
@@ -339,6 +361,15 @@ public class DomaAutoConfigurationTest {
 		@Bean
 		public NativeSql myNativeSql(Config config) {
 			return new NativeSql(config);
+		}
+	}
+
+	@Configuration
+	public static class MyQueryDslConfig {
+
+		@Bean
+		public QueryDsl myQueryDsl(Config config) {
+			return new QueryDsl(config);
 		}
 	}
 }
