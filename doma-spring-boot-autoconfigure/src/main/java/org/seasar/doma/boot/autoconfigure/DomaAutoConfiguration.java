@@ -16,6 +16,7 @@ import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
+import org.seasar.doma.jdbc.criteria.QueryDsl;
 import org.seasar.doma.jdbc.dialect.Db2Dialect;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
@@ -146,7 +147,6 @@ public class DomaAutoConfiguration {
 		return new DomaConfigBuilder(domaProperties);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Bean
 	@ConditionalOnMissingBean(Config.class)
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
@@ -188,6 +188,17 @@ public class DomaAutoConfiguration {
 		@ConditionalOnMissingBean(NativeSql.class)
 		public NativeSql nativeSql(Config config) {
 			return new NativeSql(config);
+		}
+	}
+
+	@Configuration
+	@ConditionalOnClass({ QueryDsl.class })
+	public static class QueryDslConfiguration {
+
+		@Bean
+		@ConditionalOnMissingBean(QueryDsl.class)
+		public QueryDsl queryDsl(Config config) {
+			return new QueryDsl(config);
 		}
 	}
 }
