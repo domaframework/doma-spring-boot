@@ -46,8 +46,11 @@ jobs:
 
     strategy:
       matrix:
-        java: [ 21, 22 ]
-        spring-boot-version: [ 3.2.9, 3.3.3, 3.4.0-M2 ]
+        # Latest LTS, latest release
+        java: [ 21, 23 ]
+        # OSS support versions
+        # https://spring.io/projects/spring-boot#support
+        spring-boot-version: [ 3.3.7, 3.4.1 ]
 
     steps:
       - uses: actions/checkout@v4
