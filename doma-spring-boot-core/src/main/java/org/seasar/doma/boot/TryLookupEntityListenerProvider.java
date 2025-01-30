@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * {@link EntityListenerProvider} implementation that {@link EntityListener} managed by
  * Spring Framework, or else created by Doma.
- * 
+ *
  * @author backpaper0
  *
  */

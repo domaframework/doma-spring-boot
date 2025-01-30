@@ -67,7 +67,8 @@ public class DataSourceConfiguration {
 
 	@Secondary
 	@Bean
-	public SqlDataSourceScriptDatabaseInitializer secondaryDataSourceInitializer(@Secondary DataSource dataSource,
+	public SqlDataSourceScriptDatabaseInitializer secondaryDataSourceInitializer(
+			@Secondary DataSource dataSource,
 			@Secondary SqlInitializationProperties properties) {
 		return new SqlDataSourceScriptDatabaseInitializer(dataSource, properties);
 	}

@@ -1,19 +1,29 @@
 package org.seasar.doma.boot.autoconfigure;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
+import org.seasar.doma.boot.DomaSpringBootSqlBuilderSettings;
+import org.seasar.doma.boot.ResourceLoaderScriptFileLoader;
 import org.seasar.doma.boot.TryLookupEntityListenerProvider;
 import org.seasar.doma.boot.autoconfigure.DomaProperties.DialectType;
 import org.seasar.doma.boot.event.DomaEventEntityListener;
 import org.seasar.doma.boot.event.DomaEventListenerFactory;
 import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.ConfigSupport;
+import org.seasar.doma.jdbc.DuplicateColumnHandler;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Naming;
+import org.seasar.doma.jdbc.ScriptFileLoader;
+import org.seasar.doma.jdbc.SqlBuilderSettings;
 import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.ThrowingDuplicateColumnHandler;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.criteria.QueryDsl;
@@ -27,6 +37,9 @@ import org.seasar.doma.jdbc.dialect.OracleDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.SqliteDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
+import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
+import org.seasar.doma.jdbc.statistic.StatisticManager;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -38,6 +51,7 @@ import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
 
@@ -99,8 +113,7 @@ public class DomaAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = DomaProperties.DOMA_PREFIX, name = "exception-translation-enabled",
-			matchIfMissing = true)
+	@ConditionalOnProperty(prefix = DomaProperties.DOMA_PREFIX, name = "exception-translation-enabled", matchIfMissing = true)
 	public PersistenceExceptionTranslator exceptionTranslator(Config config) {
 		return new DomaPersistenceExceptionTranslator(
 				new SQLErrorCodeSQLExceptionTranslator(config.getDataSource()));
@@ -143,6 +156,44 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
+	public DuplicateColumnHandler duplicateColumnHandler() {
+		if (domaProperties.isThrowExceptionIfDuplicateColumn()) {
+			return new ThrowingDuplicateColumnHandler();
+		}
+		return ConfigSupport.defaultDuplicateColumnHandler;
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public ScriptFileLoader scriptFileLoader(ResourceLoader resourceLoader) {
+		return new ResourceLoaderScriptFileLoader(resourceLoader);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public SqlBuilderSettings sqlBuilderSettings(
+			Optional<Predicate<String>> shouldRemoveBlockCommentOpt,
+			Optional<Predicate<String>> shouldRemoveLineCommentOpt) {
+		Predicate<String> shouldRemoveBlockComment = shouldRemoveBlockCommentOpt
+				.orElseGet(() -> comment -> false);
+		Predicate<String> shouldRemoveLineComment = shouldRemoveLineCommentOpt
+				.orElseGet(() -> comment -> false);
+		boolean shouldRemoveBlankLines = domaProperties.getSqlBuilderSettings()
+				.isShouldRemoveBlankLines();
+		boolean shouldRequireInListPadding = domaProperties.getSqlBuilderSettings()
+				.isShouldRequireInListPadding();
+		return new DomaSpringBootSqlBuilderSettings(shouldRemoveBlockComment,
+				shouldRemoveLineComment, shouldRemoveBlankLines, shouldRequireInListPadding);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
+	public StatisticManager statisticManager() {
+		return new DefaultStatisticManager(domaProperties.getStatisticManager().isEnabled());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean
 	public DomaConfigBuilder domaConfigBuilder() {
 		return new DomaConfigBuilder(domaProperties);
 	}
@@ -152,7 +203,9 @@ public class DomaAutoConfiguration {
 	public DomaConfig config(DataSource dataSource, Dialect dialect,
 			SqlFileRepository sqlFileRepository, Naming naming, JdbcLogger jdbcLogger,
 			EntityListenerProvider entityListenerProvider,
-			DomaConfigBuilder domaConfigBuilder) {
+			DomaConfigBuilder domaConfigBuilder, DuplicateColumnHandler duplicateColumnHandler,
+			ScriptFileLoader scriptFileLoader, SqlBuilderSettings sqlBuilderSettings,
+			StatisticManager statisticManager) {
 		if (domaConfigBuilder.dataSource() == null) {
 			domaConfigBuilder.dataSource(dataSource);
 		}
@@ -170,6 +223,18 @@ public class DomaAutoConfiguration {
 		}
 		if (domaConfigBuilder.entityListenerProvider() == null) {
 			domaConfigBuilder.entityListenerProvider(entityListenerProvider);
+		}
+		if (domaConfigBuilder.duplicateColumnHandler() == null) {
+			domaConfigBuilder.duplicateColumnHandler(duplicateColumnHandler);
+		}
+		if (domaConfigBuilder.scriptFileLoader() == null) {
+			domaConfigBuilder.scriptFileLoader(scriptFileLoader);
+		}
+		if (domaConfigBuilder.sqlBuilderSettings() == null) {
+			domaConfigBuilder.sqlBuilderSettings(sqlBuilderSettings);
+		}
+		if (domaConfigBuilder.statisticManager() == null) {
+			domaConfigBuilder.statisticManager(statisticManager);
 		}
 		return domaConfigBuilder.build();
 	}

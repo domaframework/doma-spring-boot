@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 /**
@@ -40,6 +41,10 @@ public class DomaConfigBuilder {
 	private MapKeyNaming mapKeyNaming = ConfigSupport.defaultMapKeyNaming;
 	private Commenter commenter = ConfigSupport.defaultCommenter;
 	private EntityListenerProvider entityListenerProvider;
+	private DuplicateColumnHandler duplicateColumnHandler;
+	private ScriptFileLoader scriptFileLoader;
+	private SqlBuilderSettings sqlBuilderSettings;
+	private StatisticManager statisticManager;
 
 	public DomaConfigBuilder(DomaProperties domaProperties) {
 		this.domaProperties = Objects.requireNonNull(domaProperties);
@@ -171,6 +176,42 @@ public class DomaConfigBuilder {
 	public DomaConfigBuilder entityListenerProvider(
 			EntityListenerProvider entityListenerProvider) {
 		this.entityListenerProvider = entityListenerProvider;
+		return this;
+	}
+
+	public DuplicateColumnHandler duplicateColumnHandler() {
+		return duplicateColumnHandler;
+	}
+
+	public DomaConfigBuilder duplicateColumnHandler(DuplicateColumnHandler duplicateColumnHandler) {
+		this.duplicateColumnHandler = duplicateColumnHandler;
+		return this;
+	}
+
+	public ScriptFileLoader scriptFileLoader() {
+		return scriptFileLoader;
+	}
+
+	public DomaConfigBuilder scriptFileLoader(ScriptFileLoader scriptFileLoader) {
+		this.scriptFileLoader = scriptFileLoader;
+		return this;
+	}
+
+	public SqlBuilderSettings sqlBuilderSettings() {
+		return sqlBuilderSettings;
+	}
+
+	public DomaConfigBuilder sqlBuilderSettings(SqlBuilderSettings sqlBuilderSettings) {
+		this.sqlBuilderSettings = sqlBuilderSettings;
+		return this;
+	}
+
+	public StatisticManager statisticManager() {
+		return statisticManager;
+	}
+
+	public DomaConfigBuilder statisticManager(StatisticManager statisticManager) {
+		this.statisticManager = statisticManager;
 		return this;
 	}
 

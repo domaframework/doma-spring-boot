@@ -97,6 +97,21 @@ public class DomaProperties {
 	 */
 	private int batchSize = 0;
 
+	/**
+	 * Properties for <code>org.seasar.doma.jdbc.SqlBuilderSettings</code>.
+	 */
+	private SqlBuilderSettings sqlBuilderSettings = new SqlBuilderSettings();
+
+	/**
+	 * Whether to throw an exception when duplicate columns are detected.
+	 */
+	private boolean throwExceptionIfDuplicateColumn = false;
+
+	/**
+	 * Properties for <code>org.seasar.doma.jdbc.statistic.DefaultStatisticManager</code>.
+	 */
+	private StatisticManager statisticManager = new StatisticManager();
+
 	public DialectType getDialect() {
 		return dialect;
 	}
@@ -185,6 +200,30 @@ public class DomaProperties {
 		this.batchSize = batchSize;
 	}
 
+	public SqlBuilderSettings getSqlBuilderSettings() {
+		return sqlBuilderSettings;
+	}
+
+	public void setSqlBuilderSettings(SqlBuilderSettings sqlBuilderSettings) {
+		this.sqlBuilderSettings = sqlBuilderSettings;
+	}
+
+	public boolean isThrowExceptionIfDuplicateColumn() {
+		return throwExceptionIfDuplicateColumn;
+	}
+
+	public void setThrowExceptionIfDuplicateColumn(boolean throwExceptionIfDuplicateColumn) {
+		this.throwExceptionIfDuplicateColumn = throwExceptionIfDuplicateColumn;
+	}
+
+	public StatisticManager getStatisticManager() {
+		return statisticManager;
+	}
+
+	public void setStatisticManager(StatisticManager statisticManager) {
+		this.statisticManager = statisticManager;
+	}
+
 	public DomaConfigBuilder initializeDomaConfigBuilder() {
 		return new DomaConfigBuilder(this).dialect(dialect.create())
 				.sqlFileRepository(sqlFileRepository.create()).naming(naming.naming());
@@ -267,7 +306,9 @@ public class DomaProperties {
 					return (JdbcLogger) Class.forName("org.seasar.doma.jdbc.Slf4jJdbcLogger")
 							.getConstructor().newInstance();
 				} catch (ReflectiveOperationException roe) {
-					logger.warn("org.seasar.doma.jdbc.Slf4jJdbcLogger could not be instantiated either.", roe);
+					logger.warn(
+							"org.seasar.doma.jdbc.Slf4jJdbcLogger could not be instantiated either.",
+							roe);
 				}
 				throw e;
 			}
@@ -284,15 +325,45 @@ public class DomaProperties {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return "DomaProperties{" + "dialect=" + dialect + ", sqlFileRepository="
-				+ sqlFileRepository + ", naming=" + naming
-				+ ", exceptionTranslationEnabled=" + exceptionTranslationEnabled
-				+ ", dataSourceName='" + dataSourceName + '\'' + ", exceptionSqlLogType="
-				+ exceptionSqlLogType + ", jdbcLogger="
-				+ jdbcLogger + ", maxRows=" + maxRows + ", fetchSize="
-				+ fetchSize + ", queryTimeout=" + queryTimeout + ", batchSize="
-				+ batchSize + '}';
+	public static class SqlBuilderSettings {
+
+		/**
+		 * Whether the blank lines should be removed.
+		 */
+		private boolean shouldRemoveBlankLines = false;
+
+		/**
+		 * Whether padding is required for elements in an "IN" list in SQL queries.
+		 */
+		private boolean shouldRequireInListPadding = false;
+
+		public boolean isShouldRemoveBlankLines() {
+			return shouldRemoveBlankLines;
+		}
+
+		public void setShouldRemoveBlankLines(boolean shouldRemoveBlankLines) {
+			this.shouldRemoveBlankLines = shouldRemoveBlankLines;
+		}
+
+		public boolean isShouldRequireInListPadding() {
+			return shouldRequireInListPadding;
+		}
+
+		public void setShouldRequireInListPadding(boolean shouldRequireInListPadding) {
+			this.shouldRequireInListPadding = shouldRequireInListPadding;
+		}
+	}
+
+	public static class StatisticManager {
+
+		private boolean enabled = false;
+
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
 	}
 }

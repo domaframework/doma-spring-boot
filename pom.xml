@@ -55,7 +55,7 @@
         <formatter-maven-plugin.version>2.24.1</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <gpg-plugin.version>3.2.7</gpg-plugin.version>
-        <rootDir>${project.basedir}</rootDir>
+        <rootDir>${env.PWD}</rootDir>
     </properties>
 
     <modules>
