@@ -9,3 +9,4 @@ target
 .settings
 .factorypath
 .apt_generated
+.vscode/
