@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 
 import org.seasar.doma.jdbc.*;
 import org.seasar.doma.jdbc.dialect.Dialect;
+import org.seasar.doma.jdbc.statistic.StatisticManager;
 
 /**
  * {@link Config} implementation used in doma-spring-boot.
@@ -26,6 +27,10 @@ public class DomaConfig implements Config {
 	private final Commenter commenter;
 	private final EntityListenerProvider entityListenerProvider;
 	private final DomaProperties domaProperties;
+	private final DuplicateColumnHandler duplicateColumnHandler;
+	private final ScriptFileLoader scriptFileLoader;
+	private final SqlBuilderSettings sqlBuilderSettings;
+	private final StatisticManager statisticManager;
 
 	public DomaConfig(DomaConfigBuilder builder, DomaProperties domaProperties) {
 		this.dataSource = builder.dataSource();
@@ -41,6 +46,10 @@ public class DomaConfig implements Config {
 		this.mapKeyNaming = builder.mapKeyNaming();
 		this.commenter = builder.commenter();
 		this.entityListenerProvider = builder.entityListenerProvider();
+		this.duplicateColumnHandler = builder.duplicateColumnHandler();
+		this.scriptFileLoader = builder.scriptFileLoader();
+		this.sqlBuilderSettings = builder.sqlBuilderSettings();
+		this.statisticManager = builder.statisticManager();
 		this.domaProperties = domaProperties;
 	}
 
@@ -140,15 +149,22 @@ public class DomaConfig implements Config {
 	}
 
 	@Override
-	public String toString() {
-		return "DomaConfig{" + "dataSource=" + dataSource + ", dialect=" + dialect
-				+ ", jdbcLogger=" + jdbcLogger + ", sqlFileRepository="
-				+ sqlFileRepository + ", requiresNewController=" + requiresNewController
-				+ ", classHelper=" + classHelper + ", commandImplementors="
-				+ commandImplementors + ", queryImplementors=" + queryImplementors
-				+ ", unknownColumnHandler=" + unknownColumnHandler + ", naming=" + naming
-				+ ", mapKeyNaming=" + mapKeyNaming + ", commenter=" + commenter
-				+ ", entityListenerProvider=" + entityListenerProvider
-				+ ", domaProperties=" + domaProperties + '}';
+	public DuplicateColumnHandler getDuplicateColumnHandler() {
+		return this.duplicateColumnHandler;
+	}
+
+	@Override
+	public ScriptFileLoader getScriptFileLoader() {
+		return this.scriptFileLoader;
+	}
+
+	@Override
+	public SqlBuilderSettings getSqlBuilderSettings() {
+		return this.sqlBuilderSettings;
+	}
+
+	@Override
+	public StatisticManager getStatisticManager() {
+		return this.statisticManager;
 	}
 }
