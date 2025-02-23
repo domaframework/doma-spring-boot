@@ -55,7 +55,7 @@
         <formatter-maven-plugin.version>2.25.0</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
         <gpg-plugin.version>3.2.7</gpg-plugin.version>
-        <rootDir>${project.basedir}</rootDir>
+        <rootDir>${env.PWD}</rootDir>
     </properties>
 
     <modules>
@@ -63,6 +63,7 @@
         <module>doma-spring-boot-autoconfigure</module>
         <module>doma-spring-boot-starter</module>
         <module>doma-spring-boot-samples</module>
+        <module>doma-spring-boot-jacoco-aggregate</module>
     </modules>
 
     <dependencyManagement>
@@ -162,6 +163,28 @@
                 <configuration>
                     <configFile>${rootDir}/eclipse/eclipse-code-formatter.xml</configFile>
                     <lineEnding>LF</lineEnding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <executions>
+                    <execution>
+                        <id>prepare</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
                 </configuration>
             </plugin>
         </plugins>
