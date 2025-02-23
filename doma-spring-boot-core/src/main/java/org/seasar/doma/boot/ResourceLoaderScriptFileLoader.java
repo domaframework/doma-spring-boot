@@ -17,9 +17,16 @@ public class ResourceLoaderScriptFileLoader implements ScriptFileLoader {
 
 	@Override
 	public URL loadAsURL(String path) {
-		var resource = resourceLoader.getResource(ResourceLoader.CLASSPATH_URL_PREFIX + path);
 		try {
-			return resource.getURL();
+			var resource = resourceLoader.getResource(ResourceLoader.CLASSPATH_URL_PREFIX + path);
+			if (resource.exists()) {
+				return resource.getURL();
+			}
+			resource = resourceLoader.getResource(ResourceLoader.CLASSPATH_URL_PREFIX + "/" + path);
+			if (resource.exists()) {
+				return resource.getURL();
+			}
+			return null;
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}

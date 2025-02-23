@@ -5,13 +5,23 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import javax.sql.DataSource;
 
@@ -19,14 +29,21 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.seasar.doma.boot.DomaPersistenceExceptionTranslator;
+import org.seasar.doma.boot.DomaSpringBootSqlBuilderSettings;
+import org.seasar.doma.boot.ResourceLoaderScriptFileLoader;
 import org.seasar.doma.jdbc.Config;
+import org.seasar.doma.jdbc.ConfigSupport;
+import org.seasar.doma.jdbc.DuplicateColumnHandler;
 import org.seasar.doma.jdbc.EntityListenerProvider;
 import org.seasar.doma.jdbc.GreedyCacheSqlFileRepository;
 import org.seasar.doma.jdbc.JdbcException;
 import org.seasar.doma.jdbc.JdbcLogger;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.NoCacheSqlFileRepository;
+import org.seasar.doma.jdbc.ScriptFileLoader;
+import org.seasar.doma.jdbc.SqlBuilderSettings;
 import org.seasar.doma.jdbc.SqlFileRepository;
+import org.seasar.doma.jdbc.ThrowingDuplicateColumnHandler;
 import org.seasar.doma.jdbc.UtilLoggingJdbcLogger;
 import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
@@ -36,6 +53,8 @@ import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
+import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
+import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.seasar.doma.message.Message;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -75,6 +94,13 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
 		assertThat(config.getEntityListenerProvider(), is(notNullValue()));
+		assertThat(config.getDuplicateColumnHandler(),
+				is(ConfigSupport.defaultDuplicateColumnHandler));
+		assertThat(config.getScriptFileLoader(),
+				is(instanceOf(ResourceLoaderScriptFileLoader.class)));
+		assertThat(config.getSqlBuilderSettings(),
+				is(instanceOf(DomaSpringBootSqlBuilderSettings.class)));
+		assertThat(config.getStatisticManager(), is(instanceOf(DefaultStatisticManager.class)));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -96,6 +122,12 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
 		assertThat(config.getEntityListenerProvider(),
 				is(instanceOf(TestEntityListenerProvider.class)));
+		assertThat(config.getDuplicateColumnHandler(),
+				is(ConfigBuilderConfigure.testDuplicateColumnHandler));
+		assertThat(config.getScriptFileLoader(), is(ConfigBuilderConfigure.testScriptFileLoader));
+		assertThat(config.getSqlBuilderSettings(),
+				is(ConfigBuilderConfigure.testSqlBuilderSettings));
+		assertThat(config.getStatisticManager(), is(ConfigBuilderConfigure.testStatisticManager));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -117,6 +149,12 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
 		assertThat(config.getEntityListenerProvider(),
 				is(instanceOf(TestEntityListenerProvider.class)));
+		assertThat(config.getDuplicateColumnHandler(),
+				is(ConfigConfigure.testDuplicateColumnHandler));
+		assertThat(config.getScriptFileLoader(), is(ConfigConfigure.testScriptFileLoader));
+		assertThat(config.getSqlBuilderSettings(),
+				is(ConfigConfigure.testSqlBuilderSettings));
+		assertThat(config.getStatisticManager(), is(ConfigConfigure.testStatisticManager));
 		PersistenceExceptionTranslator translator = this.context
 				.getBean(PersistenceExceptionTranslator.class);
 		assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
@@ -277,6 +315,123 @@ public class DomaAutoConfigurationTest {
 		assertNotNull(queryDslBeans.get("myQueryDsl"));
 	}
 
+	@Test
+	public void testThrowExceptionIfDuplicateColumn() {
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.throw-exception-if-duplicate-column:true");
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertThat(config.getDuplicateColumnHandler(),
+				is(instanceOf(ThrowingDuplicateColumnHandler.class)));
+	}
+
+	@Test
+	public void testCustomizeShouldRemoveBlockComment() {
+		Predicate<String> predicate = mock(Predicate.class);
+		when(predicate.test(anyString())).thenReturn(true);
+
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean("shouldRemoveBlockComment", Predicate.class, () -> predicate);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
+		config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+
+		verify(predicate, times(1)).test("shouldRemoveBlockComment");
+		verifyNoMoreInteractions(predicate);
+	}
+
+	@Test
+	public void testCustomizeShouldRemoveLineComment() {
+		Predicate<String> predicate = mock(Predicate.class);
+		when(predicate.test(anyString())).thenReturn(true);
+
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean("shouldRemoveLineComment", Predicate.class, () -> predicate);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
+		config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+
+		verify(predicate, times(1)).test("shouldRemoveLineComment");
+		verifyNoMoreInteractions(predicate);
+	}
+
+	@Test
+	public void testAnonymousPredicateAreNotAffected() {
+		Predicate<String> predicate = mock(Predicate.class);
+		when(predicate.test(anyString())).thenReturn(true);
+
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean(Predicate.class, () -> predicate);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
+		config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+
+		verifyNoInteractions(predicate);
+	}
+
+	@Test
+	public void testShouldRemoveBlankLinesDefaultValue() {
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertFalse(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+	}
+
+	@Test
+	public void testShouldRemoveBlankLinesChangedValue() {
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.sql-builder-settings.should-remove-blank-lines:true");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertTrue(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+	}
+
+	@Test
+	public void testShouldRequireInListPaddingDefaultValue() {
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertFalse(config.getSqlBuilderSettings().shouldRequireInListPadding());
+	}
+
+	@Test
+	public void testShouldRequireInListPaddingChangedValue() {
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.sql-builder-settings.should-require-in-list-padding:true");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertTrue(config.getSqlBuilderSettings().shouldRequireInListPadding());
+	}
+
+	@Test
+	public void testStatisticManagerDefaultValue() {
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertFalse(config.getStatisticManager().isEnabled());
+	}
+
+	@Test
+	public void testStatisticManagerChangedValue() {
+		EnvironmentTestUtils.addEnvironment(this.context, "doma.statistic-manager.enabled:true");
+		this.context.register(DomaAutoConfiguration.class,
+				DataSourceAutoConfiguration.class);
+		this.context.refresh();
+		Config config = this.context.getBean(Config.class);
+		assertTrue(config.getStatisticManager().isEnabled());
+	}
+
 	@After
 	public void tearDown() {
 		if (this.context != null) {
@@ -286,18 +441,38 @@ public class DomaAutoConfigurationTest {
 
 	@Configuration
 	public static class ConfigBuilderConfigure {
+		static DuplicateColumnHandler testDuplicateColumnHandler = new DuplicateColumnHandler() {
+		};
+		static ScriptFileLoader testScriptFileLoader = new ScriptFileLoader() {
+		};
+		static SqlBuilderSettings testSqlBuilderSettings = new SqlBuilderSettings() {
+		};
+		static StatisticManager testStatisticManager = new DefaultStatisticManager();
+
 		@Bean
 		DomaConfigBuilder myDomaConfigBuilder(DomaProperties domaProperties) {
 			return new DomaConfigBuilder(domaProperties).dialect(new MysqlDialect())
 					.sqlFileRepository(new NoCacheSqlFileRepository())
 					.jdbcLogger(new UtilLoggingJdbcLogger())
 					.naming(Naming.SNAKE_UPPER_CASE)
-					.entityListenerProvider(new TestEntityListenerProvider());
+					.entityListenerProvider(new TestEntityListenerProvider())
+					.duplicateColumnHandler(testDuplicateColumnHandler)
+					.scriptFileLoader(testScriptFileLoader)
+					.sqlBuilderSettings(testSqlBuilderSettings)
+					.statisticManager(testStatisticManager);
 		}
 	}
 
 	@Configuration
 	public static class ConfigConfigure {
+		static DuplicateColumnHandler testDuplicateColumnHandler = new DuplicateColumnHandler() {
+		};
+		static ScriptFileLoader testScriptFileLoader = new ScriptFileLoader() {
+		};
+		static SqlBuilderSettings testSqlBuilderSettings = new SqlBuilderSettings() {
+		};
+		static StatisticManager testStatisticManager = new DefaultStatisticManager();
+
 		@Bean
 		Config myConfig(DataSource dataSource) {
 			return new Config() {
@@ -329,6 +504,26 @@ public class DomaAutoConfigurationTest {
 				@Override
 				public EntityListenerProvider getEntityListenerProvider() {
 					return new TestEntityListenerProvider();
+				}
+
+				@Override
+				public DuplicateColumnHandler getDuplicateColumnHandler() {
+					return testDuplicateColumnHandler;
+				}
+
+				@Override
+				public ScriptFileLoader getScriptFileLoader() {
+					return testScriptFileLoader;
+				}
+
+				@Override
+				public SqlBuilderSettings getSqlBuilderSettings() {
+					return testSqlBuilderSettings;
+				}
+
+				@Override
+				public StatisticManager getStatisticManager() {
+					return testStatisticManager;
 				}
 			};
 		}

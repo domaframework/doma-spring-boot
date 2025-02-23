@@ -41,6 +41,7 @@ import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -172,8 +173,8 @@ public class DomaAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean
 	public SqlBuilderSettings sqlBuilderSettings(
-			Optional<Predicate<String>> shouldRemoveBlockCommentOpt,
-			Optional<Predicate<String>> shouldRemoveLineCommentOpt) {
+			@Qualifier("shouldRemoveBlockComment") Optional<Predicate<String>> shouldRemoveBlockCommentOpt,
+			@Qualifier("shouldRemoveLineComment") Optional<Predicate<String>> shouldRemoveLineCommentOpt) {
 		Predicate<String> shouldRemoveBlockComment = shouldRemoveBlockCommentOpt
 				.orElseGet(() -> comment -> false);
 		Predicate<String> shouldRemoveLineComment = shouldRemoveLineCommentOpt
