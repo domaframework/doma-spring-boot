@@ -4,21 +4,9 @@ Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 
 [![Java CI with Maven](https://github.com/domaframework/doma-spring-boot/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/domaframework/doma-spring-boot/actions?query=workflow%3A%22Java+CI+with+Maven%22)
 
-## Properties file configuration
+## Document
 
-``` properties
-doma.dialect= # Dialect of database used by Doma. (STANDARD, SQLITE, DB2, MSSQL, MSSQL2008, MYSQL, MYSQLV5, MYSQLV8, POSTGRES, ORACLE11, ORACLE, H2, H212126, H214199, HSQL)
-doma.sql-file-repository= # Type of SqlFileRepository. (GREEDY_CACHE, NO_CACHE)
-doma.naming= # Type of Naming (NONE, LOWER_CASE, UPPER_CASE, SNAKE_LOWER_CASE, SNAKE_UPPER_CASE, LENIENT_SNAKE_LOWER_CASE, LENIENT_SNAKE_UPPER_CASE, DEFAULT)
-doma.exception-translation-enabled= # Whether convert JdbcException into DataAccessException.
-doma.max-rows=0 # Limit for the maximum number of rows. Ignored unless this value is greater than 0.
-doma.query-timeout=0 # Number of seconds the driver will wait for a Statement object to execute. Ignored unless this value is greater than 0.
-doma.fetch-size=0 # Hint to the number of rows that should be fetched. Ignored unless this value is greater than 0.
-doma.batch-size=0 # Size in executing PreparedStatement#addBatch(). Regarded as 1 unless this value is greater than 1.
-doma.data-source-name= # Datasource name.
-doma.exception-sql-log-type= # Type of SQL log in the exception. (RAW, FORMATTED, NONE)
-doma.jdbc-logger= # Type of JdbcLogger. (SLF4J, JUL)
-```
+[GitHub Wiki](https://github.com/domaframework/doma-spring-boot/wiki)
 
 ## Issue Tracking
 
