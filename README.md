@@ -18,7 +18,7 @@ Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>2.1.0</version>
+    <version>2.2.0</version>
 </dependency>
 <dependency>
     <groupId>org.seasar.doma</groupId>
