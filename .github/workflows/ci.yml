@@ -50,7 +50,8 @@ jobs:
         java: [ 21, 23 ]
         # OSS support versions
         # https://spring.io/projects/spring-boot#support
-        spring-boot-version: [ 3.3.7, 3.4.1 ]
+        # and milestone version of the next release
+        spring-boot-version: [ 3.4.3, 3.5.0-M2 ]
 
     steps:
       - uses: actions/checkout@v4
