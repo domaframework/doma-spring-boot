@@ -67,8 +67,8 @@ public class PageablesForCriteriaTest {
 		Consumer<OrderByNameDeclaration> consumer = PageablesForCriteria.orderBy(
 				pageable,
 				propertyName -> switch (propertyName) {
-					case "name" -> Optional.of(nameProp);
-					default -> Optional.empty();
+				case "name" -> Optional.of(nameProp);
+				default -> Optional.empty();
 				});
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
@@ -77,7 +77,8 @@ public class PageablesForCriteriaTest {
 
 	@Test
 	public void testOrderBy2() {
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").descending().and(Sort.by("age").ascending()));
+		Pageable pageable = PageRequest.of(0, 10,
+				Sort.by("name").descending().and(Sort.by("age").ascending()));
 
 		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
 		PropertyMetamodel<?> ageProp = mock(PropertyMetamodel.class);
@@ -85,9 +86,9 @@ public class PageablesForCriteriaTest {
 		Consumer<OrderByNameDeclaration> consumer = PageablesForCriteria.orderBy(
 				pageable,
 				propertyName -> switch (propertyName) {
-					case "name" -> Optional.of(nameProp);
-					case "age" -> Optional.of(ageProp);
-					default -> Optional.empty();
+				case "name" -> Optional.of(nameProp);
+				case "age" -> Optional.of(ageProp);
+				default -> Optional.empty();
 				});
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
@@ -124,7 +125,8 @@ public class PageablesForCriteriaTest {
 
 	@Test
 	public void testOrderBySingleEntity() {
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").descending().and(Sort.by("age").ascending()));
+		Pageable pageable = PageRequest.of(0, 10,
+				Sort.by("name").descending().and(Sort.by("age").ascending()));
 
 		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
 		when(nameProp.getName()).thenReturn("name");
@@ -133,7 +135,8 @@ public class PageablesForCriteriaTest {
 		EntityMetamodel<?> entity = mock(EntityMetamodel.class);
 		when(entity.allPropertyMetamodels()).thenReturn(List.of(nameProp, ageProp));
 
-		Consumer<OrderByNameDeclaration> consumer = PageablesForCriteria.orderBySingleEntity(pageable, entity);
+		Consumer<OrderByNameDeclaration> consumer = PageablesForCriteria
+				.orderBySingleEntity(pageable, entity);
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
 		verify(orderByNameDeclaration, times(1)).desc(nameProp);

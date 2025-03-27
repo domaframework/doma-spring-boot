@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 public class PageablesForCriteria {
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#limit(Integer)}
-	 * 
+	 *
 	 * @param pageable {@link Pageable} object to convert
 	 * @return the limit.
 	 *         if {@link Pageable#isUnpaged()} is {@code true} then null.
@@ -30,13 +30,14 @@ public class PageablesForCriteria {
 
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#offset(Integer)}
-	 * 
+	 *
 	 * @param pageable {@link Pageable} object to convert
 	 * @return the offset.
 	 *         if {@link Pageable#isUnpaged()} is {@code true} then null.
 	 */
 	public static Integer offset(Pageable pageable) {
-		return pageable.isUnpaged() ? null : Math.multiplyExact(pageable.getPageNumber(), pageable.getPageSize());
+		return pageable.isUnpaged() ? null
+				: Math.multiplyExact(pageable.getPageNumber(), pageable.getPageSize());
 	}
 
 	/**
@@ -142,10 +143,11 @@ public class PageablesForCriteria {
 				.getSort()
 				.flatMap(order -> propertyMetamodelResolver
 						.resolve(order.getProperty())
-						.<Consumer<OrderByNameDeclaration>>map(propertyMetamodel -> switch (order.getDirection()) {
-							case ASC -> c -> c.asc(propertyMetamodel);
-							case DESC -> c -> c.desc(propertyMetamodel);
-						})
+						.<Consumer<OrderByNameDeclaration>> map(
+								propertyMetamodel -> switch (order.getDirection()) {
+								case ASC -> c -> c.asc(propertyMetamodel);
+								case DESC -> c -> c.desc(propertyMetamodel);
+								})
 						.stream())
 				.toList();
 		return c -> orderSpecifiers.forEach(orderSpecifier -> orderSpecifier.accept(c));
