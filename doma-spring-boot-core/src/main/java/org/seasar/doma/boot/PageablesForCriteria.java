@@ -150,6 +150,9 @@ public class PageablesForCriteria {
 								})
 						.stream())
 				.toList();
+		if (orderSpecifiers.isEmpty()) {
+			return defaultOrder;
+		}
 		return c -> orderSpecifiers.forEach(orderSpecifier -> orderSpecifier.accept(c));
 	}
 }
