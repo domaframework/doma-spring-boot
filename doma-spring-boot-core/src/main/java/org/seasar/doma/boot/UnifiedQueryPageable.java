@@ -1,5 +1,7 @@
 package org.seasar.doma.boot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -179,21 +181,51 @@ public class UnifiedQueryPageable {
 	 * @return a consumer that configures ordering based on the resolved {@link PropertyMetamodel} instances
 	 */
 	public Consumer<OrderByNameDeclaration> orderBy() {
+		return orderBy(missingProperties -> {
+		});
+	}
+
+	/**
+	 * Creates an {@link OrderByNameDeclaration} consumer based on the
+	 * {@link Pageable}'s sort information using the provided {@link PropertyMetamodelResolver}.
+	 * <p>
+	 * If the {@link Pageable} is unsorted, or if no {@link PropertyMetamodel} can be resolved
+	 * for a given sort property, a default ordering is applied.
+	 * <p>
+	 * The provided {@code handleMissingProperties} consumer is called with a list of
+	 * property names that could not be resolved. This can be used to throw an exception,
+	 * log a warning, or handle the situation in a custom way.
+	 *
+	 * @param handleMissingProperties a callback that handles property names which could not be resolved
+	 * @return a consumer that configures ordering based on the resolved {@link PropertyMetamodel} instances
+	 */
+	public Consumer<OrderByNameDeclaration> orderBy(
+			Consumer<List<String>> handleMissingProperties) {
 		if (pageable.getSort().isUnsorted()) {
 			return sortConfig.defaultOrder();
 		}
+		final var missingProperties = new ArrayList<String>();
 		final var orderSpecifiers = pageable
 				.getSort()
-				.flatMap(order -> sortConfig
-						.propertyMetamodelResolver()
-						.resolve(order.getProperty())
-						.<Consumer<OrderByNameDeclaration>> map(
-								propertyMetamodel -> switch (order.getDirection()) {
-								case ASC -> c -> c.asc(propertyMetamodel);
-								case DESC -> c -> c.desc(propertyMetamodel);
-								})
-						.stream())
+				.flatMap(order -> {
+					final var resolvedProperty = sortConfig
+							.propertyMetamodelResolver()
+							.resolve(order.getProperty());
+					if (resolvedProperty.isEmpty()) {
+						missingProperties.add(order.getProperty());
+					}
+					return resolvedProperty
+							.<Consumer<OrderByNameDeclaration>> map(
+									propertyMetamodel -> switch (order.getDirection()) {
+									case ASC -> c -> c.asc(propertyMetamodel);
+									case DESC -> c -> c.desc(propertyMetamodel);
+									})
+							.stream();
+				})
 				.toList();
+		if (!missingProperties.isEmpty()) {
+			handleMissingProperties.accept(missingProperties);
+		}
 		if (orderSpecifiers.isEmpty()) {
 			return sortConfig.defaultOrder();
 		}

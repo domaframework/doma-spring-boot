@@ -1,5 +1,6 @@
 package org.seasar.doma.boot;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -142,5 +144,25 @@ public class UnifiedQueryPageableTest {
 		consumer.accept(orderByNameDeclaration);
 		verify(orderByNameDeclaration, times(1)).desc(nameProp);
 		verify(orderByNameDeclaration, times(1)).asc(ageProp);
+	}
+
+	@Test
+	public void testOrderByWhenMissingPropertiesHandle() {
+		Pageable pageable = PageRequest.of(0, 10,
+				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
+		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
+		UnifiedQueryPageable p = UnifiedQueryPageable.of(
+				pageable,
+				propertyName -> switch (propertyName) {
+				case "name" -> Optional.of(nameProp);
+				default -> Optional.empty();
+				});
+
+		assertThatThrownBy(() -> p.orderBy(missingProperties -> {
+			throw new IllegalArgumentException(
+					missingProperties.stream().collect(Collectors.joining(",")));
+		}))
+				.isInstanceOf(IllegalArgumentException.class)
+				.hasMessage("dog,cat");
 	}
 }
