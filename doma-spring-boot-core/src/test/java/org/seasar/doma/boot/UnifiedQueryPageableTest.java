@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.seasar.doma.jdbc.criteria.declaration.OrderByNameDeclaration;
 import org.seasar.doma.jdbc.criteria.metamodel.EntityMetamodel;
 import org.seasar.doma.jdbc.criteria.metamodel.PropertyMetamodel;
@@ -22,40 +24,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class UnifiedQueryPageableTest {
-	@Test
-	public void testOffsetAndLimit() {
-		Pageable pageable = PageRequest.of(0, 10);
+	@ParameterizedTest
+	@CsvSource(value = {
+			"0 | 10 | 0 | 10",
+			"2 | 10 | 20 | 10",
+			"2 | 5 | 10 | 5",
+	}, delimiter = '|')
+	public void testOffsetAndLimit(
+			int pageNumber, int pageSize, int expectedOffset, int expectedLimit) {
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertThat(offset, is(0));
-		assertThat(limit, is(10));
-	}
-
-	@Test
-	public void testOffsetAndLimit2() {
-		Pageable pageable = PageRequest.of(2, 10);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
-
-		Integer offset = p.offset();
-		Integer limit = p.limit();
-
-		assertThat(offset, is(20));
-		assertThat(limit, is(10));
-	}
-
-	@Test
-	public void testOffsetAndLimit3() {
-		Pageable pageable = PageRequest.of(2, 5);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
-
-		Integer offset = p.offset();
-		Integer limit = p.limit();
-
-		assertThat(offset, is(10));
-		assertThat(limit, is(5));
+		assertThat(offset, is(expectedOffset));
+		assertThat(limit, is(expectedLimit));
 	}
 
 	@Test
