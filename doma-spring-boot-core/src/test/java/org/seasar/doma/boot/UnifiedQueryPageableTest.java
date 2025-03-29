@@ -8,9 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -18,9 +16,10 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.seasar.doma.Entity;
+import org.seasar.doma.Id;
+import org.seasar.doma.Metamodel;
 import org.seasar.doma.jdbc.criteria.declaration.OrderByNameDeclaration;
-import org.seasar.doma.jdbc.criteria.metamodel.EntityMetamodel;
-import org.seasar.doma.jdbc.criteria.metamodel.PropertyMetamodel;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,11 +58,11 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOrderBy() {
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
-		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
+		Person_ entity = new Person_();
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(
 				pageable,
 				propertyName -> switch (propertyName) {
-				case "name" -> Optional.of(nameProp);
+				case "name" -> Optional.of(entity.name);
 				default -> Optional.empty();
 				});
 
@@ -71,20 +70,19 @@ public class UnifiedQueryPageableTest {
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).asc(nameProp);
+		verify(orderByNameDeclaration, times(1)).asc(entity.name);
 	}
 
 	@Test
 	public void testOrderBy2() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
-		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
-		PropertyMetamodel<?> ageProp = mock(PropertyMetamodel.class);
+		Person_ entity = new Person_();
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(
 				pageable,
 				propertyName -> switch (propertyName) {
-				case "name" -> Optional.of(nameProp);
-				case "age" -> Optional.of(ageProp);
+				case "name" -> Optional.of(entity.name);
+				case "age" -> Optional.of(entity.age);
 				default -> Optional.empty();
 				});
 
@@ -92,8 +90,8 @@ public class UnifiedQueryPageableTest {
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).desc(nameProp);
-		verify(orderByNameDeclaration, times(1)).asc(ageProp);
+		verify(orderByNameDeclaration, times(1)).desc(entity.name);
+		verify(orderByNameDeclaration, times(1)).asc(entity.age);
 	}
 
 	@Test
@@ -113,50 +111,40 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOrderByWhenNonSortAndSetDefault() {
 		Pageable pageable = PageRequest.of(0, 10);
-		PropertyMetamodel<?> idProp = mock(PropertyMetamodel.class);
+		Person_ entity = new Person_();
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(
 				pageable,
 				propertyName -> Optional.empty(),
-				t -> t.asc(idProp));
+				t -> t.asc(entity.id));
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).asc(idProp);
+		verify(orderByNameDeclaration, times(1)).asc(entity.id);
 	}
 
 	@Test
 	public void testOrderBySingleEntity() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
-		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
-		when(nameProp.getName()).thenReturn("name");
-		PropertyMetamodel<?> ageProp = mock(PropertyMetamodel.class);
-		when(ageProp.getName()).thenReturn("age");
-		EntityMetamodel<?> entity = mock(EntityMetamodel.class);
-		when(entity.allPropertyMetamodels()).thenReturn(List.of(nameProp, ageProp));
+		Person_ entity = new Person_();
 		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).desc(nameProp);
-		verify(orderByNameDeclaration, times(1)).asc(ageProp);
+		verify(orderByNameDeclaration, times(1)).desc(entity.name);
+		verify(orderByNameDeclaration, times(1)).asc(entity.age);
 	}
 
 	@Test
 	public void testOrderByWhenMissingPropertiesHandle() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
-		PropertyMetamodel<?> nameProp = mock(PropertyMetamodel.class);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(
-				pageable,
-				propertyName -> switch (propertyName) {
-				case "name" -> Optional.of(nameProp);
-				default -> Optional.empty();
-				});
+		Person_ entity = new Person_();
+		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
 
 		assertThatThrownBy(() -> p.orderBy(missingProperties -> {
 			throw new IllegalArgumentException(
@@ -165,4 +153,8 @@ public class UnifiedQueryPageableTest {
 				.isInstanceOf(IllegalArgumentException.class)
 				.hasMessage("dog,cat");
 	}
+}
+
+@Entity(metamodel = @Metamodel)
+record Person(@Id String id, String name, Integer age) {
 }
