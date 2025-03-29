@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -90,8 +91,9 @@ public class UnifiedQueryPageableTest {
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).desc(entity.name);
-		verify(orderByNameDeclaration, times(1)).asc(entity.age);
+		var sortOrderVerifier = inOrder(orderByNameDeclaration);
+		sortOrderVerifier.verify(orderByNameDeclaration, times(1)).desc(entity.name);
+		sortOrderVerifier.verify(orderByNameDeclaration, times(1)).asc(entity.age);
 	}
 
 	@Test
@@ -135,8 +137,9 @@ public class UnifiedQueryPageableTest {
 
 		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
 		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).desc(entity.name);
-		verify(orderByNameDeclaration, times(1)).asc(entity.age);
+		var sortOrderVerifier = inOrder(orderByNameDeclaration);
+		sortOrderVerifier.verify(orderByNameDeclaration, times(1)).desc(entity.name);
+		sortOrderVerifier.verify(orderByNameDeclaration, times(1)).asc(entity.age);
 	}
 
 	@Test
