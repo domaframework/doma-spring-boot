@@ -1,6 +1,5 @@
 package org.seasar.doma.boot;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +25,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOffsetAndLimit() {
 		Pageable pageable = PageRequest.of(0, 10);
-		UnifiedQueryPageable p = UnifiedQueryPageable.ofNonSort(pageable);
+		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -38,7 +37,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOffsetAndLimit2() {
 		Pageable pageable = PageRequest.of(2, 10);
-		UnifiedQueryPageable p = UnifiedQueryPageable.ofNonSort(pageable);
+		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -50,7 +49,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOffsetAndLimit3() {
 		Pageable pageable = PageRequest.of(2, 5);
-		UnifiedQueryPageable p = UnifiedQueryPageable.ofNonSort(pageable);
+		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -62,7 +61,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOffsetAndLimit4() {
 		Pageable pageable = Pageable.unpaged();
-		UnifiedQueryPageable p = UnifiedQueryPageable.ofNonSort(pageable);
+		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -159,16 +158,5 @@ public class UnifiedQueryPageableTest {
 		consumer.accept(orderByNameDeclaration);
 		verify(orderByNameDeclaration, times(1)).desc(nameProp);
 		verify(orderByNameDeclaration, times(1)).asc(ageProp);
-	}
-
-	@Test
-	public void testOrderByWhenMissingSortConfig() {
-		Pageable pageable = PageRequest.of(0, 10,
-				Sort.by("name").descending().and(Sort.by("age").ascending()));
-		UnifiedQueryPageable p = UnifiedQueryPageable.ofNonSort(pageable);
-
-		assertThatThrownBy(() -> p.orderBy())
-				.isInstanceOf(IllegalStateException.class)
-				.hasMessage("Sort configuration is required but not present.");
 	}
 }

@@ -39,7 +39,7 @@ import org.springframework.data.domain.Pageable;
  */
 public class UnifiedQueryPageable {
 	private final Pageable pageable;
-	private final Optional<SortConfig> sortConfig;
+	private final SortConfig sortConfig;
 
 	/**
 	 * A configuration holder for sort resolution.
@@ -53,7 +53,7 @@ public class UnifiedQueryPageable {
 
 	private UnifiedQueryPageable(
 			Pageable pageable,
-			Optional<SortConfig> sortConfig) {
+			SortConfig sortConfig) {
 		this.pageable = pageable;
 		this.sortConfig = sortConfig;
 	}
@@ -62,7 +62,7 @@ public class UnifiedQueryPageable {
 		return pageable;
 	}
 
-	public Optional<SortConfig> getSortConfig() {
+	public SortConfig getSortConfig() {
 		return sortConfig;
 	}
 
@@ -101,7 +101,7 @@ public class UnifiedQueryPageable {
 				defaultOrder);
 		return new UnifiedQueryPageable(
 				pageable,
-				Optional.of(sortConfig));
+				sortConfig);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class UnifiedQueryPageable {
 	 * @return the {@link UnifiedQueryPageable}
 	 */
 	public static UnifiedQueryPageable of(Pageable pageable, SortConfig sortConfig) {
-		return new UnifiedQueryPageable(pageable, Optional.of(sortConfig));
+		return new UnifiedQueryPageable(pageable, sortConfig);
 	}
 
 	/**
@@ -144,18 +144,7 @@ public class UnifiedQueryPageable {
 		final var sortConfig = new SortConfig(
 				propertyMetamodelResolver,
 				defaultOrder);
-		return new UnifiedQueryPageable(pageable, Optional.of(sortConfig));
-	}
-
-	/**
-	 * Creates a {@link UnifiedQueryPageable} without sort configuration.
-	 * Only limit and offset will be available.
-	 *
-	 * @param pageable {@link Pageable} object to convert
-	 * @return the {@link UnifiedQueryPageable} without sort support
-	 */
-	public static UnifiedQueryPageable ofNonSort(Pageable pageable) {
-		return new UnifiedQueryPageable(pageable, Optional.empty());
+		return new UnifiedQueryPageable(pageable, sortConfig);
 	}
 
 	/**
@@ -191,8 +180,6 @@ public class UnifiedQueryPageable {
 	 * @throws IllegalStateException if the sort configuration is missing
 	 */
 	public Consumer<OrderByNameDeclaration> orderBy() {
-		final var sortConfig = this.sortConfig.orElseThrow(
-				() -> new IllegalStateException("Sort configuration is required but not present."));
 		if (pageable.getSort().isUnsorted()) {
 			return sortConfig.defaultOrder();
 		}
