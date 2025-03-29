@@ -59,7 +59,7 @@ public class UnifiedQueryPageableTest {
 	}
 
 	@Test
-	public void testOffsetAndLimit4() {
+	public void testOffsetAndLimitWhenUnpaged() {
 		Pageable pageable = Pageable.unpaged();
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
 
