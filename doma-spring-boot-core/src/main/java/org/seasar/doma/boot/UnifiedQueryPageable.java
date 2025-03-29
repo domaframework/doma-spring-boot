@@ -153,53 +153,45 @@ public class UnifiedQueryPageable {
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#limit(Integer)}
 	 *
-	 * @param pageable {@link Pageable} object to convert
 	 * @return the limit.
 	 *         if {@link Pageable#isUnpaged()} is {@code true} then null.
 	 */
-	public static Integer limit(Pageable pageable) {
+	public Integer limit() {
 		return pageable.isUnpaged() ? null : pageable.getPageSize();
 	}
 
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#offset(Integer)}
 	 *
-	 * @param pageable {@link Pageable} object to convert
 	 * @return the offset.
 	 *         if {@link Pageable#isUnpaged()} is {@code true} then null.
 	 */
-	public static Integer offset(Pageable pageable) {
-		return pageable.isUnpaged() ? null
+	public Integer offset() {
+		return pageable.isUnpaged()
+				? null
 				: Math.multiplyExact(pageable.getPageNumber(), pageable.getPageSize());
 	}
 
 	/**
 	 * Creates an {@link OrderByNameDeclaration} consumer based on the
-	 * {@link Pageable}'s sort information
-	 * using the provided {@link PropertyMetamodelResolver}.
+	 * {@link Pageable}'s sort information using the provided {@link PropertyMetamodelResolver}.
 	 * <p>
-	 * a default ordering via {@code defaultOrder} if the given {@link Pageable} is
-	 * unsorted.
+	 * If the {@link Pageable} is unsorted or no matching {@link PropertyMetamodel} is found,
+	 * a default ordering is applied.
 	 *
-	 * @param pageable                  the {@link Pageable} containing sorting
-	 *                                  information
-	 * @param propertyMetamodelResolver a resolver that maps property names to
-	 *                                  {@link PropertyMetamodel}
-	 * @param defaultOrder              a consumer that applies default ordering if
-	 *                                  the {@link Pageable} is unsorted
-	 * @return a consumer that configures ordering based on the resolved
-	 *         {@link PropertyMetamodel} instances
+	 * @return a consumer that configures ordering based on the resolved {@link PropertyMetamodel} instances
+	 * @throws IllegalStateException if the sort configuration is missing
 	 */
-	public static Consumer<OrderByNameDeclaration> orderBy(
-			Pageable pageable,
-			PropertyMetamodelResolver propertyMetamodelResolver,
-			Consumer<OrderByNameDeclaration> defaultOrder) {
+	public Consumer<OrderByNameDeclaration> orderBy() {
+		final var sortConfig = this.sortConfig.orElseThrow(
+				() -> new IllegalStateException("Sort configuration is required but not present."));
 		if (pageable.getSort().isUnsorted()) {
-			return defaultOrder;
+			return sortConfig.defaultOrder();
 		}
 		final var orderSpecifiers = pageable
 				.getSort()
-				.flatMap(order -> propertyMetamodelResolver
+				.flatMap(order -> sortConfig
+						.propertyMetamodelResolver()
 						.resolve(order.getProperty())
 						.<Consumer<OrderByNameDeclaration>> map(
 								propertyMetamodel -> switch (order.getDirection()) {
@@ -209,7 +201,7 @@ public class UnifiedQueryPageable {
 						.stream())
 				.toList();
 		if (orderSpecifiers.isEmpty()) {
-			return defaultOrder;
+			return sortConfig.defaultOrder();
 		}
 		return c -> orderSpecifiers.forEach(orderSpecifier -> orderSpecifier.accept(c));
 	}
