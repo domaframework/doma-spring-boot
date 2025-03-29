@@ -58,6 +58,14 @@ public class UnifiedQueryPageable {
 		this.sortConfig = sortConfig;
 	}
 
+	public Pageable getPageable() {
+		return pageable;
+	}
+
+	public Optional<SortConfig> getSortConfig() {
+		return sortConfig;
+	}
+
 	/**
 	 * Creates a {@link UnifiedQueryPageable}, resolving sort properties based on the entity's property names.
 	 *
