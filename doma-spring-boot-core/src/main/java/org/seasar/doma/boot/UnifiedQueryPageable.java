@@ -59,6 +59,98 @@ public class UnifiedQueryPageable {
 	}
 
 	/**
+	 * Creates a {@link UnifiedQueryPageable}, resolving sort properties based on the entity's property names.
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @param sortTargetEntity the target entity whose properties are used for sorting
+	 * @return the {@link UnifiedQueryPageable}
+	 */
+	public static UnifiedQueryPageable from(
+			Pageable pageable,
+			EntityMetamodel<?> sortTargetEntity) {
+		return UnifiedQueryPageable.from(pageable, sortTargetEntity, c -> {
+		});
+	}
+
+	/**
+	 * Creates a {@link UnifiedQueryPageable}, resolving sort properties based on the entity's property names.
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @param sortTargetEntity the target entity whose properties are used for sorting
+	 * @param defaultOrder a consumer that applies default ordering when no valid sort can be determined
+	 * @return the {@link UnifiedQueryPageable}
+	 */
+	public static UnifiedQueryPageable from(
+			Pageable pageable,
+			EntityMetamodel<?> sortTargetEntity,
+			Consumer<OrderByNameDeclaration> defaultOrder) {
+		final var nameToMetamodel = sortTargetEntity
+				.allPropertyMetamodels()
+				.stream()
+				.collect(Collectors.toMap(PropertyMetamodel::getName, Function.identity()));
+		final var sortConfig = new SortConfig(
+				propertyName -> Optional.ofNullable(nameToMetamodel.get(propertyName)),
+				defaultOrder);
+		return new UnifiedQueryPageable(
+				pageable,
+				Optional.of(sortConfig));
+	}
+
+	/**
+	 * Creates a {@link UnifiedQueryPageable}
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @param sortConfig sort configuration
+	 * @return the {@link UnifiedQueryPageable}
+	 */
+	public static UnifiedQueryPageable of(Pageable pageable, SortConfig sortConfig) {
+		return new UnifiedQueryPageable(pageable, Optional.of(sortConfig));
+	}
+
+	/**
+	 * Creates a {@link UnifiedQueryPageable}
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @param propertyMetamodelResolver a resolver that maps property names to {@link PropertyMetamodel}
+	 * @return the {@link UnifiedQueryPageable}
+	 */
+	public static UnifiedQueryPageable of(
+			Pageable pageable,
+			PropertyMetamodelResolver propertyMetamodelResolver) {
+		return UnifiedQueryPageable.of(pageable, propertyMetamodelResolver, c -> {
+		});
+	}
+
+	/**
+	 * Creates a {@link UnifiedQueryPageable}
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @param propertyMetamodelResolver a resolver that maps property names to {@link PropertyMetamodel}
+	 * @param defaultOrder a consumer that applies default ordering when no valid sort can be determined
+	 * @return the {@link UnifiedQueryPageable}
+	 */
+	public static UnifiedQueryPageable of(
+			Pageable pageable,
+			PropertyMetamodelResolver propertyMetamodelResolver,
+			Consumer<OrderByNameDeclaration> defaultOrder) {
+		final var sortConfig = new SortConfig(
+				propertyMetamodelResolver,
+				defaultOrder);
+		return new UnifiedQueryPageable(pageable, Optional.of(sortConfig));
+	}
+
+	/**
+	 * Creates a {@link UnifiedQueryPageable} without sort configuration.
+	 * Only limit and offset will be available.
+	 *
+	 * @param pageable {@link Pageable} object to convert
+	 * @return the {@link UnifiedQueryPageable} without sort support
+	 */
+	public static UnifiedQueryPageable ofNonSort(Pageable pageable) {
+		return new UnifiedQueryPageable(pageable, Optional.empty());
+	}
+
+	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#limit(Integer)}
 	 *
 	 * @param pageable {@link Pageable} object to convert
