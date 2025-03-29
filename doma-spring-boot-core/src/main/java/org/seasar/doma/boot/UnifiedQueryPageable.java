@@ -12,11 +12,52 @@ import org.seasar.doma.jdbc.criteria.statement.EntityQueryable;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Converts Utilities for {@link Pageable} to be used with Doma Criteria.
+ * An adapter that integrates {@link Pageable} with Doma Criteria API.
+ * <p>
+ * This class allows converting {@link Pageable} pagination and sort information
+ * into Doma Criteria API's limit, offset, and order-by specifications.
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * public Page<Task> getPage(Pageable pageable) {
+ *     final var task_ = new Task_();
+ *     final var p = UnifiedQueryPageable.from(pageable, task_);
+ *     final var content = this.queryDsl
+ *         .from(task_)
+ *         .offset(p.offset())
+ *         .limit(p.limit())
+ *         .orderBy(p.orderBy())
+ *         .fetch();
+ *     final var total = this.queryDsl
+ *         .from(task_)
+ *         .select(Expressions.count())
+ *         .fetchOne();
+ *     return new PageImpl<>(content, pageable, total);
+ * }</pre>
  *
  * @author mazeneko
  */
 public class UnifiedQueryPageable {
+	private final Pageable pageable;
+	private final Optional<SortConfig> sortConfig;
+
+	/**
+	 * A configuration holder for sort resolution.
+	 */
+	public record SortConfig(
+			/** a resolver that maps property names to {@link PropertyMetamodel} */
+			PropertyMetamodelResolver propertyMetamodelResolver,
+			/** a consumer that applies default ordering when no valid sort can be determined */
+			Consumer<OrderByNameDeclaration> defaultOrder) {
+	}
+
+	private UnifiedQueryPageable(
+			Pageable pageable,
+			Optional<SortConfig> sortConfig) {
+		this.pageable = pageable;
+		this.sortConfig = sortConfig;
+	}
+
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#limit(Integer)}
 	 *
