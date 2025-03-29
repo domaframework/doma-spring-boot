@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
  *
  * @author mazeneko
  */
-public class PageablesForCriteria {
+public class UnifiedQueryPageable {
 	/**
 	 * Converts {@link Pageable} to {@link EntityQueryable#limit(Integer)}
 	 *
