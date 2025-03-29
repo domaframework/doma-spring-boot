@@ -177,7 +177,6 @@ public class UnifiedQueryPageable {
 	 * a default ordering is applied.
 	 *
 	 * @return a consumer that configures ordering based on the resolved {@link PropertyMetamodel} instances
-	 * @throws IllegalStateException if the sort configuration is missing
 	 */
 	public Consumer<OrderByNameDeclaration> orderBy() {
 		if (pageable.getSort().isUnsorted()) {
