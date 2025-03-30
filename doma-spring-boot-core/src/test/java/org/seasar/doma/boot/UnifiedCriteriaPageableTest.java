@@ -26,7 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public class UnifiedQueryPageableTest {
+public class UnifiedCriteriaPageableTest {
 	@ParameterizedTest
 	@CsvSource(value = {
 			"0 | 10 | 0 | 10",
@@ -36,7 +36,7 @@ public class UnifiedQueryPageableTest {
 	public void testOffsetAndLimit(
 			int pageNumber, int pageSize, int expectedOffset, int expectedLimit) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -48,7 +48,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOffsetAndLimitWhenUnpaged() {
 		Pageable pageable = Pageable.unpaged();
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(pageable, c -> Optional.empty());
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
@@ -61,7 +61,7 @@ public class UnifiedQueryPageableTest {
 	public void testOrderBy() {
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
 		Person_ entity = new Person_();
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
 				propertyName -> switch (propertyName) {
 				case "name" -> Optional.of(entity.name);
@@ -80,7 +80,7 @@ public class UnifiedQueryPageableTest {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
 				propertyName -> switch (propertyName) {
 				case "name" -> Optional.of(entity.name);
@@ -100,7 +100,7 @@ public class UnifiedQueryPageableTest {
 	@Test
 	public void testOrderByWhenNonSort() {
 		Pageable pageable = PageRequest.of(0, 10);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
 				propertyName -> Optional.empty());
 
@@ -116,7 +116,7 @@ public class UnifiedQueryPageableTest {
 		Pageable pageable = PageRequest.of(0, 10);
 		Person_ entity = new Person_();
 		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.asc(entity.id);
-		UnifiedQueryPageable p = UnifiedQueryPageable.of(
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
 				propertyName -> Optional.empty(),
 				defaultOrder);
@@ -131,7 +131,7 @@ public class UnifiedQueryPageableTest {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
-		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.from(pageable, entity);
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
@@ -147,7 +147,7 @@ public class UnifiedQueryPageableTest {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
-		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.from(pageable, entity);
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
@@ -162,7 +162,7 @@ public class UnifiedQueryPageableTest {
 				Sort.by("dog").and(Sort.by("cat")));
 		Person_ entity = new Person_();
 		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.desc(entity.age);
-		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity, defaultOrder);
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.from(pageable, entity, defaultOrder);
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
@@ -174,7 +174,7 @@ public class UnifiedQueryPageableTest {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
-		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
+		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.from(pageable, entity);
 
 		assertThatThrownBy(() -> p.orderBy(missingProperties -> {
 			throw new IllegalArgumentException(
