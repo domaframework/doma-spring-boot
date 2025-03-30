@@ -35,6 +35,7 @@ import org.springframework.data.domain.Pageable;
  *         .select(Expressions.count())
  *         .fetchOne();
  *     return new PageImpl<>(content, pageable, total);
+ * }
  * }</pre>
  *
  * @author mazeneko
