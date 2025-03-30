@@ -23,7 +23,7 @@ Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 <dependency>
     <groupId>org.seasar.doma</groupId>
     <artifactId>doma-processor</artifactId>
-    <version>3.5.1</version>
+    <version>3.6.0</version>
     <optional>true</optional>
 </dependency>
 ```
