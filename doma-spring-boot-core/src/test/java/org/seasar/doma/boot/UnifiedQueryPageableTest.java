@@ -143,6 +143,33 @@ public class UnifiedQueryPageableTest {
 	}
 
 	@Test
+	public void testOrderByWhenMissingProperties() {
+		Pageable pageable = PageRequest.of(0, 10,
+				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
+		Person_ entity = new Person_();
+		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity);
+
+		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
+
+		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
+		consumer.accept(orderByNameDeclaration);
+		verify(orderByNameDeclaration, times(1)).asc(entity.name);
+	}
+
+	@Test
+	public void testOrderByWhenMissingAllProperties() {
+		Pageable pageable = PageRequest.of(0, 10,
+				Sort.by("dog").and(Sort.by("cat")));
+		Person_ entity = new Person_();
+		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.desc(entity.age);
+		UnifiedQueryPageable p = UnifiedQueryPageable.from(pageable, entity, defaultOrder);
+
+		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
+
+		assertThat(consumer, sameInstance(defaultOrder));
+	}
+
+	@Test
 	public void testOrderByWhenMissingPropertiesHandle() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
