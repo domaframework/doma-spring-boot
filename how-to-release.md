@@ -18,6 +18,8 @@ The following example shows the command to update the description from 1.3.0 to 
 sed -i '' -e 's/1\.3\.0/1\.4\.0/g' README.md
 ```
 
+And change `doma-processor` version.
+
 ## Set a new version
 
 Update pom.xml by Maven Versions Plugin.

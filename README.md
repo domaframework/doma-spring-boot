@@ -18,12 +18,12 @@ Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
 </dependency>
 <dependency>
     <groupId>org.seasar.doma</groupId>
     <artifactId>doma-processor</artifactId>
-    <version>3.5.1</version>
+    <version>3.6.0</version>
     <optional>true</optional>
 </dependency>
 ```
