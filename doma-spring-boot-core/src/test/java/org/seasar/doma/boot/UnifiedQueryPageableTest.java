@@ -3,6 +3,7 @@ package org.seasar.doma.boot;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -114,16 +115,15 @@ public class UnifiedQueryPageableTest {
 	public void testOrderByWhenNonSortAndSetDefault() {
 		Pageable pageable = PageRequest.of(0, 10);
 		Person_ entity = new Person_();
+		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.asc(entity.id);
 		UnifiedQueryPageable p = UnifiedQueryPageable.of(
 				pageable,
 				propertyName -> Optional.empty(),
-				t -> t.asc(entity.id));
+				defaultOrder);
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		OrderByNameDeclaration orderByNameDeclaration = mock(OrderByNameDeclaration.class);
-		consumer.accept(orderByNameDeclaration);
-		verify(orderByNameDeclaration, times(1)).asc(entity.id);
+		assertThat(consumer, sameInstance(defaultOrder));
 	}
 
 	@Test
