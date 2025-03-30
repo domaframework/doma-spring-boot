@@ -204,25 +204,20 @@ public class UnifiedQueryPageable {
 		if (pageable.getSort().isUnsorted()) {
 			return sortConfig.defaultOrder();
 		}
+		final var orderSpecifiers = new ArrayList<Consumer<OrderByNameDeclaration>>();
 		final var missingProperties = new ArrayList<String>();
-		final var orderSpecifiers = pageable
-				.getSort()
-				.flatMap(order -> {
-					final var resolvedProperty = sortConfig
-							.propertyMetamodelResolver()
-							.resolve(order.getProperty());
-					if (resolvedProperty.isEmpty()) {
-						missingProperties.add(order.getProperty());
-					}
-					return resolvedProperty
-							.<Consumer<OrderByNameDeclaration>> map(
-									propertyMetamodel -> switch (order.getDirection()) {
+		for (final var order : pageable.getSort()) {
+			sortConfig
+					.propertyMetamodelResolver()
+					.resolve(order.getProperty())
+					.ifPresentOrElse(
+							propertyMetamodel -> orderSpecifiers.add(
+									switch (order.getDirection()) {
 									case ASC -> c -> c.asc(propertyMetamodel);
 									case DESC -> c -> c.desc(propertyMetamodel);
-									})
-							.stream();
-				})
-				.toList();
+									}),
+							() -> missingProperties.add(order.getProperty()));
+		}
 		if (!missingProperties.isEmpty()) {
 			handleMissingProperties.accept(missingProperties);
 		}
