@@ -56,6 +56,7 @@ import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.seasar.doma.message.Message;
+import org.seasar.doma.slf4j.Slf4jJdbcLogger;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -92,7 +93,7 @@ public class DomaAutoConfigurationTest {
 		assertThat(config.getSqlFileRepository(),
 				is(instanceOf(GreedyCacheSqlFileRepository.class)));
 		assertThat(config.getNaming(), is(Naming.DEFAULT));
-		assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+		assertThat(config.getJdbcLogger(), is(instanceOf(Slf4jJdbcLogger.class)));
 		assertThat(config.getEntityListenerProvider(), is(notNullValue()));
 		assertThat(config.getDuplicateColumnHandler(),
 				is(ConfigSupport.defaultDuplicateColumnHandler));

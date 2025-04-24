@@ -26,7 +26,6 @@
             <groupId>org.seasar.doma</groupId>
             <artifactId>doma-slf4j</artifactId>
             <version>${doma.version}</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

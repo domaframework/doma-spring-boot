@@ -75,7 +75,7 @@ public class DomaProperties {
 	/**
 	 * Type of {@link JdbcLogger}.
 	 */
-	private JdbcLoggerType jdbcLogger = JdbcLoggerType.JUL;
+	private JdbcLoggerType jdbcLogger = JdbcLoggerType.SLF4J;
 
 	/**
 	 * Limit for the maximum number of rows. Ignored unless this value is greater than 0.
