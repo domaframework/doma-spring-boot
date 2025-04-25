@@ -1,5 +1,6 @@
 package org.seasar.doma.boot.autoconfigure;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -7,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -55,6 +57,7 @@ import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.seasar.doma.message.Message;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
@@ -69,6 +72,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 public class DomaAutoConfigurationTest {
@@ -279,8 +283,6 @@ public class DomaAutoConfigurationTest {
 		sources.addFirst(new MapPropertySource("test",
 				Map.of("doma.exception-translation-enabled",
 						"false"/* prevent database connections */)));
-		EnvironmentTestUtils.addEnvironment(this.context,
-				"doma.exception-translation-enabled:false"); // Prevent database connections
 		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
 		this.context.registerBean(JdbcConnectionDetails.class, () -> new JdbcConnectionDetails() {
 			@Override
@@ -298,6 +300,37 @@ public class DomaAutoConfigurationTest {
 				return "jdbc:postgresql://localhost:1234/example";
 			}
 		});
+		this.context.refresh();
+		Dialect dialect = this.context.getBean(Dialect.class);
+		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+	}
+
+	@Test
+	public void testDialectMissingJdbConnectionDetails() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		sources.addFirst(new MapPropertySource("test",
+				Map.of("doma.exception-translation-enabled",
+						"false"/* prevent database connections */)));
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean(DataSource.class, SimpleDriverDataSource::new);
+		BeanCreationException exception = assertThrows(BeanCreationException.class,
+				() -> this.context.refresh());
+		assertThat(exception.getMessage(), containsString(
+				"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
+		//Dialect dialect = this.context.getBean(Dialect.class);
+		//assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+	}
+
+	@Test
+	public void testDialectMissingJdbConnectionDetailsExplicitDialect() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		sources.addFirst(new MapPropertySource("test",
+				Map.of("doma.dialect", "POSTGRES", "doma.exception-translation-enabled",
+						"false"/* prevent database connections */)));
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean(DataSource.class, SimpleDriverDataSource::new);
 		this.context.refresh();
 		Dialect dialect = this.context.getBean(Dialect.class);
 		assertThat(dialect, is(instanceOf(PostgresDialect.class)));

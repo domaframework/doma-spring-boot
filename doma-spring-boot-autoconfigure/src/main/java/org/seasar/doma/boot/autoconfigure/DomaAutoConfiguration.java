@@ -39,6 +39,8 @@ import org.seasar.doma.jdbc.dialect.SqliteDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
+import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -75,39 +77,41 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public Dialect dialect(JdbcConnectionDetails connectionDetails) {
+	public Dialect dialect(ObjectProvider<JdbcConnectionDetails> connectionDetailsProvider) {
 		DialectType dialectType = domaProperties.getDialect();
 		if (dialectType != null) {
 			return dialectType.create();
 		}
-		String url = connectionDetails.getJdbcUrl();
-		if (url != null) {
-			DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(url);
-			switch (databaseDriver) {
-			case DB2:
-				return new Db2Dialect();
-			case H2:
-				return new H2Dialect();
-			case HSQLDB:
-				return new HsqldbDialect();
-			case SQLSERVER:
-			case JTDS:
-				return new MssqlDialect();
-			case MYSQL:
-				return new MysqlDialect();
-			case ORACLE:
-				return new OracleDialect();
-			case POSTGRESQL:
-				return new PostgresDialect();
-			case SQLITE:
-				return new SqliteDialect();
-			default:
-				break;
-			}
+		JdbcConnectionDetails connectionDetails = connectionDetailsProvider.getIfAvailable();
+		if (connectionDetails == null) {
+			throw new BeanCreationException(
+					"No connection details available. You will probably have to set 'doma.dialect' explicitly.");
+		}
+		DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(connectionDetails.getJdbcUrl());
+		switch (databaseDriver) {
+		case DB2:
+			return new Db2Dialect();
+		case H2:
+			return new H2Dialect();
+		case HSQLDB:
+			return new HsqldbDialect();
+		case SQLSERVER:
+		case JTDS:
+			return new MssqlDialect();
+		case MYSQL:
+			return new MysqlDialect();
+		case ORACLE:
+			return new OracleDialect();
+		case POSTGRESQL:
+			return new PostgresDialect();
+		case SQLITE:
+			return new SqliteDialect();
+		default:
+			break;
 		}
 		if (logger.isWarnEnabled()) {
 			logger.warn(
-					"StandardDialect was selected because no explicit configuration and it is not possible to guess from 'spring.datasource.url property'");
+					"StandardDialect was selected because no explicit configuration and it is not possible to guess from the connection details.");
 		}
 		return new StandardDialect();
 	}
