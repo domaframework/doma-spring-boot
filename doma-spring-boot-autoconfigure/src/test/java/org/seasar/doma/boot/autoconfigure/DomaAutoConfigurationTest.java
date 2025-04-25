@@ -318,8 +318,6 @@ public class DomaAutoConfigurationTest {
 				() -> this.context.refresh());
 		assertThat(exception.getMessage(), containsString(
 				"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
-		//Dialect dialect = this.context.getBean(Dialect.class);
-		//assertThat(dialect, is(instanceOf(PostgresDialect.class)));
 	}
 
 	@Test
