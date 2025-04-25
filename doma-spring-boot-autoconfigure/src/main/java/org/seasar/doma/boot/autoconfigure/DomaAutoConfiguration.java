@@ -39,7 +39,6 @@ import org.seasar.doma.jdbc.dialect.SqliteDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
 import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -47,11 +46,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator;
@@ -76,12 +75,12 @@ public class DomaAutoConfiguration {
 
 	@Bean
 	@ConditionalOnMissingBean
-	public Dialect dialect(Environment environment) {
+	public Dialect dialect(JdbcConnectionDetails connectionDetails) {
 		DialectType dialectType = domaProperties.getDialect();
 		if (dialectType != null) {
 			return dialectType.create();
 		}
-		String url = environment.getProperty("spring.datasource.url");
+		String url = connectionDetails.getJdbcUrl();
 		if (url != null) {
 			DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(url);
 			switch (databaseDriver) {

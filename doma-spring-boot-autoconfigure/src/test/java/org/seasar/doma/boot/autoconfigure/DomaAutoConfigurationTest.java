@@ -49,7 +49,6 @@ import org.seasar.doma.jdbc.criteria.Entityql;
 import org.seasar.doma.jdbc.criteria.NativeSql;
 import org.seasar.doma.jdbc.criteria.QueryDsl;
 import org.seasar.doma.jdbc.dialect.Dialect;
-import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.seasar.doma.jdbc.dialect.MysqlDialect;
 import org.seasar.doma.jdbc.dialect.PostgresDialect;
 import org.seasar.doma.jdbc.dialect.StandardDialect;
@@ -58,6 +57,7 @@ import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.seasar.doma.message.Message;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -263,11 +263,44 @@ public class DomaAutoConfigurationTest {
 		MutablePropertySources sources = context.getEnvironment()
 				.getPropertySources();
 		sources.addFirst(new MapPropertySource("test",
-				Collections.singletonMap("spring.datasource.url", "jdbc:h2:mem:example")));
+				Map.of("spring.datasource.url", "jdbc:postgresql://localhost:1234/example",
+						"doma.exception-translation-enabled",
+						"false" /* prevent database connections */)));
 		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
 		this.context.refresh();
 		Dialect dialect = this.context.getBean(Dialect.class);
-		assertThat(dialect, is(instanceOf(H2Dialect.class)));
+		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+	}
+
+	@Test
+	public void testDialectByJdbConnectionDetails() {
+		MutablePropertySources sources = context.getEnvironment()
+				.getPropertySources();
+		sources.addFirst(new MapPropertySource("test",
+				Map.of("doma.exception-translation-enabled",
+						"false"/* prevent database connections */)));
+		EnvironmentTestUtils.addEnvironment(this.context,
+				"doma.exception-translation-enabled:false"); // Prevent database connections
+		this.context.register(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class);
+		this.context.registerBean(JdbcConnectionDetails.class, () -> new JdbcConnectionDetails() {
+			@Override
+			public String getUsername() {
+				return "dummy";
+			}
+
+			@Override
+			public String getPassword() {
+				return "dummy";
+			}
+
+			@Override
+			public String getJdbcUrl() {
+				return "jdbc:postgresql://localhost:1234/example";
+			}
+		});
+		this.context.refresh();
+		Dialect dialect = this.context.getBean(Dialect.class);
+		assertThat(dialect, is(instanceOf(PostgresDialect.class)));
 	}
 
 	@Test
