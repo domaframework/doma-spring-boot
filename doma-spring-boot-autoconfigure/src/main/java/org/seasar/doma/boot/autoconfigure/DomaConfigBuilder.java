@@ -62,8 +62,10 @@ public class DomaConfigBuilder {
 	 *
 	 * @param dataSource dataSource to use
 	 * @return chained builder
+	 * @throws NullPointerException if dataSource is null
 	 */
 	public DomaConfigBuilder dataSource(DataSource dataSource) {
+		Objects.requireNonNull(dataSource, "dataSource must not be null");
 		this.dataSource = new TransactionAwareDataSourceProxy(dataSource);
 		return this;
 	}
@@ -72,7 +74,15 @@ public class DomaConfigBuilder {
 		return dialect;
 	}
 
+	/**
+	 * Set the Dialect.
+	 * 
+	 * @param dialect the Dialect
+	 * @return this instance
+	 * @throws NullPointerException if dialect is null
+	 */
 	public DomaConfigBuilder dialect(Dialect dialect) {
+		Objects.requireNonNull(dialect, "dialect must not be null");
 		this.dialect = dialect;
 		return this;
 	}
@@ -81,7 +91,15 @@ public class DomaConfigBuilder {
 		return jdbcLogger;
 	}
 
+	/**
+	 * Set the JdbcLogger.
+	 * 
+	 * @param jdbcLogger the JdbcLogger
+	 * @return this instance
+	 * @throws NullPointerException if jdbcLogger is null
+	 */
 	public DomaConfigBuilder jdbcLogger(JdbcLogger jdbcLogger) {
+		Objects.requireNonNull(jdbcLogger, "jdbcLogger must not be null");
 		this.jdbcLogger = jdbcLogger;
 		return this;
 	}
@@ -90,7 +108,15 @@ public class DomaConfigBuilder {
 		return sqlFileRepository;
 	}
 
+	/**
+	 * Set the SqlFileRepository.
+	 * 
+	 * @param sqlFileRepository the SqlFileRepository
+	 * @return this instance
+	 * @throws NullPointerException if sqlFileRepository is null
+	 */
 	public DomaConfigBuilder sqlFileRepository(SqlFileRepository sqlFileRepository) {
+		Objects.requireNonNull(sqlFileRepository, "sqlFileRepository must not be null");
 		this.sqlFileRepository = sqlFileRepository;
 		return this;
 	}
@@ -146,7 +172,15 @@ public class DomaConfigBuilder {
 		return naming;
 	}
 
+	/**
+	 * Set the Naming convention.
+	 * 
+	 * @param naming the Naming convention
+	 * @return this instance
+	 * @throws NullPointerException if naming is null
+	 */
 	public DomaConfigBuilder naming(Naming naming) {
+		Objects.requireNonNull(naming, "naming must not be null");
 		this.naming = naming;
 		return this;
 	}
@@ -173,8 +207,16 @@ public class DomaConfigBuilder {
 		return entityListenerProvider;
 	}
 
+	/**
+	 * Set the EntityListenerProvider.
+	 * 
+	 * @param entityListenerProvider the EntityListenerProvider
+	 * @return this instance
+	 * @throws NullPointerException if entityListenerProvider is null
+	 */
 	public DomaConfigBuilder entityListenerProvider(
 			EntityListenerProvider entityListenerProvider) {
+		Objects.requireNonNull(entityListenerProvider, "entityListenerProvider must not be null");
 		this.entityListenerProvider = entityListenerProvider;
 		return this;
 	}

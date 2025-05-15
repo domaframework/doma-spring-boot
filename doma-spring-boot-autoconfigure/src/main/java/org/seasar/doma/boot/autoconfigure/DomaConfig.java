@@ -7,9 +7,15 @@ import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
 
 /**
- * {@link Config} implementation used in doma-spring-boot.
+ * Implementation of {@link Config} used by the Doma Spring Boot integration.
+ * <p>
+ * This class encapsulates all configuration properties required by Doma,
+ * such as {@link DataSource}, {@link Dialect}, and {@link JdbcLogger}.
+ * <p>
+ * The configuration is built using a builder pattern through {@link DomaConfigBuilder}.
  *
  * @author Toshiaki Maki
+ * @see DomaConfigBuilder
  */
 public class DomaConfig implements Config {
 
