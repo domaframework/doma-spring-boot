@@ -10,28 +10,28 @@ import org.seasar.doma.jdbc.SqlBuilderSettings;
  * This record encapsulates the SQL builder settings used by Doma in a Spring Boot application.
  */
 public record DomaSpringBootSqlBuilderSettings(
-        Predicate<String> shouldRemoveBlockComment,
-        Predicate<String> shouldRemoveLineComment,
-        boolean shouldRemoveBlankLines,
-        boolean shouldRequireInListPadding) implements SqlBuilderSettings {
+		Predicate<String> shouldRemoveBlockComment,
+		Predicate<String> shouldRemoveLineComment,
+		boolean shouldRemoveBlankLines,
+		boolean shouldRequireInListPadding) implements SqlBuilderSettings {
 
-    @Override
-    public boolean shouldRemoveBlockComment(String comment) {
-        return shouldRemoveBlockComment.test(comment);
-    }
+	@Override
+	public boolean shouldRemoveBlockComment(String comment) {
+		return shouldRemoveBlockComment.test(comment);
+	}
 
-    @Override
-    public boolean shouldRemoveLineComment(String comment) {
-        return shouldRemoveLineComment.test(comment);
-    }
+	@Override
+	public boolean shouldRemoveLineComment(String comment) {
+		return shouldRemoveLineComment.test(comment);
+	}
 
-    @Override
-    public boolean shouldRemoveBlankLines() {
-        return shouldRemoveBlankLines;
-    }
+	@Override
+	public boolean shouldRemoveBlankLines() {
+		return shouldRemoveBlankLines;
+	}
 
-    @Override
-    public boolean shouldRequireInListPadding() {
-        return shouldRequireInListPadding;
-    }
+	@Override
+	public boolean shouldRequireInListPadding() {
+		return shouldRequireInListPadding;
+	}
 }
