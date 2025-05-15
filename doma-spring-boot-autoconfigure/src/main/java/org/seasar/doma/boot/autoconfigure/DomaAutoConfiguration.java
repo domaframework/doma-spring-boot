@@ -85,7 +85,7 @@ public class DomaAutoConfiguration {
 		JdbcConnectionDetails connectionDetails = connectionDetailsProvider.getIfAvailable();
 		if (connectionDetails == null) {
 			throw new BeanCreationException(
-					"No JdbcConnectionDetails available. Either configure a DataSource or explicitly set 'doma.dialect' property in your configuration.");
+					"No JdbcConnectionDetails available. You will need to explicitly set 'doma.dialect' property in your configuration.");
 		}
 		DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(connectionDetails.getJdbcUrl());
 		switch (databaseDriver) {
