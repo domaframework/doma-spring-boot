@@ -318,7 +318,7 @@ public class DomaAutoConfigurationTest {
 		BeanCreationException exception = assertThrows(BeanCreationException.class,
 				() -> this.context.refresh());
 		assertThat(exception.getMessage(), containsString(
-				"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
+				"No JdbcConnectionDetails available. You will need to explicitly set 'doma.dialect' property in your configuration."));
 	}
 
 	@Test
