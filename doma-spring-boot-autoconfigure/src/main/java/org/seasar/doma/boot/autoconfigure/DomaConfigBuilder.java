@@ -76,7 +76,7 @@ public class DomaConfigBuilder {
 
 	/**
 	 * Set the Dialect.
-	 * 
+	 *
 	 * @param dialect the Dialect
 	 * @return this instance
 	 * @throws NullPointerException if dialect is null
@@ -93,7 +93,7 @@ public class DomaConfigBuilder {
 
 	/**
 	 * Set the JdbcLogger.
-	 * 
+	 *
 	 * @param jdbcLogger the JdbcLogger
 	 * @return this instance
 	 * @throws NullPointerException if jdbcLogger is null
@@ -110,7 +110,7 @@ public class DomaConfigBuilder {
 
 	/**
 	 * Set the SqlFileRepository.
-	 * 
+	 *
 	 * @param sqlFileRepository the SqlFileRepository
 	 * @return this instance
 	 * @throws NullPointerException if sqlFileRepository is null
@@ -174,7 +174,7 @@ public class DomaConfigBuilder {
 
 	/**
 	 * Set the Naming convention.
-	 * 
+	 *
 	 * @param naming the Naming convention
 	 * @return this instance
 	 * @throws NullPointerException if naming is null
@@ -209,7 +209,7 @@ public class DomaConfigBuilder {
 
 	/**
 	 * Set the EntityListenerProvider.
-	 * 
+	 *
 	 * @param entityListenerProvider the EntityListenerProvider
 	 * @return this instance
 	 * @throws NullPointerException if entityListenerProvider is null
