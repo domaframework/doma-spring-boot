@@ -79,329 +79,348 @@ public class DomaAutoConfigurationTest {
 	@Test
 	public void testAutoRegisteredConfig() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertThat(config, is(notNullValue()));
-				assertThat(config.getDataSource(),
-						is(instanceOf(TransactionAwareDataSourceProxy.class)));
-				assertThat(config.getDialect(), is(instanceOf(StandardDialect.class)));
-				assertThat(config.getSqlFileRepository(),
-						is(instanceOf(GreedyCacheSqlFileRepository.class)));
-				assertThat(config.getNaming(), is(Naming.DEFAULT));
-				assertThat(config.getJdbcLogger(), is(instanceOf(Slf4jJdbcLogger.class)));
-				assertThat(config.getEntityListenerProvider(), is(notNullValue()));
-				assertThat(config.getDuplicateColumnHandler(),
-						is(ConfigSupport.defaultDuplicateColumnHandler));
-				assertThat(config.getScriptFileLoader(),
-						is(instanceOf(ResourceLoaderScriptFileLoader.class)));
-				assertThat(config.getSqlBuilderSettings(),
-						is(instanceOf(DomaSpringBootSqlBuilderSettings.class)));
-				assertThat(config.getStatisticManager(), is(instanceOf(DefaultStatisticManager.class)));
-				PersistenceExceptionTranslator translator = context
-						.getBean(PersistenceExceptionTranslator.class);
-				assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertThat(config, is(notNullValue()));
+					assertThat(config.getDataSource(),
+							is(instanceOf(TransactionAwareDataSourceProxy.class)));
+					assertThat(config.getDialect(), is(instanceOf(StandardDialect.class)));
+					assertThat(config.getSqlFileRepository(),
+							is(instanceOf(GreedyCacheSqlFileRepository.class)));
+					assertThat(config.getNaming(), is(Naming.DEFAULT));
+					assertThat(config.getJdbcLogger(), is(instanceOf(Slf4jJdbcLogger.class)));
+					assertThat(config.getEntityListenerProvider(), is(notNullValue()));
+					assertThat(config.getDuplicateColumnHandler(),
+							is(ConfigSupport.defaultDuplicateColumnHandler));
+					assertThat(config.getScriptFileLoader(),
+							is(instanceOf(ResourceLoaderScriptFileLoader.class)));
+					assertThat(config.getSqlBuilderSettings(),
+							is(instanceOf(DomaSpringBootSqlBuilderSettings.class)));
+					assertThat(config.getStatisticManager(),
+							is(instanceOf(DefaultStatisticManager.class)));
+					PersistenceExceptionTranslator translator = context
+							.getBean(PersistenceExceptionTranslator.class);
+					assertThat(translator,
+							is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+				});
 	}
 
 	@Test
 	public void testConfigWithDomaConfigBuilder() {
 		this.contextRunner
-			.withUserConfiguration(ConfigBuilderConfigure.class)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertThat(config, is(notNullValue()));
-				assertThat(config.getDataSource(),
-						is(instanceOf(TransactionAwareDataSourceProxy.class)));
-				assertThat(config.getDialect(), is(instanceOf(MysqlDialect.class)));
-				assertThat(config.getSqlFileRepository(),
-						is(instanceOf(NoCacheSqlFileRepository.class)));
-				assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
-				assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-				assertThat(config.getEntityListenerProvider(),
-						is(instanceOf(TestEntityListenerProvider.class)));
-				assertThat(config.getDuplicateColumnHandler(),
-						is(ConfigBuilderConfigure.testDuplicateColumnHandler));
-				assertThat(config.getScriptFileLoader(), is(ConfigBuilderConfigure.testScriptFileLoader));
-				assertThat(config.getSqlBuilderSettings(),
-						is(ConfigBuilderConfigure.testSqlBuilderSettings));
-				assertThat(config.getStatisticManager(), is(ConfigBuilderConfigure.testStatisticManager));
-				PersistenceExceptionTranslator translator = context
-						.getBean(PersistenceExceptionTranslator.class);
-				assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
-			});
+				.withUserConfiguration(ConfigBuilderConfigure.class)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertThat(config, is(notNullValue()));
+					assertThat(config.getDataSource(),
+							is(instanceOf(TransactionAwareDataSourceProxy.class)));
+					assertThat(config.getDialect(), is(instanceOf(MysqlDialect.class)));
+					assertThat(config.getSqlFileRepository(),
+							is(instanceOf(NoCacheSqlFileRepository.class)));
+					assertThat(config.getNaming(), is(Naming.SNAKE_UPPER_CASE));
+					assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+					assertThat(config.getEntityListenerProvider(),
+							is(instanceOf(TestEntityListenerProvider.class)));
+					assertThat(config.getDuplicateColumnHandler(),
+							is(ConfigBuilderConfigure.testDuplicateColumnHandler));
+					assertThat(config.getScriptFileLoader(),
+							is(ConfigBuilderConfigure.testScriptFileLoader));
+					assertThat(config.getSqlBuilderSettings(),
+							is(ConfigBuilderConfigure.testSqlBuilderSettings));
+					assertThat(config.getStatisticManager(),
+							is(ConfigBuilderConfigure.testStatisticManager));
+					PersistenceExceptionTranslator translator = context
+							.getBean(PersistenceExceptionTranslator.class);
+					assertThat(translator,
+							is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+				});
 	}
 
 	@Test
 	public void testConfigWithConfig() {
 		this.contextRunner
-			.withUserConfiguration(ConfigConfigure.class)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertThat(config, is(notNullValue()));
-				assertThat(config.getDataSource(),
-						is(instanceOf(TransactionAwareDataSourceProxy.class)));
-				assertThat(config.getDialect(), is(instanceOf(PostgresDialect.class)));
-				assertThat(config.getSqlFileRepository(),
-						is(instanceOf(NoCacheSqlFileRepository.class)));
-				assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
-				assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
-				assertThat(config.getEntityListenerProvider(),
-						is(instanceOf(TestEntityListenerProvider.class)));
-				assertThat(config.getDuplicateColumnHandler(),
-						is(ConfigConfigure.testDuplicateColumnHandler));
-				assertThat(config.getScriptFileLoader(), is(ConfigConfigure.testScriptFileLoader));
-				assertThat(config.getSqlBuilderSettings(),
-						is(ConfigConfigure.testSqlBuilderSettings));
-				assertThat(config.getStatisticManager(), is(ConfigConfigure.testStatisticManager));
-				PersistenceExceptionTranslator translator = context
-						.getBean(PersistenceExceptionTranslator.class);
-				assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
-			});
+				.withUserConfiguration(ConfigConfigure.class)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertThat(config, is(notNullValue()));
+					assertThat(config.getDataSource(),
+							is(instanceOf(TransactionAwareDataSourceProxy.class)));
+					assertThat(config.getDialect(), is(instanceOf(PostgresDialect.class)));
+					assertThat(config.getSqlFileRepository(),
+							is(instanceOf(NoCacheSqlFileRepository.class)));
+					assertThat(config.getNaming(), is(Naming.SNAKE_LOWER_CASE));
+					assertThat(config.getJdbcLogger(), is(instanceOf(UtilLoggingJdbcLogger.class)));
+					assertThat(config.getEntityListenerProvider(),
+							is(instanceOf(TestEntityListenerProvider.class)));
+					assertThat(config.getDuplicateColumnHandler(),
+							is(ConfigConfigure.testDuplicateColumnHandler));
+					assertThat(config.getScriptFileLoader(),
+							is(ConfigConfigure.testScriptFileLoader));
+					assertThat(config.getSqlBuilderSettings(),
+							is(ConfigConfigure.testSqlBuilderSettings));
+					assertThat(config.getStatisticManager(),
+							is(ConfigConfigure.testStatisticManager));
+					PersistenceExceptionTranslator translator = context
+							.getBean(PersistenceExceptionTranslator.class);
+					assertThat(translator,
+							is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+				});
 	}
 
 	@Test
 	public void testExceptionTranslationEnabledSpecifyFalse() {
 		this.contextRunner
-			.withPropertyValues("doma.exception-translation-enabled=false")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				assertThrows(NoSuchBeanDefinitionException.class, () -> 
-					context.getBean(PersistenceExceptionTranslator.class));
-			});
+				.withPropertyValues("doma.exception-translation-enabled=false")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					assertThrows(NoSuchBeanDefinitionException.class,
+							() -> context.getBean(PersistenceExceptionTranslator.class));
+				});
 	}
 
 	@Test
 	public void testExceptionTranslationEnabledSpecifyTrue() {
 		this.contextRunner
-			.withPropertyValues("doma.exception-translation-enabled=true")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				PersistenceExceptionTranslator translator = context
-						.getBean(PersistenceExceptionTranslator.class);
-				assertThat(translator, is(instanceOf(DomaPersistenceExceptionTranslator.class)));
-			});
+				.withPropertyValues("doma.exception-translation-enabled=true")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					PersistenceExceptionTranslator translator = context
+							.getBean(PersistenceExceptionTranslator.class);
+					assertThat(translator,
+							is(instanceOf(DomaPersistenceExceptionTranslator.class)));
+				});
 	}
 
 	@Test
 	public void testChangeDialect() {
 		this.contextRunner
-			.withPropertyValues("doma.dialect=MYSQL")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Dialect dialect = context.getBean(Dialect.class);
-				assertThat(dialect, is(instanceOf(MysqlDialect.class)));
-			});
+				.withPropertyValues("doma.dialect=MYSQL")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Dialect dialect = context.getBean(Dialect.class);
+					assertThat(dialect, is(instanceOf(MysqlDialect.class)));
+				});
 	}
 
 	@Test
 	public void testChangeMaxRows() {
 		this.contextRunner
-			.withPropertyValues("doma.max-rows=100")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertThat(config.getMaxRows(), is(100));
-			});
+				.withPropertyValues("doma.max-rows=100")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertThat(config.getMaxRows(), is(100));
+				});
 	}
 
 	@Test
 	public void testSQLExceptionTranslator() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				PersistenceExceptionTranslator translator = context
-						.getBean(PersistenceExceptionTranslator.class);
-				{
-					// Translated by SQLErrorCodeSQLExceptionTranslator
-					DataAccessException dataAccessException = translator
-							.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
-									new SQLException("Acquire Lock on H2", "SqlState", 50200,
-											null)));
-					assertThat(dataAccessException,
-							is(instanceOf(CannotAcquireLockException.class)));
-				}
-				{
-					// Translated by SQLExceptionSubclassTranslator(fallback)
-					DataAccessException dataAccessException = translator
-							.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
-									new SQLTimeoutException("Timeout", "SqlState", -1, null)));
-					assertThat(dataAccessException, is(instanceOf(QueryTimeoutException.class)));
-				}
-				{
-					// Translated by SQLStateSQLExceptionTranslator (fallback)
-					DataAccessException dataAccessException = translator
-							.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
-									new SQLException("With check violation", "44", -1, null)));
-					assertThat(dataAccessException,
-							is(instanceOf(DataIntegrityViolationException.class)));
-				}
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					PersistenceExceptionTranslator translator = context
+							.getBean(PersistenceExceptionTranslator.class);
+					{
+						// Translated by SQLErrorCodeSQLExceptionTranslator
+						DataAccessException dataAccessException = translator
+								.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+										new SQLException("Acquire Lock on H2", "SqlState", 50200,
+												null)));
+						assertThat(dataAccessException,
+								is(instanceOf(CannotAcquireLockException.class)));
+					}
+					{
+						// Translated by SQLExceptionSubclassTranslator(fallback)
+						DataAccessException dataAccessException = translator
+								.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+										new SQLTimeoutException("Timeout", "SqlState", -1, null)));
+						assertThat(dataAccessException,
+								is(instanceOf(QueryTimeoutException.class)));
+					}
+					{
+						// Translated by SQLStateSQLExceptionTranslator (fallback)
+						DataAccessException dataAccessException = translator
+								.translateExceptionIfPossible(new JdbcException(Message.DOMA2008,
+										new SQLException("With check violation", "44", -1, null)));
+						assertThat(dataAccessException,
+								is(instanceOf(DataIntegrityViolationException.class)));
+					}
+				});
 	}
 
 	@Test
 	public void testAutoRegisteredCriteriaAPI() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Entityql entityql = context.getBean(Entityql.class);
-				assertNotNull(entityql);
-				NativeSql nativeSql = context.getBean(NativeSql.class);
-				assertNotNull(nativeSql);
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Entityql entityql = context.getBean(Entityql.class);
+					assertNotNull(entityql);
+					NativeSql nativeSql = context.getBean(NativeSql.class);
+					assertNotNull(nativeSql);
+				});
 	}
 
 	@Test
 	public void testCriteriaAPIWithConfig() {
 		this.contextRunner
-			.withUserConfiguration(MyCriteriaAPIConfig.class)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Map<String, Entityql> entityqlBeans = context.getBeansOfType(Entityql.class);
-				assertEquals(1, entityqlBeans.size());
-				assertNotNull(entityqlBeans.get("myEntityql"));
-				Map<String, NativeSql> nativeSqlBeans = context.getBeansOfType(NativeSql.class);
-				assertEquals(1, nativeSqlBeans.size());
-				assertNotNull(nativeSqlBeans.get("myNativeSql"));
-			});
+				.withUserConfiguration(MyCriteriaAPIConfig.class)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Map<String, Entityql> entityqlBeans = context.getBeansOfType(Entityql.class);
+					assertEquals(1, entityqlBeans.size());
+					assertNotNull(entityqlBeans.get("myEntityql"));
+					Map<String, NativeSql> nativeSqlBeans = context.getBeansOfType(NativeSql.class);
+					assertEquals(1, nativeSqlBeans.size());
+					assertNotNull(nativeSqlBeans.get("myNativeSql"));
+				});
 	}
 
 	@Test
 	public void testDialectByDataSourceUrl() {
 		this.contextRunner
-			.withPropertyValues(
-				"spring.datasource.url=jdbc:postgresql://localhost:1234/example",
-				"doma.exception-translation-enabled=false" /* prevent database connections */)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, 
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Dialect dialect = context.getBean(Dialect.class);
-				assertThat(dialect, is(instanceOf(PostgresDialect.class)));
-			});
+				.withPropertyValues(
+						"spring.datasource.url=jdbc:postgresql://localhost:1234/example",
+						"doma.exception-translation-enabled=false" /* prevent database connections */)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Dialect dialect = context.getBean(Dialect.class);
+					assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+				});
 	}
 
 	@Test
 	public void testDialectByJdbConnectionDetails() {
 		this.contextRunner
-			.withPropertyValues("doma.exception-translation-enabled=false"/* prevent database connections */)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean(JdbcConnectionDetails.class, () -> new JdbcConnectionDetails() {
-				@Override
-				public String getUsername() {
-					return "dummy";
-				}
+				.withPropertyValues(
+						"doma.exception-translation-enabled=false"/* prevent database connections */)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean(JdbcConnectionDetails.class, () -> new JdbcConnectionDetails() {
+					@Override
+					public String getUsername() {
+						return "dummy";
+					}
 
-				@Override
-				public String getPassword() {
-					return "dummy";
-				}
+					@Override
+					public String getPassword() {
+						return "dummy";
+					}
 
-				@Override
-				public String getJdbcUrl() {
-					return "jdbc:postgresql://localhost:1234/example";
-				}
-			})
-			.run(context -> {
-				Dialect dialect = context.getBean(Dialect.class);
-				assertThat(dialect, is(instanceOf(PostgresDialect.class)));
-			});
+					@Override
+					public String getJdbcUrl() {
+						return "jdbc:postgresql://localhost:1234/example";
+					}
+				})
+				.run(context -> {
+					Dialect dialect = context.getBean(Dialect.class);
+					assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+				});
 	}
 
 	@Test
 	public void testDialectMissingJdbConnectionDetails() {
 		this.contextRunner
-			.withPropertyValues("doma.exception-translation-enabled=false"/* prevent database connections */)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean(DataSource.class, SimpleDriverDataSource::new)
-			.run(context -> {
-				assertThat(context.getStartupFailure().getMessage(), containsString(
-						"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
-			});
+				.withPropertyValues(
+						"doma.exception-translation-enabled=false"/* prevent database connections */)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean(DataSource.class, SimpleDriverDataSource::new)
+				.run(context -> {
+					assertThat(context.getStartupFailure().getMessage(), containsString(
+							"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
+				});
 	}
 
 	@Test
 	public void testDialectMissingJdbConnectionDetailsExplicitDialect() {
 		this.contextRunner
-			.withPropertyValues(
-				"doma.dialect=POSTGRES", 
-				"doma.exception-translation-enabled=false"/* prevent database connections */)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean(DataSource.class, SimpleDriverDataSource::new)
-			.run(context -> {
-				Dialect dialect = context.getBean(Dialect.class);
-				assertThat(dialect, is(instanceOf(PostgresDialect.class)));
-			});
+				.withPropertyValues(
+						"doma.dialect=POSTGRES",
+						"doma.exception-translation-enabled=false"/* prevent database connections */)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean(DataSource.class, SimpleDriverDataSource::new)
+				.run(context -> {
+					Dialect dialect = context.getBean(Dialect.class);
+					assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+				});
 	}
 
 	@Test
 	public void testDialectByDomaPropertiesIgnoreDataSourceUrl() {
 		this.contextRunner
-			.withPropertyValues(
-				"spring.datasource.url=jdbc:h2:mem:example",
-				"doma.dialect=POSTGRES")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Dialect dialect = context.getBean(Dialect.class);
-				assertThat(dialect, is(instanceOf(PostgresDialect.class)));
-			});
+				.withPropertyValues(
+						"spring.datasource.url=jdbc:h2:mem:example",
+						"doma.dialect=POSTGRES")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Dialect dialect = context.getBean(Dialect.class);
+					assertThat(dialect, is(instanceOf(PostgresDialect.class)));
+				});
 	}
 
 	@Test
 	public void testJdbcLoggerSlf4J() {
 		this.contextRunner
-			.withPropertyValues("doma.jdbcLogger=SLF4J")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.run(context -> {
-				JdbcLogger jdbcLogger = context.getBean(JdbcLogger.class);
-				assertThat(jdbcLogger.getClass().getSimpleName(), is("Slf4jJdbcLogger"));
-			});
+				.withPropertyValues("doma.jdbcLogger=SLF4J")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					JdbcLogger jdbcLogger = context.getBean(JdbcLogger.class);
+					assertThat(jdbcLogger.getClass().getSimpleName(), is("Slf4jJdbcLogger"));
+				});
 	}
 
 	@Test
 	public void testAutoRegisteredQueryDsl() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.run(context -> {
-				QueryDsl queryDsl = context.getBean(QueryDsl.class);
-				assertNotNull(queryDsl);
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					QueryDsl queryDsl = context.getBean(QueryDsl.class);
+					assertNotNull(queryDsl);
+				});
 	}
 
 	@Test
 	public void testQueryDslWithConfig() {
 		this.contextRunner
-			.withUserConfiguration(MyQueryDslConfig.class)
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Map<String, QueryDsl> queryDslBeans = context.getBeansOfType(QueryDsl.class);
-				assertEquals(1, queryDslBeans.size());
-				assertNotNull(queryDslBeans.get("myQueryDsl"));
-			});
+				.withUserConfiguration(MyQueryDslConfig.class)
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Map<String, QueryDsl> queryDslBeans = context.getBeansOfType(QueryDsl.class);
+					assertEquals(1, queryDslBeans.size());
+					assertNotNull(queryDslBeans.get("myQueryDsl"));
+				});
 	}
 
 	@Test
 	public void testThrowExceptionIfDuplicateColumn() {
 		this.contextRunner
-			.withPropertyValues("doma.throw-exception-if-duplicate-column=true")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertThat(config.getDuplicateColumnHandler(),
-						is(instanceOf(ThrowingDuplicateColumnHandler.class)));
-			});
+				.withPropertyValues("doma.throw-exception-if-duplicate-column=true")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertThat(config.getDuplicateColumnHandler(),
+							is(instanceOf(ThrowingDuplicateColumnHandler.class)));
+				});
 	}
 
 	@Test
@@ -410,16 +429,19 @@ public class DomaAutoConfigurationTest {
 		when(predicate.test(anyString())).thenReturn(true);
 
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean("shouldRemoveBlockComment", Predicate.class, () -> predicate)
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
-				config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean("shouldRemoveBlockComment", Predicate.class, () -> predicate)
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					config.getSqlBuilderSettings()
+							.shouldRemoveBlockComment("shouldRemoveBlockComment");
+					config.getSqlBuilderSettings()
+							.shouldRemoveLineComment("shouldRemoveLineComment");
 
-				verify(predicate, times(1)).test("shouldRemoveBlockComment");
-				verifyNoMoreInteractions(predicate);
-			});
+					verify(predicate, times(1)).test("shouldRemoveBlockComment");
+					verifyNoMoreInteractions(predicate);
+				});
 	}
 
 	@Test
@@ -428,16 +450,19 @@ public class DomaAutoConfigurationTest {
 		when(predicate.test(anyString())).thenReturn(true);
 
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean("shouldRemoveLineComment", Predicate.class, () -> predicate)
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
-				config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean("shouldRemoveLineComment", Predicate.class, () -> predicate)
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					config.getSqlBuilderSettings()
+							.shouldRemoveBlockComment("shouldRemoveBlockComment");
+					config.getSqlBuilderSettings()
+							.shouldRemoveLineComment("shouldRemoveLineComment");
 
-				verify(predicate, times(1)).test("shouldRemoveLineComment");
-				verifyNoMoreInteractions(predicate);
-			});
+					verify(predicate, times(1)).test("shouldRemoveLineComment");
+					verifyNoMoreInteractions(predicate);
+				});
 	}
 
 	@Test
@@ -446,84 +471,87 @@ public class DomaAutoConfigurationTest {
 		when(predicate.test(anyString())).thenReturn(true);
 
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class, DataSourceAutoConfiguration.class))
-			.withBean(Predicate.class, () -> predicate)
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				config.getSqlBuilderSettings().shouldRemoveBlockComment("shouldRemoveBlockComment");
-				config.getSqlBuilderSettings().shouldRemoveLineComment("shouldRemoveLineComment");
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.withBean(Predicate.class, () -> predicate)
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					config.getSqlBuilderSettings()
+							.shouldRemoveBlockComment("shouldRemoveBlockComment");
+					config.getSqlBuilderSettings()
+							.shouldRemoveLineComment("shouldRemoveLineComment");
 
-				verifyNoInteractions(predicate);
-			});
+					verifyNoInteractions(predicate);
+				});
 	}
 
 	@Test
 	public void testShouldRemoveBlankLinesDefaultValue() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertFalse(config.getSqlBuilderSettings().shouldRemoveBlankLines());
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertFalse(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+				});
 	}
 
 	@Test
 	public void testShouldRemoveBlankLinesChangedValue() {
 		this.contextRunner
-			.withPropertyValues("doma.sql-builder-settings.should-remove-blank-lines=true")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertTrue(config.getSqlBuilderSettings().shouldRemoveBlankLines());
-			});
+				.withPropertyValues("doma.sql-builder-settings.should-remove-blank-lines=true")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertTrue(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+				});
 	}
 
 	@Test
 	public void testShouldRequireInListPaddingDefaultValue() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertFalse(config.getSqlBuilderSettings().shouldRequireInListPadding());
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertFalse(config.getSqlBuilderSettings().shouldRequireInListPadding());
+				});
 	}
 
 	@Test
 	public void testShouldRequireInListPaddingChangedValue() {
 		this.contextRunner
-			.withPropertyValues("doma.sql-builder-settings.should-require-in-list-padding=true")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertTrue(config.getSqlBuilderSettings().shouldRequireInListPadding());
-			});
+				.withPropertyValues("doma.sql-builder-settings.should-require-in-list-padding=true")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertTrue(config.getSqlBuilderSettings().shouldRequireInListPadding());
+				});
 	}
 
 	@Test
 	public void testStatisticManagerDefaultValue() {
 		this.contextRunner
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertFalse(config.getStatisticManager().isEnabled());
-			});
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertFalse(config.getStatisticManager().isEnabled());
+				});
 	}
 
 	@Test
 	public void testStatisticManagerChangedValue() {
 		this.contextRunner
-			.withPropertyValues("doma.statistic-manager.enabled=true")
-			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
-					DataSourceAutoConfiguration.class))
-			.run(context -> {
-				Config config = context.getBean(Config.class);
-				assertTrue(config.getStatisticManager().isEnabled());
-			});
+				.withPropertyValues("doma.statistic-manager.enabled=true")
+				.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
+						DataSourceAutoConfiguration.class))
+				.run(context -> {
+					Config config = context.getBean(Config.class);
+					assertTrue(config.getStatisticManager().isEnabled());
+				});
 	}
 
 	// tearDown method removed - no longer needed with ApplicationContextRunner
