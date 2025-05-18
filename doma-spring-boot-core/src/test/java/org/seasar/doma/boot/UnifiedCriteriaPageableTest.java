@@ -1,10 +1,9 @@
 package org.seasar.doma.boot;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -41,8 +40,8 @@ public class UnifiedCriteriaPageableTest {
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertThat(offset, is(expectedOffset));
-		assertThat(limit, is(expectedLimit));
+		assertEquals(expectedOffset, offset);
+		assertEquals(expectedLimit, limit);
 	}
 
 	@Test
@@ -53,8 +52,8 @@ public class UnifiedCriteriaPageableTest {
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertThat(offset, nullValue());
-		assertThat(limit, nullValue());
+		assertNull(offset);
+		assertNull(limit);
 	}
 
 	@Test
@@ -123,7 +122,7 @@ public class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertThat(consumer, sameInstance(defaultOrder));
+		assertSame(defaultOrder, consumer);
 	}
 
 	@Test
@@ -166,7 +165,7 @@ public class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertThat(consumer, sameInstance(defaultOrder));
+		assertSame(defaultOrder, consumer);
 	}
 
 	@Test

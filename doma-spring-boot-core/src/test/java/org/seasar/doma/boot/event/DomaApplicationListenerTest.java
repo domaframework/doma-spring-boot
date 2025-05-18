@@ -6,9 +6,8 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.Entity;
 import org.seasar.doma.boot.event.annotation.HandlePostInsert;
 import org.seasar.doma.boot.event.annotation.HandlePreInsert;
@@ -21,9 +20,9 @@ import org.springframework.context.event.EventListenerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-@RunWith(Enclosed.class)
 public class DomaApplicationListenerTest {
 
+	@Nested
 	public static class ConstructorTest {
 
 		@SuppressWarnings("unused")
@@ -184,6 +183,7 @@ public class DomaApplicationListenerTest {
 		}
 	}
 
+	@Nested
 	public static class OnApplicationEventTest {
 
 		@Test

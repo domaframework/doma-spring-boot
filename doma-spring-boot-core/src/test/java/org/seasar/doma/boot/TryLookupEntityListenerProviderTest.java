@@ -1,9 +1,9 @@
 package org.seasar.doma.boot;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.jdbc.entity.EntityListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,17 +21,19 @@ public class TryLookupEntityListenerProviderTest {
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
 			FooListener listener = provider.get(FooListener.class, FooListener::new);
-			assertThat(listener.managed, is(true));
+			assertTrue(listener.managed);
 		}
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void testManaged_notUnique() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				FooConfig.class)) {
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
-			provider.get(FooListener.class, FooListener::new);
+			assertThrows(IllegalStateException.class, () -> {
+				provider.get(FooListener.class, FooListener::new);
+			});
 		}
 	}
 
@@ -42,7 +44,7 @@ public class TryLookupEntityListenerProviderTest {
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
 			FooListener listener = provider.get(FooListener.class, FooListener::new);
-			assertThat(listener.managed, is(false));
+			assertFalse(listener.managed);
 		}
 	}
 

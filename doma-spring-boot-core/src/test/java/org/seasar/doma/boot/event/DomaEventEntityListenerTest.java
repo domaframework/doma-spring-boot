@@ -2,8 +2,9 @@ package org.seasar.doma.boot.event;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.boot.event.annotation.HandlePostDelete;
 import org.seasar.doma.boot.event.annotation.HandlePostInsert;
 import org.seasar.doma.boot.event.annotation.HandlePostUpdate;
@@ -333,14 +334,16 @@ public class DomaEventEntityListenerTest {
 		}
 	}
 
-	@Test(expected = BeanInitializationException.class)
+	@Test
 	public void noArg() throws Exception {
-		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-			context.register(DomaEventEntityListener.class);
-			context.register(DomaEventListenerFactory.class);
-			context.register(NoArgHandler.class);
-			context.refresh();
-		}
+		assertThrows(BeanInitializationException.class, () -> {
+			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+				context.register(DomaEventEntityListener.class);
+				context.register(DomaEventListenerFactory.class);
+				context.register(NoArgHandler.class);
+				context.refresh();
+			}
+		});
 	}
 
 	@Test
