@@ -19,6 +19,11 @@
     <dependencies>
         <dependency>
             <groupId>org.seasar.doma</groupId>
+            <artifactId>doma-core</artifactId>
+            <version>${doma.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seasar.doma</groupId>
             <artifactId>doma-processor</artifactId>
             <version>${doma.version}</version>
             <optional>true</optional>

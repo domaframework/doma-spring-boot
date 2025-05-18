@@ -30,13 +30,13 @@ import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.support.SQLExceptionSubclassTranslator;
 
-public class DomaPersistenceExceptionTranslatorTest {
+class DomaPersistenceExceptionTranslatorTest {
 
 	private final DomaPersistenceExceptionTranslator translator = new DomaPersistenceExceptionTranslator(
 			new SQLExceptionSubclassTranslator());
 
 	@Test
-	public void testOccurNotJdbcException() {
+	void testOccurNotJdbcException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new DomaException(Message.DOMA2008));
 		assertNull(dataAccessException);
@@ -51,8 +51,8 @@ public class DomaPersistenceExceptionTranslatorTest {
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql", new SQLException(), null));
 		assertInstanceOf(UncategorizedSQLException.class, dataAccessException);
-		assertEquals("select * from todo where todo_id = ?", 
-				((UncategorizedSQLException)dataAccessException).getSql());
+		assertEquals("select * from todo where todo_id = ?",
+				((UncategorizedSQLException) dataAccessException).getSql());
 	}
 
 	@Test

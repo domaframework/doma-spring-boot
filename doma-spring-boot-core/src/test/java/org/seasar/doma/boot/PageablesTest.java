@@ -7,24 +7,24 @@ import org.seasar.doma.jdbc.SelectOptions;
 import org.seasar.doma.jdbc.SelectOptionsAccessor;
 import org.springframework.data.domain.PageRequest;
 
-public class PageablesTest {
+class PageablesTest {
 
 	@Test
-	public void testToSelectOptions() throws Exception {
+	void testToSelectOptions() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(0, 10));
 		assertEquals(0L, SelectOptionsAccessor.getOffset(options));
 		assertEquals(10L, SelectOptionsAccessor.getLimit(options));
 	}
 
 	@Test
-	public void testToSelectOptions2() throws Exception {
+	void testToSelectOptions2() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(2, 10));
 		assertEquals(20L, SelectOptionsAccessor.getOffset(options));
 		assertEquals(10L, SelectOptionsAccessor.getLimit(options));
 	}
 
 	@Test
-	public void testToSelectOptions3() throws Exception {
+	void testToSelectOptions3() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(2, 5));
 		assertEquals(10L, SelectOptionsAccessor.getOffset(options));
 		assertEquals(5L, SelectOptionsAccessor.getLimit(options));

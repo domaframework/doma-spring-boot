@@ -187,7 +187,7 @@ public class DomaApplicationListenerTest {
 	public static class OnApplicationEventTest {
 
 		@Test
-		public void handleEvent() throws Exception {
+		void handleEvent() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();

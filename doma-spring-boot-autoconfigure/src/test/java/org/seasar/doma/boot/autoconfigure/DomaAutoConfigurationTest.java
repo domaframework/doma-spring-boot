@@ -69,13 +69,13 @@ import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
-public class DomaAutoConfigurationTest {
+class DomaAutoConfigurationTest {
 	private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
 			.withConfiguration(AutoConfigurations.of(DomaAutoConfiguration.class,
 					DataSourceAutoConfiguration.class));
 
 	@Test
-	public void testAutoRegisteredConfig() {
+	void testAutoRegisteredConfig() {
 		this.contextRunner
 				.run(context -> {
 					Config config = context.getBean(Config.class);

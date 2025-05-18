@@ -25,14 +25,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public class UnifiedCriteriaPageableTest {
+class UnifiedCriteriaPageableTest {
 	@ParameterizedTest
 	@CsvSource(value = {
 			"0 | 10 | 0 | 10",
 			"2 | 10 | 20 | 10",
 			"2 | 5 | 10 | 5",
 	}, delimiter = '|')
-	public void testOffsetAndLimit(
+	void testOffsetAndLimit(
 			int pageNumber, int pageSize, int expectedOffset, int expectedLimit) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
@@ -45,7 +45,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOffsetAndLimitWhenUnpaged() {
+	void testOffsetAndLimitWhenUnpaged() {
 		Pageable pageable = Pageable.unpaged();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
 

@@ -24,7 +24,7 @@ import org.springframework.context.event.EventListener;
 @SuppressWarnings("unchecked")
 public class DomaEventEntityListenerTest {
 	@Test
-	public void handlePreInsert() throws Exception {
+	void handlePreInsert() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -43,7 +43,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePreInsertWithContext() throws Exception {
+	void handlePreInsertWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -64,7 +64,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePreUpdate() throws Exception {
+	void handlePreUpdate() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -83,7 +83,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePreUpdateWithContext() throws Exception {
+	void handlePreUpdateWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
