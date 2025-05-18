@@ -57,7 +57,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderBy() {
+	void testOrderBy() {
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
 		Person_ entity = new Person_();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
@@ -75,7 +75,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderBy2() {
+	void testOrderBy2() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -97,7 +97,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenNonSort() {
+	void testOrderByWhenNonSort() {
 		Pageable pageable = PageRequest.of(0, 10);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
@@ -111,7 +111,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenNonSortAndSetDefault() {
+	void testOrderByWhenNonSortAndSetDefault() {
 		Pageable pageable = PageRequest.of(0, 10);
 		Person_ entity = new Person_();
 		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.asc(entity.id);
@@ -126,7 +126,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderBySingleEntity() {
+	void testOrderBySingleEntity() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -142,7 +142,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenMissingProperties() {
+	void testOrderByWhenMissingProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -156,7 +156,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenMissingAllProperties() {
+	void testOrderByWhenMissingAllProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -169,7 +169,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenMissingPropertiesHandle() {
+	void testOrderByWhenMissingPropertiesHandle() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();

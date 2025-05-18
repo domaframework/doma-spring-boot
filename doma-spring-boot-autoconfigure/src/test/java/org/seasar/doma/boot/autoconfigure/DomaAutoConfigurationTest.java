@@ -104,7 +104,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testConfigWithDomaConfigBuilder() {
+	void testConfigWithDomaConfigBuilder() {
 		this.contextRunner
 				.withUserConfiguration(ConfigBuilderConfigure.class)
 				.run(context -> {
@@ -135,7 +135,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testConfigWithConfig() {
+	void testConfigWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(ConfigConfigure.class)
 				.run(context -> {
@@ -166,7 +166,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testExceptionTranslationEnabledSpecifyFalse() {
+	void testExceptionTranslationEnabledSpecifyFalse() {
 		this.contextRunner
 				.withPropertyValues("doma.exception-translation-enabled=false")
 				.run(context -> {
@@ -176,7 +176,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testExceptionTranslationEnabledSpecifyTrue() {
+	void testExceptionTranslationEnabledSpecifyTrue() {
 		this.contextRunner
 				.withPropertyValues("doma.exception-translation-enabled=true")
 				.run(context -> {
@@ -188,7 +188,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testChangeDialect() {
+	void testChangeDialect() {
 		this.contextRunner
 				.withPropertyValues("doma.dialect=MYSQL")
 				.run(context -> {
@@ -198,7 +198,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testChangeMaxRows() {
+	void testChangeMaxRows() {
 		this.contextRunner
 				.withPropertyValues("doma.max-rows=100")
 				.run(context -> {
@@ -208,7 +208,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testSQLExceptionTranslator() {
+	void testSQLExceptionTranslator() {
 		this.contextRunner
 				.run(context -> {
 					PersistenceExceptionTranslator translator = context
@@ -242,7 +242,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testAutoRegisteredCriteriaAPI() {
+	void testAutoRegisteredCriteriaAPI() {
 		this.contextRunner
 				.run(context -> {
 					Entityql entityql = context.getBean(Entityql.class);
@@ -253,7 +253,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testCriteriaAPIWithConfig() {
+	void testCriteriaAPIWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(MyCriteriaAPIConfig.class)
 				.run(context -> {
@@ -267,7 +267,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testDialectByDataSourceUrl() {
+	void testDialectByDataSourceUrl() {
 		this.contextRunner
 				.withPropertyValues(
 						"spring.datasource.url=jdbc:postgresql://localhost:1234/example",
@@ -279,7 +279,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testDialectByJdbConnectionDetails() {
+	void testDialectByJdbConnectionDetails() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.exception-translation-enabled=false"/* prevent database connections */)
@@ -306,7 +306,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testDialectMissingJdbConnectionDetails() {
+	void testDialectMissingJdbConnectionDetails() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.exception-translation-enabled=false"/* prevent database connections */)
@@ -319,7 +319,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testDialectMissingJdbConnectionDetailsExplicitDialect() {
+	void testDialectMissingJdbConnectionDetailsExplicitDialect() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.dialect=POSTGRES",
@@ -333,7 +333,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testDialectByDomaPropertiesIgnoreDataSourceUrl() {
+	void testDialectByDomaPropertiesIgnoreDataSourceUrl() {
 		this.contextRunner
 				.withPropertyValues(
 						"spring.datasource.url=jdbc:h2:mem:example",
@@ -346,7 +346,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testJdbcLoggerSlf4J() {
+	void testJdbcLoggerSlf4J() {
 		this.contextRunner
 				.withPropertyValues("doma.jdbcLogger=SLF4J")
 
@@ -357,7 +357,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testAutoRegisteredQueryDsl() {
+	void testAutoRegisteredQueryDsl() {
 		this.contextRunner
 
 				.run(context -> {
@@ -367,7 +367,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testQueryDslWithConfig() {
+	void testQueryDslWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(MyQueryDslConfig.class)
 
@@ -379,7 +379,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testThrowExceptionIfDuplicateColumn() {
+	void testThrowExceptionIfDuplicateColumn() {
 		this.contextRunner
 				.withPropertyValues("doma.throw-exception-if-duplicate-column=true")
 
@@ -391,7 +391,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testCustomizeShouldRemoveBlockComment() {
+	void testCustomizeShouldRemoveBlockComment() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -411,7 +411,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testCustomizeShouldRemoveLineComment() {
+	void testCustomizeShouldRemoveLineComment() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -431,7 +431,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testAnonymousPredicateAreNotAffected() {
+	void testAnonymousPredicateAreNotAffected() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -450,7 +450,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testShouldRemoveBlankLinesDefaultValue() {
+	void testShouldRemoveBlankLinesDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
@@ -460,7 +460,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testShouldRemoveBlankLinesChangedValue() {
+	void testShouldRemoveBlankLinesChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.sql-builder-settings.should-remove-blank-lines=true")
 
@@ -471,7 +471,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testShouldRequireInListPaddingDefaultValue() {
+	void testShouldRequireInListPaddingDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
@@ -481,7 +481,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testShouldRequireInListPaddingChangedValue() {
+	void testShouldRequireInListPaddingChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.sql-builder-settings.should-require-in-list-padding=true")
 
@@ -492,7 +492,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testStatisticManagerDefaultValue() {
+	void testStatisticManagerDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
@@ -502,7 +502,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	public void testStatisticManagerChangedValue() {
+	void testStatisticManagerChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.statistic-manager.enabled=true")
 

@@ -104,7 +104,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePreDelete() throws Exception {
+	void handlePreDelete() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);

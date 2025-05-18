@@ -43,7 +43,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testOccurSqlExecutionException() {
+	void testOccurSqlExecutionException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new SqlExecutionException(
 						SqlLogType.FORMATTED, SqlKind.SELECT,
@@ -56,7 +56,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowOptimisticLockingFailureException() {
+	void testThrowOptimisticLockingFailureException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new OptimisticLockException(
 						SqlLogType.FORMATTED,
@@ -68,7 +68,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowDuplicateKeyException() {
+	void testThrowDuplicateKeyException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new UniqueConstraintException(
 						SqlLogType.FORMATTED,
@@ -80,7 +80,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowIncorrectResultSizeDataAccessException() {
+	void testThrowIncorrectResultSizeDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new NonUniqueResultException(
@@ -103,7 +103,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowEmptyResultDataAccessException() {
+	void testThrowEmptyResultDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new NoResultException(SqlLogType.FORMATTED,
 						SqlKind.SELECT, "select * from todo where todo_id = ?",
@@ -113,7 +113,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowTypeMismatchDataAccessException() {
+	void testThrowTypeMismatchDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new UnknownColumnException(
@@ -139,7 +139,7 @@ class DomaPersistenceExceptionTranslatorTest {
 	}
 
 	@Test
-	public void testThrowUncategorizedDataAccessException() {
+	void testThrowUncategorizedDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new ConfigException("DomaConfig",
 						"configure"));

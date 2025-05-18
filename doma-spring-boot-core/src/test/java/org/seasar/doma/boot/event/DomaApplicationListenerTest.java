@@ -27,7 +27,7 @@ public class DomaApplicationListenerTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void entityOnly() throws Exception {
+		void entityOnly() throws Exception {
 			String beanName = "";
 			Method method = EntityOnly.class.getDeclaredMethod("handle",
 					TestEntity1.class);
