@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 class DomaApplicationListenerTest {
 
 	@Nested
-	static class ConstructorTest {
+	public static class ConstructorTest {
 
 		@SuppressWarnings("unused")
 		@Test
@@ -184,7 +184,7 @@ class DomaApplicationListenerTest {
 	}
 
 	@Nested
-	static class OnApplicationEventTest {
+	public static class OnApplicationEventTest {
 
 		@Test
 		void handleEvent() throws Exception {
