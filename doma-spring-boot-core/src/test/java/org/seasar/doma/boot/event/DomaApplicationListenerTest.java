@@ -125,57 +125,57 @@ public class DomaApplicationListenerTest {
 		public static class TestEntity3 {
 		}
 
-		static class EntityOnly {
+		public static class EntityOnly {
 			@HandlePreInsert
 			void handle(TestEntity1 entity) {
 			}
 		}
 
-		static class EntityWithContext {
+		public static class EntityWithContext {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
 			}
 		}
 
-		static class MultiAnnotations {
+		public static class MultiAnnotations {
 			@HandlePreInsert
 			@HandlePostInsert
 			void handle(TestEntity1 entity) {
 			}
 		}
 
-		static class NotEntity {
+		public static class NotEntity {
 			@HandlePreInsert
 			void handle(TestEntity3 entity) {
 			}
 		}
 
-		static class InvalidContextClass {
+		public static class InvalidContextClass {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PostInsertContext<TestEntity1> context) {
 			}
 		}
 
-		static class InvalidContextTypeVar {
+		public static class InvalidContextTypeVar {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity2> context) {
 			}
 		}
 
-		static class NoArg {
+		public static class NoArg {
 			@HandlePreInsert
 			void handle() {
 			}
 		}
 
-		static class TooManyArgs {
+		public static class TooManyArgs {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context,
 					Object unnecessary) {
 			}
 		}
 
-		static class MultiAnnotationsWithContext {
+		public static class MultiAnnotationsWithContext {
 			@HandlePreInsert
 			@HandlePostInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
@@ -315,7 +315,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("entityOnlyHandler")
-		static class EntityOnlyHandler {
+		public static class EntityOnlyHandler {
 			TestEntity1 entity;
 
 			@HandlePreInsert
@@ -325,7 +325,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("withContextHandler")
-		static class WithContextHandler {
+		public static class WithContextHandler {
 			TestEntity1 entity;
 			PreInsertContext<TestEntity1> context;
 
@@ -337,7 +337,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("superClassHandler")
-		static class SuperClassHandler {
+		public static class SuperClassHandler {
 			TestEntity1 entity;
 
 			@HandlePreInsert
@@ -348,7 +348,7 @@ public class DomaApplicationListenerTest {
 
 		// java.lang.IllegalStateException
 		// Maximum one parameter is allowed for event listener method
-		static class PassthroughEventListenerFactory implements EventListenerFactory,
+		public static class PassthroughEventListenerFactory implements EventListenerFactory,
 				Ordered {
 
 			@Override
