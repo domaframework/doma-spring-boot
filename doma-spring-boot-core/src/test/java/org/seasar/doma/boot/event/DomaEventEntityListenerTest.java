@@ -22,7 +22,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.event.EventListener;
 
 @SuppressWarnings("unchecked")
-public class DomaEventEntityListenerTest {
+class DomaEventEntityListenerTest {
 	@Test
 	void handlePreInsert() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
@@ -123,7 +123,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePreDeleteWithContext() throws Exception {
+	void handlePreDeleteWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -144,7 +144,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostInsert() throws Exception {
+	void handlePostInsert() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -163,7 +163,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostInsertWithContext() throws Exception {
+	void handlePostInsertWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -184,7 +184,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostUpdate() throws Exception {
+	void handlePostUpdate() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -203,7 +203,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostUpdateWithContext() throws Exception {
+	void handlePostUpdateWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -224,7 +224,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostDelete() throws Exception {
+	void handlePostDelete() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -243,7 +243,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void handlePostDeleteWithContext() throws Exception {
+	void handlePostDeleteWithContext() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -264,7 +264,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void anotherEntity() throws Exception {
+	void anotherEntity() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -288,7 +288,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void multiHandlers() throws Exception {
+	void multiHandlers() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -311,7 +311,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void multiAnnotations() throws Exception {
+	void multiAnnotations() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -335,7 +335,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void noArg() throws Exception {
+	void noArg() throws Exception {
 		assertThrows(BeanInitializationException.class, () -> {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(DomaEventEntityListener.class);
@@ -347,7 +347,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void springEventListener() throws Exception {
+	void springEventListener() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -371,7 +371,7 @@ public class DomaEventEntityListenerTest {
 	}
 
 	@Test
-	public void springConditionalEventListener() throws Exception {
+	void springConditionalEventListener() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(DomaEventEntityListener.class);
 			context.register(DomaEventListenerFactory.class);
@@ -413,7 +413,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePreInsert
-		public void handlePreInsert(Entity entity) {
+		void handlePreInsert(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -422,7 +422,7 @@ public class DomaEventEntityListenerTest {
 		Entity2 entity;
 
 		@HandlePreInsert
-		public void handlePreInsert(Entity2 entity) {
+		void handlePreInsert(Entity2 entity) {
 			this.entity = entity;
 		}
 	}
@@ -432,7 +432,7 @@ public class DomaEventEntityListenerTest {
 		PreInsertContext<Entity> ctx;
 
 		@HandlePreInsert
-		public void handlePreInsert(Entity entity, PreInsertContext<Entity> ctx) {
+		void handlePreInsert(Entity entity, PreInsertContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -442,7 +442,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePreUpdate
-		public void handlePreUpdate(Entity entity) {
+		void handlePreUpdate(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -452,7 +452,7 @@ public class DomaEventEntityListenerTest {
 		PreUpdateContext<Entity> ctx;
 
 		@HandlePreUpdate
-		public void handlePreUpdate(Entity entity, PreUpdateContext<Entity> ctx) {
+		void handlePreUpdate(Entity entity, PreUpdateContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -462,7 +462,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePreDelete
-		public void handlePreDelete(Entity entity) {
+		void handlePreDelete(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -472,7 +472,7 @@ public class DomaEventEntityListenerTest {
 		PreDeleteContext<Entity> ctx;
 
 		@HandlePreDelete
-		public void handlePreDelete(Entity entity, PreDeleteContext<Entity> ctx) {
+		void handlePreDelete(Entity entity, PreDeleteContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -482,7 +482,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePostInsert
-		public void handlePostInsert(Entity entity) {
+		void handlePostInsert(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -492,7 +492,7 @@ public class DomaEventEntityListenerTest {
 		PostInsertContext<Entity> ctx;
 
 		@HandlePostInsert
-		public void handlePostInsert(Entity entity, PostInsertContext<Entity> ctx) {
+		void handlePostInsert(Entity entity, PostInsertContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -502,7 +502,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePostUpdate
-		public void handlePostUpdate(Entity entity) {
+		void handlePostUpdate(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -512,7 +512,7 @@ public class DomaEventEntityListenerTest {
 		PostUpdateContext<Entity> ctx;
 
 		@HandlePostUpdate
-		public void handlePostUpdate(Entity entity, PostUpdateContext<Entity> ctx) {
+		void handlePostUpdate(Entity entity, PostUpdateContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -522,7 +522,7 @@ public class DomaEventEntityListenerTest {
 		Entity entity;
 
 		@HandlePostDelete
-		public void handlePostDelete(Entity entity) {
+		void handlePostDelete(Entity entity) {
 			this.entity = entity;
 		}
 	}
@@ -532,7 +532,7 @@ public class DomaEventEntityListenerTest {
 		PostDeleteContext<Entity> ctx;
 
 		@HandlePostDelete
-		public void handlePostDelete(Entity entity, PostDeleteContext<Entity> ctx) {
+		void handlePostDelete(Entity entity, PostDeleteContext<Entity> ctx) {
 			this.entity = entity;
 			this.ctx = ctx;
 		}
@@ -543,12 +543,12 @@ public class DomaEventEntityListenerTest {
 		Entity postEntity;
 
 		@HandlePreInsert
-		public void handlePreInsert(Entity entity) {
+		void handlePreInsert(Entity entity) {
 			this.preEntity = entity;
 		}
 
 		@HandlePostInsert
-		public void handlePostInsert(Entity entity) {
+		void handlePostInsert(Entity entity) {
 			this.postEntity = entity;
 		}
 	}
@@ -558,14 +558,14 @@ public class DomaEventEntityListenerTest {
 
 		@HandlePreInsert
 		@HandlePostInsert
-		public void handleInsert(Entity entity) {
+		void handleInsert(Entity entity) {
 			this.entity = entity;
 		}
 	}
 
 	static class NoArgHandler {
 		@HandlePreInsert
-		public void noarg() {
+		void noarg() {
 		}
 	}
 
@@ -573,7 +573,7 @@ public class DomaEventEntityListenerTest {
 		DomaEvent<Entity, PreInsertContext<Entity>> event;
 
 		@EventListener
-		public void listen(DomaEvent<Entity, PreInsertContext<Entity>> event) {
+		void listen(DomaEvent<Entity, PreInsertContext<Entity>> event) {
 			this.event = event;
 		}
 	}
@@ -591,7 +591,7 @@ public class DomaEventEntityListenerTest {
 		Todo todo;
 
 		@EventListener(condition = "#root.event.source.createdBy == 'making'")
-		public void handlePreInsert(PreInsertEvent<Todo> event) {
+		void handlePreInsert(PreInsertEvent<Todo> event) {
 			this.todo = event.getSource();
 		}
 	}

@@ -20,10 +20,10 @@ import org.springframework.context.event.EventListenerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-public class DomaApplicationListenerTest {
+class DomaApplicationListenerTest {
 
 	@Nested
-	public static class ConstructorTest {
+	static class ConstructorTest {
 
 		@SuppressWarnings("unused")
 		@Test
@@ -37,7 +37,7 @@ public class DomaApplicationListenerTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void entityWithContext() throws Exception {
+		void entityWithContext() throws Exception {
 			String beanName = "";
 			Method method = EntityWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -47,7 +47,7 @@ public class DomaApplicationListenerTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void multiAnnotations() throws Exception {
+		void multiAnnotations() throws Exception {
 			String beanName = "";
 			Method method = MultiAnnotations.class.getDeclaredMethod("handle",
 					TestEntity1.class);
@@ -56,7 +56,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void notEntity() throws Exception {
+		void notEntity() throws Exception {
 			String beanName = "";
 			Method method = NotEntity.class
 					.getDeclaredMethod("handle", TestEntity3.class);
@@ -66,7 +66,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void invalidContextClass() throws Exception {
+		void invalidContextClass() throws Exception {
 			String beanName = "";
 			Method method = InvalidContextClass.class.getDeclaredMethod("handle",
 					TestEntity1.class, PostInsertContext.class);
@@ -76,7 +76,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void invalidContextTypeVar() throws Exception {
+		void invalidContextTypeVar() throws Exception {
 			String beanName = "";
 			Method method = InvalidContextTypeVar.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -86,7 +86,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void noArg() throws Exception {
+		void noArg() throws Exception {
 			String beanName = "";
 			Method method = NoArg.class.getDeclaredMethod("handle");
 			BeanFactory beanFactory = mock(BeanFactory.class);
@@ -95,7 +95,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void tooManyArgs() throws Exception {
+		void tooManyArgs() throws Exception {
 			String beanName = "";
 			Method method = TooManyArgs.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class, Object.class);
@@ -105,7 +105,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void multiAnnotationsWithContext() throws Exception {
+		void multiAnnotationsWithContext() throws Exception {
 			String beanName = "";
 			Method method = MultiAnnotationsWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -184,7 +184,7 @@ public class DomaApplicationListenerTest {
 	}
 
 	@Nested
-	public static class OnApplicationEventTest {
+	static class OnApplicationEventTest {
 
 		@Test
 		void handleEvent() throws Exception {
@@ -209,7 +209,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void handleEventWithContext() throws Exception {
+		void handleEventWithContext() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(WithContextHandler.class);
 
@@ -237,7 +237,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void differentEventContext() throws Exception {
+		void differentEventContext() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();
@@ -259,7 +259,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void differentEntity() throws Exception {
+		void differentEntity() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();
@@ -281,7 +281,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void handleSubEntity() throws Exception {
+		void handleSubEntity() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(SuperClassHandler.class);
 				context.refresh();
