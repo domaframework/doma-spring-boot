@@ -20,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -55,7 +54,6 @@ import org.seasar.doma.jdbc.statistic.DefaultStatisticManager;
 import org.seasar.doma.jdbc.statistic.StatisticManager;
 import org.seasar.doma.message.Message;
 import org.seasar.doma.slf4j.Slf4jJdbcLogger;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
@@ -63,8 +61,6 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.core.env.MutablePropertySources;
 import org.springframework.dao.CannotAcquireLockException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
