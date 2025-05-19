@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    @SuppressWarnings("resource")
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+	@SuppressWarnings("resource")
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
 }
