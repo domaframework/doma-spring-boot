@@ -31,4 +31,4 @@ This will start the application with a PostgreSQL container.
 - Spring Boot's native TestContainers integration with `@ServiceConnection`
 - Using TestContainers at development time with `SpringApplication.from()`
 - Running Doma queries against a real PostgreSQL database in tests
-- Configuration for both development (H2) and test (PostgreSQL) environments
+- Configuration for PostgreSQL database in both development and test environments
