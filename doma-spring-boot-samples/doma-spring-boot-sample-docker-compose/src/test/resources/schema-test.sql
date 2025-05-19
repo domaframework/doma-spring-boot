@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS messages;
+CREATE TABLE messages (
+  id SERIAL PRIMARY KEY,
+  text VARCHAR(255)
+);
+ALTER SEQUENCE messages_id_seq RESTART WITH 1;
