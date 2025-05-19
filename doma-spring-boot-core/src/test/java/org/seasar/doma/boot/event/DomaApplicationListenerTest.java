@@ -6,9 +6,8 @@ import static org.mockito.Mockito.*;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.Entity;
 import org.seasar.doma.boot.event.annotation.HandlePostInsert;
 import org.seasar.doma.boot.event.annotation.HandlePreInsert;
@@ -21,14 +20,14 @@ import org.springframework.context.event.EventListenerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
-@RunWith(Enclosed.class)
-public class DomaApplicationListenerTest {
+class DomaApplicationListenerTest {
 
+	@Nested
 	public static class ConstructorTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void entityOnly() throws Exception {
+		void entityOnly() throws Exception {
 			String beanName = "";
 			Method method = EntityOnly.class.getDeclaredMethod("handle",
 					TestEntity1.class);
@@ -38,7 +37,7 @@ public class DomaApplicationListenerTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void entityWithContext() throws Exception {
+		void entityWithContext() throws Exception {
 			String beanName = "";
 			Method method = EntityWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -48,7 +47,7 @@ public class DomaApplicationListenerTest {
 
 		@SuppressWarnings("unused")
 		@Test
-		public void multiAnnotations() throws Exception {
+		void multiAnnotations() throws Exception {
 			String beanName = "";
 			Method method = MultiAnnotations.class.getDeclaredMethod("handle",
 					TestEntity1.class);
@@ -57,7 +56,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void notEntity() throws Exception {
+		void notEntity() throws Exception {
 			String beanName = "";
 			Method method = NotEntity.class
 					.getDeclaredMethod("handle", TestEntity3.class);
@@ -67,7 +66,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void invalidContextClass() throws Exception {
+		void invalidContextClass() throws Exception {
 			String beanName = "";
 			Method method = InvalidContextClass.class.getDeclaredMethod("handle",
 					TestEntity1.class, PostInsertContext.class);
@@ -77,7 +76,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void invalidContextTypeVar() throws Exception {
+		void invalidContextTypeVar() throws Exception {
 			String beanName = "";
 			Method method = InvalidContextTypeVar.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -87,7 +86,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void noArg() throws Exception {
+		void noArg() throws Exception {
 			String beanName = "";
 			Method method = NoArg.class.getDeclaredMethod("handle");
 			BeanFactory beanFactory = mock(BeanFactory.class);
@@ -96,7 +95,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void tooManyArgs() throws Exception {
+		void tooManyArgs() throws Exception {
 			String beanName = "";
 			Method method = TooManyArgs.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class, Object.class);
@@ -106,7 +105,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void multiAnnotationsWithContext() throws Exception {
+		void multiAnnotationsWithContext() throws Exception {
 			String beanName = "";
 			Method method = MultiAnnotationsWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
@@ -126,57 +125,57 @@ public class DomaApplicationListenerTest {
 		public static class TestEntity3 {
 		}
 
-		static class EntityOnly {
+		public static class EntityOnly {
 			@HandlePreInsert
 			void handle(TestEntity1 entity) {
 			}
 		}
 
-		static class EntityWithContext {
+		public static class EntityWithContext {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
 			}
 		}
 
-		static class MultiAnnotations {
+		public static class MultiAnnotations {
 			@HandlePreInsert
 			@HandlePostInsert
 			void handle(TestEntity1 entity) {
 			}
 		}
 
-		static class NotEntity {
+		public static class NotEntity {
 			@HandlePreInsert
 			void handle(TestEntity3 entity) {
 			}
 		}
 
-		static class InvalidContextClass {
+		public static class InvalidContextClass {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PostInsertContext<TestEntity1> context) {
 			}
 		}
 
-		static class InvalidContextTypeVar {
+		public static class InvalidContextTypeVar {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity2> context) {
 			}
 		}
 
-		static class NoArg {
+		public static class NoArg {
 			@HandlePreInsert
 			void handle() {
 			}
 		}
 
-		static class TooManyArgs {
+		public static class TooManyArgs {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context,
 					Object unnecessary) {
 			}
 		}
 
-		static class MultiAnnotationsWithContext {
+		public static class MultiAnnotationsWithContext {
 			@HandlePreInsert
 			@HandlePostInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
@@ -184,10 +183,11 @@ public class DomaApplicationListenerTest {
 		}
 	}
 
+	@Nested
 	public static class OnApplicationEventTest {
 
 		@Test
-		public void handleEvent() throws Exception {
+		void handleEvent() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();
@@ -209,7 +209,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void handleEventWithContext() throws Exception {
+		void handleEventWithContext() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(WithContextHandler.class);
 
@@ -237,7 +237,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void differentEventContext() throws Exception {
+		void differentEventContext() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();
@@ -259,7 +259,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void differentEntity() throws Exception {
+		void differentEntity() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(EntityOnlyHandler.class);
 				context.refresh();
@@ -281,7 +281,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Test
-		public void handleSubEntity() throws Exception {
+		void handleSubEntity() throws Exception {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(SuperClassHandler.class);
 				context.refresh();
@@ -315,7 +315,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("entityOnlyHandler")
-		static class EntityOnlyHandler {
+		public static class EntityOnlyHandler {
 			TestEntity1 entity;
 
 			@HandlePreInsert
@@ -325,7 +325,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("withContextHandler")
-		static class WithContextHandler {
+		public static class WithContextHandler {
 			TestEntity1 entity;
 			PreInsertContext<TestEntity1> context;
 
@@ -337,7 +337,7 @@ public class DomaApplicationListenerTest {
 		}
 
 		@Component("superClassHandler")
-		static class SuperClassHandler {
+		public static class SuperClassHandler {
 			TestEntity1 entity;
 
 			@HandlePreInsert
@@ -348,7 +348,7 @@ public class DomaApplicationListenerTest {
 
 		// java.lang.IllegalStateException
 		// Maximum one parameter is allowed for event listener method
-		static class PassthroughEventListenerFactory implements EventListenerFactory,
+		public static class PassthroughEventListenerFactory implements EventListenerFactory,
 				Ordered {
 
 			@Override

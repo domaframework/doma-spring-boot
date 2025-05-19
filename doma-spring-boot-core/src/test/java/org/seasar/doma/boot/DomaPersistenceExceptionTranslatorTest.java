@@ -1,12 +1,12 @@
 package org.seasar.doma.boot;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.sql.SQLException;
 import java.util.Collections;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.seasar.doma.DomaException;
 import org.seasar.doma.jdbc.ConfigException;
 import org.seasar.doma.jdbc.NoResultException;
@@ -30,33 +30,33 @@ import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.jdbc.support.SQLExceptionSubclassTranslator;
 
-public class DomaPersistenceExceptionTranslatorTest {
+class DomaPersistenceExceptionTranslatorTest {
 
 	private final DomaPersistenceExceptionTranslator translator = new DomaPersistenceExceptionTranslator(
 			new SQLExceptionSubclassTranslator());
 
 	@Test
-	public void testOccurNotJdbcException() {
+	void testOccurNotJdbcException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new DomaException(Message.DOMA2008));
-		assertThat(dataAccessException, nullValue());
+		assertNull(dataAccessException);
 	}
 
 	@Test
-	public void testOccurSqlExecutionException() {
+	void testOccurSqlExecutionException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new SqlExecutionException(
 						SqlLogType.FORMATTED, SqlKind.SELECT,
 						"select * from todo where todo_id = ?",
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql", new SQLException(), null));
-		assertThat(dataAccessException, is(instanceOf(UncategorizedSQLException.class)));
-		assertThat(UncategorizedSQLException.class.cast(dataAccessException).getSql(),
-				is("select * from todo where todo_id = ?"));
+		assertInstanceOf(UncategorizedSQLException.class, dataAccessException);
+		assertEquals("select * from todo where todo_id = ?",
+				((UncategorizedSQLException) dataAccessException).getSql());
 	}
 
 	@Test
-	public void testThrowOptimisticLockingFailureException() {
+	void testThrowOptimisticLockingFailureException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new OptimisticLockException(
 						SqlLogType.FORMATTED,
@@ -64,12 +64,11 @@ public class DomaPersistenceExceptionTranslatorTest {
 						"update todo set title = ? where todo_id = ? and version = ?",
 						"update todo set title = 'Modified Title' where todo_id = '000000001' and version = 1",
 						"TodoDao/update.sql"));
-		assertThat(dataAccessException,
-				is(instanceOf(OptimisticLockingFailureException.class)));
+		assertInstanceOf(OptimisticLockingFailureException.class, dataAccessException);
 	}
 
 	@Test
-	public void testThrowDuplicateKeyException() {
+	void testThrowDuplicateKeyException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new UniqueConstraintException(
 						SqlLogType.FORMATTED,
@@ -77,11 +76,11 @@ public class DomaPersistenceExceptionTranslatorTest {
 						"insert into todo (todo_id, title) values (?, ?)",
 						"insert into todo (todo_id, title) values ('000000001', 'Title')",
 						"TodoDao/insert.sql", new SQLException()));
-		assertThat(dataAccessException, is(instanceOf(DuplicateKeyException.class)));
+		assertInstanceOf(DuplicateKeyException.class, dataAccessException);
 	}
 
 	@Test
-	public void testThrowIncorrectResultSizeDataAccessException() {
+	void testThrowIncorrectResultSizeDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new NonUniqueResultException(
@@ -89,8 +88,7 @@ public class DomaPersistenceExceptionTranslatorTest {
 							"select * from todo where created_at = ?",
 							"select * from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertThat(dataAccessException,
-					is(instanceOf(IncorrectResultSizeDataAccessException.class)));
+			assertInstanceOf(IncorrectResultSizeDataAccessException.class, dataAccessException);
 		}
 		{
 			DataAccessException dataAccessException = translator
@@ -100,24 +98,22 @@ public class DomaPersistenceExceptionTranslatorTest {
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertThat(dataAccessException,
-					is(instanceOf(IncorrectResultSizeDataAccessException.class)));
+			assertInstanceOf(IncorrectResultSizeDataAccessException.class, dataAccessException);
 		}
 	}
 
 	@Test
-	public void testThrowEmptyResultDataAccessException() {
+	void testThrowEmptyResultDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new NoResultException(SqlLogType.FORMATTED,
 						SqlKind.SELECT, "select * from todo where todo_id = ?",
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql"));
-		assertThat(dataAccessException,
-				is(instanceOf(EmptyResultDataAccessException.class)));
+		assertInstanceOf(EmptyResultDataAccessException.class, dataAccessException);
 	}
 
 	@Test
-	public void testThrowTypeMismatchDataAccessException() {
+	void testThrowTypeMismatchDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new UnknownColumnException(
@@ -125,8 +121,7 @@ public class DomaPersistenceExceptionTranslatorTest {
 							SqlKind.SELECT, "select * from todo where created_at = ?",
 							"select * from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertThat(dataAccessException,
-					is(instanceOf(TypeMismatchDataAccessException.class)));
+			assertInstanceOf(TypeMismatchDataAccessException.class, dataAccessException);
 		}
 		{
 			DataAccessException dataAccessException = translator
@@ -139,18 +134,16 @@ public class DomaPersistenceExceptionTranslatorTest {
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertThat(dataAccessException,
-					is(instanceOf(TypeMismatchDataAccessException.class)));
+			assertInstanceOf(TypeMismatchDataAccessException.class, dataAccessException);
 		}
 	}
 
 	@Test
-	public void testThrowUncategorizedDataAccessException() {
+	void testThrowUncategorizedDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new ConfigException("DomaConfig",
 						"configure"));
-		assertThat(dataAccessException,
-				is(instanceOf(UncategorizedDataAccessException.class)));
+		assertInstanceOf(UncategorizedDataAccessException.class, dataAccessException);
 	}
 
 }

@@ -16,7 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class ApplicationTest {
+class ApplicationTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
@@ -25,7 +25,7 @@ public class ApplicationTest {
 	private int port;
 
 	@Test
-	public void test() {
+	void test() {
 		Message message1 = restTemplate.getForObject(
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
 						.queryParam("text", "hello").build().toUri(),

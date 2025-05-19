@@ -1,10 +1,9 @@
 package org.seasar.doma.boot;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -26,14 +25,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-public class UnifiedCriteriaPageableTest {
+class UnifiedCriteriaPageableTest {
 	@ParameterizedTest
 	@CsvSource(value = {
 			"0 | 10 | 0 | 10",
 			"2 | 10 | 20 | 10",
 			"2 | 5 | 10 | 5",
 	}, delimiter = '|')
-	public void testOffsetAndLimit(
+	void testOffsetAndLimit(
 			int pageNumber, int pageSize, int expectedOffset, int expectedLimit) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
@@ -41,24 +40,24 @@ public class UnifiedCriteriaPageableTest {
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertThat(offset, is(expectedOffset));
-		assertThat(limit, is(expectedLimit));
+		assertEquals(expectedOffset, offset);
+		assertEquals(expectedLimit, limit);
 	}
 
 	@Test
-	public void testOffsetAndLimitWhenUnpaged() {
+	void testOffsetAndLimitWhenUnpaged() {
 		Pageable pageable = Pageable.unpaged();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertThat(offset, nullValue());
-		assertThat(limit, nullValue());
+		assertNull(offset);
+		assertNull(limit);
 	}
 
 	@Test
-	public void testOrderBy() {
+	void testOrderBy() {
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
 		Person_ entity = new Person_();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
@@ -76,7 +75,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderBy2() {
+	void testOrderBy2() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -98,7 +97,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenNonSort() {
+	void testOrderByWhenNonSort() {
 		Pageable pageable = PageRequest.of(0, 10);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
@@ -112,7 +111,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenNonSortAndSetDefault() {
+	void testOrderByWhenNonSortAndSetDefault() {
 		Pageable pageable = PageRequest.of(0, 10);
 		Person_ entity = new Person_();
 		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.asc(entity.id);
@@ -123,11 +122,11 @@ public class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertThat(consumer, sameInstance(defaultOrder));
+		assertSame(defaultOrder, consumer);
 	}
 
 	@Test
-	public void testOrderBySingleEntity() {
+	void testOrderBySingleEntity() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -143,7 +142,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenMissingProperties() {
+	void testOrderByWhenMissingProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -157,7 +156,7 @@ public class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	public void testOrderByWhenMissingAllProperties() {
+	void testOrderByWhenMissingAllProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -166,11 +165,11 @@ public class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertThat(consumer, sameInstance(defaultOrder));
+		assertSame(defaultOrder, consumer);
 	}
 
 	@Test
-	public void testOrderByWhenMissingPropertiesHandle() {
+	void testOrderByWhenMissingPropertiesHandle() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
