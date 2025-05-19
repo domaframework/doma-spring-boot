@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@Import(DockerComposeTestConfiguration.class)
 class ApplicationTest {
 	private RestClient restClient;
 	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<>() {
