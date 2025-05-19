@@ -15,9 +15,18 @@ To run this sample, you need:
 ./mvnw clean test
 ```
 
+### Run with TestContainers
+
+```bash
+./mvnw spring-boot:test-run
+```
+
+This will start the application with a PostgreSQL container.
+
 ## Features Demonstrated
 
 - Using TestContainers to start a PostgreSQL database for tests
-- Integration with Spring Boot's test support for TestContainers
+- Spring Boot's native TestContainers integration with `@ServiceConnection`
+- Using TestContainers at development time with `SpringApplication.from()`
 - Running Doma queries against a real PostgreSQL database in tests
 - Configuration for both development (H2) and test (PostgreSQL) environments
