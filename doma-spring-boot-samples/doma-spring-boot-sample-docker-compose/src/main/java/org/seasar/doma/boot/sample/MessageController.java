@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class MessageController {
 
-    private final MessageDao messageDao;
+	private final MessageDao messageDao;
 
-    public MessageController(MessageDao messageDao) {
-        this.messageDao = messageDao;
-    }
+	public MessageController(MessageDao messageDao) {
+		this.messageDao = messageDao;
+	}
 
-    @GetMapping
-    List<Message> list(@PageableDefault Pageable pageable) {
-        return messageDao.selectAll(Pageables.toSelectOptions(pageable));
-    }
+	@GetMapping
+	List<Message> list(@PageableDefault Pageable pageable) {
+		return messageDao.selectAll(Pageables.toSelectOptions(pageable));
+	}
 
-    @GetMapping(params = "text")
-    Message add(@RequestParam String text) {
-        Message message = new Message();
-        message.text = text;
-        messageDao.insert(message);
-        return message;
-    }
+	@GetMapping(params = "text")
+	Message add(@RequestParam String text) {
+		Message message = new Message();
+		message.text = text;
+		messageDao.insert(message);
+		return message;
+	}
 }
