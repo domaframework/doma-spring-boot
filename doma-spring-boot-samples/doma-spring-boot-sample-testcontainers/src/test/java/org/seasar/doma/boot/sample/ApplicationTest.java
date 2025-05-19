@@ -62,7 +62,7 @@ class ApplicationTest {
 
 		{
 			List<Message> messages = restClient.get()
-					.uri("/?page={page}&size={size}", "1", "1")
+					.uri("/?page={page}&size={size}", 1, 1)
 					.retrieve()
 					.body(typedReference);
 			assertEquals(1, messages.size());
