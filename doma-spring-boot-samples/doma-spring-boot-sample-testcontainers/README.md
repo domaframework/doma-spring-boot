@@ -11,6 +11,8 @@ To run this sample, you need:
 
 ### Build and Run Tests
 
+This project uses the Maven Wrapper, so you don't need to install Maven separately.
+
 ```bash
 ./mvnw clean test
 ```
