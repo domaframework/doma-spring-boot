@@ -20,6 +20,7 @@
         <module>doma-spring-boot-sample-event-handler</module>
         <module>doma-spring-boot-sample-two-datasource</module>
         <module>doma-spring-boot-sample-unified-criteria</module>
+        <module>doma-spring-boot-sample-testcontainers</module>
     </modules>
 
     <properties>
