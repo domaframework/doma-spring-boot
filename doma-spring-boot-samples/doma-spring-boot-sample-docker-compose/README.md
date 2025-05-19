@@ -48,17 +48,12 @@ services:
   postgres:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=${POSTGRES_DB}'
-      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
-      - 'POSTGRES_USER=${POSTGRES_USER}'
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
     ports:
       - '5432'
 ```
-
-Before running the application, you should set the following environment variables:
-- `POSTGRES_DB`: The name of the PostgreSQL database (e.g., "domadb")
-- `POSTGRES_USER`: The PostgreSQL username (e.g., "doma")
-- `POSTGRES_PASSWORD`: The PostgreSQL password
 
 Spring Boot automatically configures the application to connect to this database.
 
