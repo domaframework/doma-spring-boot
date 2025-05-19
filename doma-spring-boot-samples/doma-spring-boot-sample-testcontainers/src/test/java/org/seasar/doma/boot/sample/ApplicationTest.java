@@ -29,10 +29,10 @@ class ApplicationTest {
 	};
 	@LocalServerPort
 	private int port;
-	
+
 	@Container
 	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15");
-	
+
 	@DynamicPropertySource
 	static void configureProperties(DynamicPropertyRegistry registry) {
 		registry.add("spring.datasource.url", postgres::getJdbcUrl);

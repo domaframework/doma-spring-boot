@@ -6,7 +6,7 @@ public class TestApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.from(Application::main)
-			.with(TestContainersConfig.class)
-			.run(args);
+				.with(TestContainersConfig.class)
+				.run(args);
 	}
 }
