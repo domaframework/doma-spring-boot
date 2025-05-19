@@ -48,11 +48,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- JUnit is managed by Spring Boot -->
         <!-- Spring Boot manages TestContainers dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
