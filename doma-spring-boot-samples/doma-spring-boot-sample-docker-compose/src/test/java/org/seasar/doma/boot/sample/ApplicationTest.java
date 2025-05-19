@@ -11,9 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class ApplicationTest {
@@ -23,14 +22,10 @@ class ApplicationTest {
 	@LocalServerPort
 	private int port;
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
 	@BeforeEach
-	void setUp(@Autowired RestClient.Builder restClientBuilder) {
-		jdbcTemplate.update("DROP TABLE IF EXISTS messages");
-		jdbcTemplate.update("CREATE TABLE messages (id SERIAL PRIMARY KEY, text VARCHAR(255))");
-		jdbcTemplate.update("ALTER SEQUENCE messages_id_seq RESTART WITH 1");
+	void setUp(@Autowired RestClient.Builder restClientBuilder, @Autowired JdbcClient jdbcClient) {
+		jdbcClient.sql("DELETE FROM messages").update();
+		jdbcClient.sql("ALTER SEQUENCE messages_id_seq RESTART WITH 1").update();
 
 		this.restClient = restClientBuilder
 				.baseUrl("http://localhost:" + port)
