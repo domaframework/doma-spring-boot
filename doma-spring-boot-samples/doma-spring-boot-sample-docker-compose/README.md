@@ -1,58 +1,69 @@
 # Doma Spring Boot Sample with Docker Compose
 
-This sample demonstrates how to use Doma with Spring Boot using Docker Compose.
+This sample demonstrates how to use Doma with Spring Boot's Docker Compose support.
 
 ## Requirements
 
 - Docker
 - Docker Compose
 
+## How it works
+
+This sample uses Spring Boot's built-in Docker Compose support, which automatically:
+
+1. Detects the `compose.yaml` file in the project root
+2. Starts the PostgreSQL container defined in the compose file
+3. Configures the application to connect to the database
+
+The `spring-boot-docker-compose` dependency enables this functionality, allowing the application to seamlessly integrate with Docker Compose services.
+
 ## Running the sample
 
 From the sample directory, run:
 
 ```bash
-docker compose up
+./mvnw spring-boot:run
 ```
 
-This will:
-1. Start a PostgreSQL database container
-2. Build the Spring Boot application
-3. Start the application container linked to the database
+Spring Boot will automatically:
+- Start the PostgreSQL container defined in compose.yaml
+- Configure the application to connect to the database
+- Run the application
 
 ## Using the application
 
-Once both containers are running, you can access the application at http://localhost:8080
+Once the application is running, you can access it at http://localhost:8080
 
 ### API Endpoints
 
 - `GET /` - List all messages
 - `GET /?text=hello` - Add a new message with the text "hello"
 
-## Running the application locally
+## Configuration
 
-If you want to run the application locally while using the Docker PostgreSQL database:
+The PostgreSQL configuration is defined in the `compose.yaml` file:
 
-1. Start only the database container:
-   ```bash
-   docker compose up postgres
-   ```
+```yaml
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=${POSTGRES_DB}'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+      - 'POSTGRES_USER=${POSTGRES_USER}'
+    ports:
+      - '5432'
+```
 
-2. Run the application:
-   ```bash
-   ./mvnw spring-boot:run
-   ```
+Before running the application, you should set the following environment variables:
+- `POSTGRES_DB`: The name of the PostgreSQL database (e.g., "domadb")
+- `POSTGRES_USER`: The PostgreSQL username (e.g., "doma")
+- `POSTGRES_PASSWORD`: The PostgreSQL password
+
+Spring Boot automatically configures the application to connect to this database.
 
 ## Notes
 
-- The PostgreSQL data is persisted in a Docker volume
-- The application connects to PostgreSQL using environment variables with default values
-- You can customize the database configuration by setting the following environment variables:
-  - `POSTGRES_DB`: Database name (default: domadb)
-  - `POSTGRES_USER`: Database username (default: doma)
-  - `POSTGRES_PASSWORD`: Database password (default: changeme)
+- No manual configuration of database connection properties is needed
 - The schema.sql file is automatically executed when the application starts
-
-## Security Note
-
-For production use, always set secure passwords through environment variables rather than using the defaults.
+- Spring Boot manages the lifecycle of the Docker containers

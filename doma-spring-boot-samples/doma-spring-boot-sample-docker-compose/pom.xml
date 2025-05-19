@@ -7,7 +7,7 @@
     <packaging>jar</packaging>
 
     <name>doma-spring-boot-sample-docker-compose</name>
-    <description>Demo project with Docker Compose for Spring Boot and Doma</description>
+    <description>Demo project for Spring Boot with Docker Compose</description>
 
     <parent>
         <groupId>org.seasar.doma.boot</groupId>
@@ -36,6 +36,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
