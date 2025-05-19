@@ -26,23 +26,23 @@ class ApplicationTest {
 
 	@BeforeEach
 	void setUp(@Autowired RestClient.Builder restClientBuilder) {
-		this.restClient = restClientBuilder.defaultStatusHandler(__ -> true, (req, res) -> {
-		}).build();
+		this.restClient = restClientBuilder
+				.baseUrl("http://localhost:" + port)
+				.defaultStatusHandler(__ -> true, (req, res) -> {
+				}).build();
 	}
 
 	@Test
 	void testWithTestContainers() {
 		Message message1 = restClient.get()
-				.uri(UriComponentsBuilder.fromUriString("http://localhost").port(port)
-						.queryParam("text", "hello").build().toUri())
+				.uri("/?text={text}", "hello")
 				.retrieve()
 				.body(Message.class);
 		assertEquals(1, message1.id);
 		assertEquals("hello", message1.text);
 
 		Message message2 = restClient.get()
-				.uri(UriComponentsBuilder.fromUriString("http://localhost").port(port)
-						.queryParam("text", "world").build().toUri())
+				.uri("/?text={text}", "world")
 				.retrieve()
 				.body(Message.class);
 		assertEquals(2, message2.id);
@@ -50,8 +50,7 @@ class ApplicationTest {
 
 		{
 			List<Message> messages = restClient.get()
-					.uri(UriComponentsBuilder.fromUriString("http://localhost").port(port)
-							.build().toUri())
+					.uri("/")
 					.retrieve()
 					.body(typedReference);
 			assertEquals(2, messages.size());
@@ -63,9 +62,7 @@ class ApplicationTest {
 
 		{
 			List<Message> messages = restClient.get()
-					.uri(UriComponentsBuilder.fromUriString("http://localhost").port(port)
-							.queryParam("page", "1").queryParam("size", "1").build()
-							.toUri())
+					.uri("/?page={page}&size={size}", "1", "1")
 					.retrieve()
 					.body(typedReference);
 			assertEquals(1, messages.size());
