@@ -19,7 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Import(TestcontainersConfiguration.class)
 class ApplicationTest {
 	private RestClient restClient;
-	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<List<Message>>() {
+	private final ParameterizedTypeReference<List<Message>> typedReference = new ParameterizedTypeReference<>() {
 	};
 	@LocalServerPort
 	private int port;
