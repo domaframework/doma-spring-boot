@@ -1,6 +1,6 @@
 package org.seasar.doma.boot;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.seasar.doma.jdbc.SelectOptions;
@@ -10,24 +10,24 @@ import org.springframework.data.domain.PageRequest;
 class PageablesTest {
 
 	@Test
-	void testToSelectOptions() throws Exception {
+	void toSelectOptions() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(0, 10));
-		assertEquals(0L, SelectOptionsAccessor.getOffset(options));
-		assertEquals(10L, SelectOptionsAccessor.getLimit(options));
+		assertThat(SelectOptionsAccessor.getOffset(options)).isEqualTo(0L);
+		assertThat(SelectOptionsAccessor.getLimit(options)).isEqualTo(10L);
 	}
 
 	@Test
-	void testToSelectOptions2() throws Exception {
+	void toSelectOptions2() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(2, 10));
-		assertEquals(20L, SelectOptionsAccessor.getOffset(options));
-		assertEquals(10L, SelectOptionsAccessor.getLimit(options));
+		assertThat(SelectOptionsAccessor.getOffset(options)).isEqualTo(20L);
+		assertThat(SelectOptionsAccessor.getLimit(options)).isEqualTo(10L);
 	}
 
 	@Test
-	void testToSelectOptions3() throws Exception {
+	void toSelectOptions3() throws Exception {
 		SelectOptions options = Pageables.toSelectOptions(pageRequest(2, 5));
-		assertEquals(10L, SelectOptionsAccessor.getOffset(options));
-		assertEquals(5L, SelectOptionsAccessor.getLimit(options));
+		assertThat(SelectOptionsAccessor.getOffset(options)).isEqualTo(10L);
+		assertThat(SelectOptionsAccessor.getLimit(options)).isEqualTo(5L);
 	}
 
 	private static PageRequest pageRequest(int page, int size) throws Exception {

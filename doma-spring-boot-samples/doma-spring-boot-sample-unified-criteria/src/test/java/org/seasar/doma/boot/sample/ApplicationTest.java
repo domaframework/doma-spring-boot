@@ -1,6 +1,6 @@
 package org.seasar.doma.boot.sample;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Map;
@@ -38,10 +38,10 @@ class ApplicationTest {
 			List<Message> messages = http.get()
 					.retrieve()
 					.body(typedReference);
-			assertEquals(3, messages.size());
-			assertEquals("message0", messages.get(0).text());
-			assertEquals("message1", messages.get(1).text());
-			assertEquals("message2", messages.get(2).text());
+			assertThat(messages.size()).isEqualTo(3);
+			assertThat(messages.get(0).text()).isEqualTo("message0");
+			assertThat(messages.get(1).text()).isEqualTo("message1");
+			assertThat(messages.get(2).text()).isEqualTo("message2");
 		}
 
 		{
@@ -49,9 +49,9 @@ class ApplicationTest {
 					.uri(builder -> builder.queryParam("page", 3).queryParam("size", 2)
 							.queryParam("sort", "id,desc").build())
 					.retrieve().body(typedReference);
-			assertEquals(2, messages.size());
-			assertEquals("message3", messages.get(0).text());
-			assertEquals("message2", messages.get(1).text());
+			assertThat(messages.size()).isEqualTo(2);
+			assertThat(messages.get(0).text()).isEqualTo("message3");
+			assertThat(messages.get(1).text()).isEqualTo("message2");
 		}
 	}
 

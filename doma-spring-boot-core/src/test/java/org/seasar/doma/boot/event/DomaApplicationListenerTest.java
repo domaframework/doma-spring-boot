@@ -1,8 +1,8 @@
 package org.seasar.doma.boot.event;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Method;
 
@@ -61,8 +61,8 @@ class DomaApplicationListenerTest {
 			Method method = NotEntity.class
 					.getDeclaredMethod("handle", TestEntity3.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
@@ -71,8 +71,8 @@ class DomaApplicationListenerTest {
 			Method method = InvalidContextClass.class.getDeclaredMethod("handle",
 					TestEntity1.class, PostInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
@@ -81,8 +81,8 @@ class DomaApplicationListenerTest {
 			Method method = InvalidContextTypeVar.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
@@ -90,8 +90,8 @@ class DomaApplicationListenerTest {
 			String beanName = "";
 			Method method = NoArg.class.getDeclaredMethod("handle");
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
@@ -100,8 +100,8 @@ class DomaApplicationListenerTest {
 			Method method = TooManyArgs.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class, Object.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Test
@@ -110,8 +110,8 @@ class DomaApplicationListenerTest {
 			Method method = MultiAnnotationsWithContext.class.getDeclaredMethod("handle",
 					TestEntity1.class, PreInsertContext.class);
 			BeanFactory beanFactory = mock(BeanFactory.class);
-			assertThrows(IllegalArgumentException.class,
-					() -> new DomaApplicationListener(beanName, method, beanFactory));
+			assertThatExceptionOfType(IllegalArgumentException.class)
+					.isThrownBy(() -> new DomaApplicationListener(beanName, method, beanFactory));
 		}
 
 		@Entity
@@ -131,7 +131,7 @@ class DomaApplicationListenerTest {
 			}
 		}
 
-		public static class EntityWithContext {
+		static class EntityWithContext {
 			@HandlePreInsert
 			void handle(TestEntity1 entity, PreInsertContext<TestEntity1> context) {
 			}
