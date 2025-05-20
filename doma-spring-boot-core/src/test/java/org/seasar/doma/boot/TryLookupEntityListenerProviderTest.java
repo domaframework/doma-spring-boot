@@ -1,7 +1,7 @@
 package org.seasar.doma.boot;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import org.junit.jupiter.api.Test;
 import org.seasar.doma.jdbc.entity.EntityListener;
@@ -14,37 +14,36 @@ import org.springframework.stereotype.Component;
 class TryLookupEntityListenerProviderTest {
 
 	@Test
-	void testManaged() throws Exception {
+	void managed() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.register(FooListener.class);
 			context.refresh();
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
 			FooListener listener = provider.get(FooListener.class, FooListener::new);
-			assertTrue(listener.managed);
+			assertThat(listener.managed).isTrue();
 		}
 	}
 
 	@Test
-	void testManaged_notUnique() throws Exception {
+	void managedNotUnique() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
 				FooConfig.class)) {
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
-			assertThrows(IllegalStateException.class, () -> {
-				provider.get(FooListener.class, FooListener::new);
-			});
+			assertThatExceptionOfType(IllegalStateException.class)
+					.isThrownBy(() -> provider.get(FooListener.class, FooListener::new));
 		}
 	}
 
 	@Test
-	void testNotManaged() throws Exception {
+	void notManaged() throws Exception {
 		try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 			context.refresh();
 			TryLookupEntityListenerProvider provider = new TryLookupEntityListenerProvider();
 			provider.setApplicationContext(context);
 			FooListener listener = provider.get(FooListener.class, FooListener::new);
-			assertFalse(listener.managed);
+			assertThat(listener.managed).isFalse();
 		}
 	}
 

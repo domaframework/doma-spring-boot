@@ -1,6 +1,6 @@
 package org.seasar.doma.boot.sample;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,16 +30,16 @@ class ApplicationTest {
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
 						.queryParam("text", "hello").build().toUri(),
 				Message.class);
-		assertEquals(1, message1.id);
-		assertEquals("hello", message1.text);
-		assertEquals(now, message1.createdAt);
+		assertThat(message1.id).isEqualTo(1);
+		assertThat(message1.text).isEqualTo("hello");
+		assertThat(message1.createdAt).isEqualTo(now);
 		Message message2 = restTemplate.getForObject(
 				UriComponentsBuilder.fromUriString("http://localhost").port(port)
 						.queryParam("text", "world").build().toUri(),
 				Message.class);
-		assertEquals(2, message2.id);
-		assertEquals("world", message2.text);
-		assertEquals(now, message2.createdAt);
+		assertThat(message2.id).isEqualTo(2);
+		assertThat(message2.text).isEqualTo("world");
+		assertThat(message2.createdAt).isEqualTo(now);
 
 		{
 			List<Message> messages = restTemplate.exchange(
@@ -47,11 +47,11 @@ class ApplicationTest {
 							.build().toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY,
 					typedReference).getBody();
-			assertEquals(2, messages.size());
-			assertEquals(message1.id, messages.get(0).id);
-			assertEquals(message1.text, messages.get(0).text);
-			assertEquals(message2.id, messages.get(1).id);
-			assertEquals(message2.text, messages.get(1).text);
+			assertThat(messages.size()).isEqualTo(2);
+			assertThat(messages.get(0).id).isEqualTo(message1.id);
+			assertThat(messages.get(0).text).isEqualTo(message1.text);
+			assertThat(messages.get(1).id).isEqualTo(message2.id);
+			assertThat(messages.get(1).text).isEqualTo(message2.text);
 		}
 
 		{
@@ -61,9 +61,9 @@ class ApplicationTest {
 							.toUri(),
 					HttpMethod.GET, HttpEntity.EMPTY, typedReference)
 					.getBody();
-			assertEquals(1, messages.size());
-			assertEquals(message2.id, messages.get(0).id);
-			assertEquals(message2.text, messages.get(0).text);
+			assertThat(messages.size()).isEqualTo(1);
+			assertThat(messages.get(0).id).isEqualTo(message2.id);
+			assertThat(messages.get(0).text).isEqualTo(message2.text);
 		}
 	}
 

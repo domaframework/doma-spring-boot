@@ -1,7 +1,6 @@
 package org.seasar.doma.boot;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -36,27 +35,27 @@ class DomaPersistenceExceptionTranslatorTest {
 			new SQLExceptionSubclassTranslator());
 
 	@Test
-	void testOccurNotJdbcException() {
+	void occurNotJdbcException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new DomaException(Message.DOMA2008));
-		assertNull(dataAccessException);
+		assertThat(dataAccessException).isNull();
 	}
 
 	@Test
-	void testOccurSqlExecutionException() {
+	void occurSqlExecutionException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new SqlExecutionException(
 						SqlLogType.FORMATTED, SqlKind.SELECT,
 						"select * from todo where todo_id = ?",
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql", new SQLException(), null));
-		assertInstanceOf(UncategorizedSQLException.class, dataAccessException);
-		assertEquals("select * from todo where todo_id = ?",
-				((UncategorizedSQLException) dataAccessException).getSql());
+		assertThat(dataAccessException).isInstanceOf(UncategorizedSQLException.class);
+		assertThat(((UncategorizedSQLException) dataAccessException).getSql())
+				.isEqualTo("select * from todo where todo_id = ?");
 	}
 
 	@Test
-	void testThrowOptimisticLockingFailureException() {
+	void throwOptimisticLockingFailureException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new OptimisticLockException(
 						SqlLogType.FORMATTED,
@@ -64,11 +63,11 @@ class DomaPersistenceExceptionTranslatorTest {
 						"update todo set title = ? where todo_id = ? and version = ?",
 						"update todo set title = 'Modified Title' where todo_id = '000000001' and version = 1",
 						"TodoDao/update.sql"));
-		assertInstanceOf(OptimisticLockingFailureException.class, dataAccessException);
+		assertThat(dataAccessException).isInstanceOf(OptimisticLockingFailureException.class);
 	}
 
 	@Test
-	void testThrowDuplicateKeyException() {
+	void throwDuplicateKeyException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new UniqueConstraintException(
 						SqlLogType.FORMATTED,
@@ -76,11 +75,11 @@ class DomaPersistenceExceptionTranslatorTest {
 						"insert into todo (todo_id, title) values (?, ?)",
 						"insert into todo (todo_id, title) values ('000000001', 'Title')",
 						"TodoDao/insert.sql", new SQLException()));
-		assertInstanceOf(DuplicateKeyException.class, dataAccessException);
+		assertThat(dataAccessException).isInstanceOf(DuplicateKeyException.class);
 	}
 
 	@Test
-	void testThrowIncorrectResultSizeDataAccessException() {
+	void throwIncorrectResultSizeDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new NonUniqueResultException(
@@ -88,7 +87,8 @@ class DomaPersistenceExceptionTranslatorTest {
 							"select * from todo where created_at = ?",
 							"select * from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertInstanceOf(IncorrectResultSizeDataAccessException.class, dataAccessException);
+			assertThat(dataAccessException)
+					.isInstanceOf(IncorrectResultSizeDataAccessException.class);
 		}
 		{
 			DataAccessException dataAccessException = translator
@@ -98,22 +98,23 @@ class DomaPersistenceExceptionTranslatorTest {
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertInstanceOf(IncorrectResultSizeDataAccessException.class, dataAccessException);
+			assertThat(dataAccessException)
+					.isInstanceOf(IncorrectResultSizeDataAccessException.class);
 		}
 	}
 
 	@Test
-	void testThrowEmptyResultDataAccessException() {
+	void throwEmptyResultDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new NoResultException(SqlLogType.FORMATTED,
 						SqlKind.SELECT, "select * from todo where todo_id = ?",
 						"select * from todo where todo_id = '000000001'",
 						"TodoDao/findOne.sql"));
-		assertInstanceOf(EmptyResultDataAccessException.class, dataAccessException);
+		assertThat(dataAccessException).isInstanceOf(EmptyResultDataAccessException.class);
 	}
 
 	@Test
-	void testThrowTypeMismatchDataAccessException() {
+	void throwTypeMismatchDataAccessException() {
 		{
 			DataAccessException dataAccessException = translator
 					.translateExceptionIfPossible(new UnknownColumnException(
@@ -121,7 +122,7 @@ class DomaPersistenceExceptionTranslatorTest {
 							SqlKind.SELECT, "select * from todo where created_at = ?",
 							"select * from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertInstanceOf(TypeMismatchDataAccessException.class, dataAccessException);
+			assertThat(dataAccessException).isInstanceOf(TypeMismatchDataAccessException.class);
 		}
 		{
 			DataAccessException dataAccessException = translator
@@ -134,16 +135,16 @@ class DomaPersistenceExceptionTranslatorTest {
 							"select todo_id, title from todo where created_at = ?",
 							"select todo_id, title from todo where created_at = '2016-03-06'",
 							"TodoDao/findBy.sql"));
-			assertInstanceOf(TypeMismatchDataAccessException.class, dataAccessException);
+			assertThat(dataAccessException).isInstanceOf(TypeMismatchDataAccessException.class);
 		}
 	}
 
 	@Test
-	void testThrowUncategorizedDataAccessException() {
+	void throwUncategorizedDataAccessException() {
 		DataAccessException dataAccessException = translator
 				.translateExceptionIfPossible(new ConfigException("DomaConfig",
 						"configure"));
-		assertInstanceOf(UncategorizedDataAccessException.class, dataAccessException);
+		assertThat(dataAccessException).isInstanceOf(UncategorizedDataAccessException.class);
 	}
 
 }
