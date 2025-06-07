@@ -1,6 +1,8 @@
 package org.seasar.doma.boot.sample;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 import org.seasar.doma.boot.sample.entity.PrimaryMessage;
@@ -18,15 +20,15 @@ class ApplicationTest {
 	@Test
 	void primary() {
 		PrimaryMessage message = service.primaryMessage(1).orElseGet(() -> fail());
-		assertEquals(1, message.id);
-		assertEquals("primary message", message.content);
+		assertThat(message.id).isEqualTo(1);
+		assertThat(message.content).isEqualTo("primary message");
 	}
 
 	@Test
 	void secondary() {
 		SecondaryMessage message = service.secondaryMessage(2).orElseGet(() -> fail());
-		assertEquals(2, message.id);
-		assertEquals("secondary message", message.content);
+		assertThat(message.id).isEqualTo(2);
+		assertThat(message.content).isEqualTo("secondary message");
 	}
 
 	@Test
@@ -40,8 +42,8 @@ class ApplicationTest {
 		}
 		{
 			PrimaryMessage message = service.primaryMessage(10).orElseGet(() -> fail());
-			assertEquals(10, message.id);
-			assertEquals("primary commit", message.content);
+			assertThat(message.id).isEqualTo(10);
+			assertThat(message.content).isEqualTo("primary commit");
 		}
 	}
 
@@ -52,11 +54,11 @@ class ApplicationTest {
 
 			boolean thrownException = true;
 
-			assertThrows(RuntimeException.class,
-					() -> service.insertPrimary(message, thrownException));
+			assertThatExceptionOfType(RuntimeException.class)
+					.isThrownBy(() -> service.insertPrimary(message, thrownException));
 		}
 
-		assertFalse(service.primaryMessage(100).isPresent());
+		assertThat(service.primaryMessage(100).isPresent()).isFalse();
 	}
 
 	@Test
@@ -70,8 +72,8 @@ class ApplicationTest {
 		}
 		{
 			SecondaryMessage message = service.secondaryMessage(20).orElseGet(() -> fail());
-			assertEquals(20, message.id);
-			assertEquals("secondary commit", message.content);
+			assertThat(message.id).isEqualTo(20);
+			assertThat(message.content).isEqualTo("secondary commit");
 		}
 	}
 
@@ -82,10 +84,10 @@ class ApplicationTest {
 
 			boolean thrownException = true;
 
-			assertThrows(RuntimeException.class,
-					() -> service.insertSecondary(message, thrownException));
+			assertThatExceptionOfType(RuntimeException.class)
+					.isThrownBy(() -> service.insertSecondary(message, thrownException));
 		}
 
-		assertFalse(service.secondaryMessage(200).isPresent());
+		assertThat(service.secondaryMessage(200).isPresent()).isFalse();
 	}
 }
