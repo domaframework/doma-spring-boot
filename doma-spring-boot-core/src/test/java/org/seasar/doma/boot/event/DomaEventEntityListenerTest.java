@@ -1,8 +1,8 @@
 package org.seasar.doma.boot.event;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 import org.seasar.doma.boot.event.annotation.HandlePostDelete;
@@ -336,7 +336,7 @@ class DomaEventEntityListenerTest {
 
 	@Test
 	void noArg() throws Exception {
-		assertThrows(BeanInitializationException.class, () -> {
+		assertThatExceptionOfType(BeanInitializationException.class).isThrownBy(() -> {
 			try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
 				context.register(DomaEventEntityListener.class);
 				context.register(DomaEventListenerFactory.class);

@@ -1,7 +1,6 @@
 package org.seasar.doma.boot;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -14,7 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 class ResourceLoaderScriptFileLoaderTest {
 
 	@Test
-	void testLoadAsURL() throws Exception {
+	void loadAsURL() throws Exception {
 		var location = "META-INF/com/example/dao/TestDao/test.script";
 		var expectedURL = new URL("file:///" + location);
 		var resourceLoader = mock(ResourceLoader.class);
@@ -27,11 +26,11 @@ class ResourceLoaderScriptFileLoaderTest {
 
 		var sut = new ResourceLoaderScriptFileLoader(resourceLoader);
 		var actualURL = sut.loadAsURL(location);
-		assertEquals(expectedURL, actualURL);
+		assertThat(actualURL).isEqualTo(expectedURL);
 	}
 
 	@Test
-	void testLoadAsURLFallback() throws Exception {
+	void loadAsURLFallback() throws Exception {
 		var location = "META-INF/com/example/dao/TestDao/test.script";
 		var expectedURL = new URL("file:///" + location);
 		var resourceLoader = mock(ResourceLoader.class);
@@ -48,11 +47,11 @@ class ResourceLoaderScriptFileLoaderTest {
 
 		var sut = new ResourceLoaderScriptFileLoader(resourceLoader);
 		var actualURL = sut.loadAsURL(location);
-		assertEquals(expectedURL, actualURL);
+		assertThat(actualURL).isEqualTo(expectedURL);
 	}
 
 	@Test
-	void testLoadAsURLScriptNotFound() {
+	void loadAsURLScriptNotFound() {
 		var location = "META-INF/com/example/dao/TestDao/test.script";
 		var resourceLoader = mock(ResourceLoader.class);
 		var notExistsResource = mock(Resource.class);
@@ -65,6 +64,6 @@ class ResourceLoaderScriptFileLoaderTest {
 
 		var sut = new ResourceLoaderScriptFileLoader(resourceLoader);
 		var actualURL = sut.loadAsURL(location);
-		assertNull(actualURL);
+		assertThat(actualURL).isNull();
 	}
 }

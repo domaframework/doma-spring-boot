@@ -5,11 +5,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -75,7 +71,7 @@ class DomaAutoConfigurationTest {
 					DataSourceAutoConfiguration.class));
 
 	@Test
-	void testAutoRegisteredConfig() {
+	void autoRegisteredConfig() {
 		this.contextRunner
 				.run(context -> {
 					Config config = context.getBean(Config.class);
@@ -104,7 +100,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testConfigWithDomaConfigBuilder() {
+	void configWithDomaConfigBuilder() {
 		this.contextRunner
 				.withUserConfiguration(ConfigBuilderConfigure.class)
 				.run(context -> {
@@ -135,7 +131,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testConfigWithConfig() {
+	void configWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(ConfigConfigure.class)
 				.run(context -> {
@@ -166,17 +162,15 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testExceptionTranslationEnabledSpecifyFalse() {
+	void exceptionTranslationEnabledSpecifyFalse() {
 		this.contextRunner
 				.withPropertyValues("doma.exception-translation-enabled=false")
-				.run(context -> {
-					assertThrows(NoSuchBeanDefinitionException.class,
-							() -> context.getBean(PersistenceExceptionTranslator.class));
-				});
+				.run(context -> assertThrows(NoSuchBeanDefinitionException.class,
+						() -> context.getBean(PersistenceExceptionTranslator.class)));
 	}
 
 	@Test
-	void testExceptionTranslationEnabledSpecifyTrue() {
+	void exceptionTranslationEnabledSpecifyTrue() {
 		this.contextRunner
 				.withPropertyValues("doma.exception-translation-enabled=true")
 				.run(context -> {
@@ -188,7 +182,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testChangeDialect() {
+	void changeDialect() {
 		this.contextRunner
 				.withPropertyValues("doma.dialect=MYSQL")
 				.run(context -> {
@@ -198,7 +192,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testChangeMaxRows() {
+	void changeMaxRows() {
 		this.contextRunner
 				.withPropertyValues("doma.max-rows=100")
 				.run(context -> {
@@ -208,7 +202,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testSQLExceptionTranslator() {
+	void sqlExceptionTranslator() {
 		this.contextRunner
 				.run(context -> {
 					PersistenceExceptionTranslator translator = context
@@ -242,32 +236,34 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testAutoRegisteredCriteriaAPI() {
+	void autoRegisteredCriteriaAPI() {
 		this.contextRunner
 				.run(context -> {
 					Entityql entityql = context.getBean(Entityql.class);
-					assertNotNull(entityql);
+					org.assertj.core.api.Assertions.assertThat(entityql).isNotNull();
 					NativeSql nativeSql = context.getBean(NativeSql.class);
-					assertNotNull(nativeSql);
+					org.assertj.core.api.Assertions.assertThat(nativeSql).isNotNull();
 				});
 	}
 
 	@Test
-	void testCriteriaAPIWithConfig() {
+	void criteriaAPIWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(MyCriteriaAPIConfig.class)
 				.run(context -> {
 					Map<String, Entityql> entityqlBeans = context.getBeansOfType(Entityql.class);
-					assertEquals(1, entityqlBeans.size());
-					assertNotNull(entityqlBeans.get("myEntityql"));
+					org.assertj.core.api.Assertions.assertThat(entityqlBeans.size()).isEqualTo(1);
+					org.assertj.core.api.Assertions.assertThat(entityqlBeans.get("myEntityql"))
+							.isNotNull();
 					Map<String, NativeSql> nativeSqlBeans = context.getBeansOfType(NativeSql.class);
-					assertEquals(1, nativeSqlBeans.size());
-					assertNotNull(nativeSqlBeans.get("myNativeSql"));
+					org.assertj.core.api.Assertions.assertThat(nativeSqlBeans.size()).isEqualTo(1);
+					org.assertj.core.api.Assertions.assertThat(nativeSqlBeans.get("myNativeSql"))
+							.isNotNull();
 				});
 	}
 
 	@Test
-	void testDialectByDataSourceUrl() {
+	void dialectByDataSourceUrl() {
 		this.contextRunner
 				.withPropertyValues(
 						"spring.datasource.url=jdbc:postgresql://localhost:1234/example",
@@ -279,7 +275,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testDialectByJdbConnectionDetails() {
+	void dialectByJdbConnectionDetails() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.exception-translation-enabled=false"/* prevent database connections */)
@@ -306,20 +302,18 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testDialectMissingJdbConnectionDetails() {
+	void dialectMissingJdbConnectionDetails() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.exception-translation-enabled=false"/* prevent database connections */)
 
 				.withBean(DataSource.class, SimpleDriverDataSource::new)
-				.run(context -> {
-					assertThat(context.getStartupFailure().getMessage(), containsString(
-							"No connection details available. You will probably have to set 'doma.dialect' explicitly."));
-				});
+				.run(context -> assertThat(context.getStartupFailure().getMessage(), containsString(
+						"No connection details available. You will probably have to set 'doma.dialect' explicitly.")));
 	}
 
 	@Test
-	void testDialectMissingJdbConnectionDetailsExplicitDialect() {
+	void dialectMissingJdbConnectionDetailsExplicitDialect() {
 		this.contextRunner
 				.withPropertyValues(
 						"doma.dialect=POSTGRES",
@@ -333,7 +327,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testDialectByDomaPropertiesIgnoreDataSourceUrl() {
+	void dialectByDomaPropertiesIgnoreDataSourceUrl() {
 		this.contextRunner
 				.withPropertyValues(
 						"spring.datasource.url=jdbc:h2:mem:example",
@@ -346,7 +340,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testJdbcLoggerSlf4J() {
+	void jdbcLoggerSlf4J() {
 		this.contextRunner
 				.withPropertyValues("doma.jdbcLogger=SLF4J")
 
@@ -357,29 +351,30 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testAutoRegisteredQueryDsl() {
+	void autoRegisteredQueryDsl() {
 		this.contextRunner
 
 				.run(context -> {
 					QueryDsl queryDsl = context.getBean(QueryDsl.class);
-					assertNotNull(queryDsl);
+					org.assertj.core.api.Assertions.assertThat(queryDsl).isNotNull();
 				});
 	}
 
 	@Test
-	void testQueryDslWithConfig() {
+	void queryDslWithConfig() {
 		this.contextRunner
 				.withUserConfiguration(MyQueryDslConfig.class)
 
 				.run(context -> {
 					Map<String, QueryDsl> queryDslBeans = context.getBeansOfType(QueryDsl.class);
-					assertEquals(1, queryDslBeans.size());
-					assertNotNull(queryDslBeans.get("myQueryDsl"));
+					org.assertj.core.api.Assertions.assertThat(queryDslBeans.size()).isEqualTo(1);
+					org.assertj.core.api.Assertions.assertThat(queryDslBeans.get("myQueryDsl"))
+							.isNotNull();
 				});
 	}
 
 	@Test
-	void testThrowExceptionIfDuplicateColumn() {
+	void throwExceptionIfDuplicateColumn() {
 		this.contextRunner
 				.withPropertyValues("doma.throw-exception-if-duplicate-column=true")
 
@@ -391,7 +386,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testCustomizeShouldRemoveBlockComment() {
+	void customizeShouldRemoveBlockComment() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -411,7 +406,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testCustomizeShouldRemoveLineComment() {
+	void customizeShouldRemoveLineComment() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -431,7 +426,7 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testAnonymousPredicateAreNotAffected() {
+	void anonymousPredicateAreNotAffected() {
 		Predicate<String> predicate = mock(Predicate.class);
 		when(predicate.test(anyString())).thenReturn(true);
 
@@ -450,65 +445,75 @@ class DomaAutoConfigurationTest {
 	}
 
 	@Test
-	void testShouldRemoveBlankLinesDefaultValue() {
+	void shouldRemoveBlankLinesDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertFalse(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getSqlBuilderSettings().shouldRemoveBlankLines())
+							.isFalse();
 				});
 	}
 
 	@Test
-	void testShouldRemoveBlankLinesChangedValue() {
+	void shouldRemoveBlankLinesChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.sql-builder-settings.should-remove-blank-lines=true")
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertTrue(config.getSqlBuilderSettings().shouldRemoveBlankLines());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getSqlBuilderSettings().shouldRemoveBlankLines())
+							.isTrue();
 				});
 	}
 
 	@Test
-	void testShouldRequireInListPaddingDefaultValue() {
+	void shouldRequireInListPaddingDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertFalse(config.getSqlBuilderSettings().shouldRequireInListPadding());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getSqlBuilderSettings().shouldRequireInListPadding())
+							.isFalse();
 				});
 	}
 
 	@Test
-	void testShouldRequireInListPaddingChangedValue() {
+	void shouldRequireInListPaddingChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.sql-builder-settings.should-require-in-list-padding=true")
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertTrue(config.getSqlBuilderSettings().shouldRequireInListPadding());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getSqlBuilderSettings().shouldRequireInListPadding())
+							.isTrue();
 				});
 	}
 
 	@Test
-	void testStatisticManagerDefaultValue() {
+	void statisticManagerDefaultValue() {
 		this.contextRunner
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertFalse(config.getStatisticManager().isEnabled());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getStatisticManager().isEnabled()).isFalse();
 				});
 	}
 
 	@Test
-	void testStatisticManagerChangedValue() {
+	void statisticManagerChangedValue() {
 		this.contextRunner
 				.withPropertyValues("doma.statistic-manager.enabled=true")
 
 				.run(context -> {
 					Config config = context.getBean(Config.class);
-					assertTrue(config.getStatisticManager().isEnabled());
+					org.assertj.core.api.Assertions
+							.assertThat(config.getStatisticManager().isEnabled()).isTrue();
 				});
 	}
 
