@@ -54,7 +54,7 @@
         <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.27.0</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
-        <gpg-plugin.version>3.2.7</gpg-plugin.version>
+        <gpg-plugin.version>3.2.8</gpg-plugin.version>
         <rootDir>${env.PWD}</rootDir>
     </properties>
 
