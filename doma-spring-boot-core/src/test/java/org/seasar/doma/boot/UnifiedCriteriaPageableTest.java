@@ -1,9 +1,7 @@
 package org.seasar.doma.boot;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -32,7 +30,7 @@ class UnifiedCriteriaPageableTest {
 			"2 | 10 | 20 | 10",
 			"2 | 5 | 10 | 5",
 	}, delimiter = '|')
-	void testOffsetAndLimit(
+	void offsetAndLimit(
 			int pageNumber, int pageSize, int expectedOffset, int expectedLimit) {
 		Pageable pageable = PageRequest.of(pageNumber, pageSize);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
@@ -40,24 +38,24 @@ class UnifiedCriteriaPageableTest {
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertEquals(expectedOffset, offset);
-		assertEquals(expectedLimit, limit);
+		assertThat(offset).isEqualTo(expectedOffset);
+		assertThat(limit).isEqualTo(expectedLimit);
 	}
 
 	@Test
-	void testOffsetAndLimitWhenUnpaged() {
+	void offsetAndLimitWhenUnpaged() {
 		Pageable pageable = Pageable.unpaged();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(pageable, c -> Optional.empty());
 
 		Integer offset = p.offset();
 		Integer limit = p.limit();
 
-		assertNull(offset);
-		assertNull(limit);
+		assertThat(offset).isNull();
+		assertThat(limit).isNull();
 	}
 
 	@Test
-	void testOrderBy() {
+	void orderBy() {
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("name").ascending());
 		Person_ entity = new Person_();
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
@@ -75,7 +73,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	void testOrderBy2() {
+	void orderBy2() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -97,7 +95,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	void testOrderByWhenNonSort() {
+	void orderByWhenNonSort() {
 		Pageable pageable = PageRequest.of(0, 10);
 		UnifiedCriteriaPageable p = UnifiedCriteriaPageable.of(
 				pageable,
@@ -111,7 +109,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	void testOrderByWhenNonSortAndSetDefault() {
+	void orderByWhenNonSortAndSetDefault() {
 		Pageable pageable = PageRequest.of(0, 10);
 		Person_ entity = new Person_();
 		Consumer<OrderByNameDeclaration> defaultOrder = c -> c.asc(entity.id);
@@ -122,11 +120,11 @@ class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertSame(defaultOrder, consumer);
+		assertThat(consumer).isSameAs(defaultOrder);
 	}
 
 	@Test
-	void testOrderBySingleEntity() {
+	void orderBySingleEntity() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("name").descending().and(Sort.by("age").ascending()));
 		Person_ entity = new Person_();
@@ -142,7 +140,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	void testOrderByWhenMissingProperties() {
+	void orderByWhenMissingProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -156,7 +154,7 @@ class UnifiedCriteriaPageableTest {
 	}
 
 	@Test
-	void testOrderByWhenMissingAllProperties() {
+	void orderByWhenMissingAllProperties() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("cat")));
 		Person_ entity = new Person_();
@@ -165,11 +163,11 @@ class UnifiedCriteriaPageableTest {
 
 		Consumer<OrderByNameDeclaration> consumer = p.orderBy();
 
-		assertSame(defaultOrder, consumer);
+		assertThat(consumer).isSameAs(defaultOrder);
 	}
 
 	@Test
-	void testOrderByWhenMissingPropertiesHandle() {
+	void orderByWhenMissingPropertiesHandle() {
 		Pageable pageable = PageRequest.of(0, 10,
 				Sort.by("dog").and(Sort.by("name")).and(Sort.by("cat")));
 		Person_ entity = new Person_();
