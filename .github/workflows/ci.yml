@@ -90,17 +90,21 @@ jobs:
           distribution: liberica
           java-version: 17
           cache: maven
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_PASSWORD
+          gpg-private-key: ${{ secrets.SIGNING_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
 
       - name: Release Maven package
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.SIGNING_KEY }}
-          gpg_passphrase: ${{ secrets.SIGNING_PASSWORD }}
-          nexus_username: ${{ secrets.OSSRH_USERNAME }}
-          nexus_password: ${{ secrets.OSSRH_PASSWORD }}
+        run: mvn -B -e -ntp -Pdeploy deploy
+        env:
+          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
 
       - name: Upload reports
         if: failure()
