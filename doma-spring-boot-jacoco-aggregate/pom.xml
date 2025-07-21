@@ -13,7 +13,7 @@
     <artifactId>doma-spring-boot-jacoco-aggregate</artifactId>
 
     <properties>
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <skipPublishing>true</skipPublishing>
     </properties>
 
     <dependencies>
