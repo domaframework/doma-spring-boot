@@ -102,8 +102,8 @@ jobs:
       - name: Release Maven package
         run: mvn -B -e -ntp -Pdeploy deploy
         env:
-          CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
-          CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
+          CENTRAL_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          CENTRAL_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
 
       - name: Upload reports
