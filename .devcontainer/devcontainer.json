@@ -27,7 +27,9 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"vmware.vscode-boot-dev-pack"
+				"vmware.vscode-boot-dev-pack",
+				"redhat.vscode-xml",
+				"redhat.vscode-yaml"
 			]
 		}
 	}
