@@ -10,7 +10,12 @@
 			"version": "none"
 		},
 		// For using Testcontainers.
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
+		// For using pre-commit.
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "3.12",
+			"toolsToInstall": "pre-commit"
+		}
 	},
 	"mounts": [
 		{
@@ -24,6 +29,7 @@
 			"type": "volume"
 		}
 	],
+	"postCreateCommand": ".devcontainer/setup.sh",
 	"customizations": {
 		"vscode": {
 			"extensions": [
