@@ -1,0 +1,33 @@
+{
+	"name": "doma-spring-boot",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/java:1": {
+			"version": "none",
+			"installMaven": "true",
+			"installGradle": "false"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	"mounts": [
+		{
+			"source": "doma-spring-boot-maven",
+			"target": "/home/vscode/.m2",
+			"type": "volume"
+		},
+		{
+			"source": "doma-spring-boot-dind",
+			"target": "/var/lib/docker",
+			"type": "volume"
+		}
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"vmware.vscode-boot-dev-pack"
+			]
+		}
+	}
+}
