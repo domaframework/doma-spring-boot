@@ -4,9 +4,12 @@
 		"dockerfile": "Dockerfile"
 	},
 	"features": {
+		// Since the base image is Java 17, set the version to "none" so Java is not installed here.  
+		// However, using SDKMAN! is convenient, so we still use ghcr.io/devcontainers/features/java.
 		"ghcr.io/devcontainers/features/java:1": {
 			"version": "none"
 		},
+		// For using Testcontainers.
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	"mounts": [
