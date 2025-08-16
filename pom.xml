@@ -50,7 +50,7 @@
         <doma.version>3.11.0</doma.version>
         <spring-boot.version>3.3.10</spring-boot.version>
         <source-plugin.version>3.3.1</source-plugin.version>
-        <javadoc-plugin.version>3.11.2</javadoc-plugin.version>
+        <javadoc-plugin.version>3.11.3</javadoc-plugin.version>
         <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.27.0</formatter-maven-plugin.version>
         <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
