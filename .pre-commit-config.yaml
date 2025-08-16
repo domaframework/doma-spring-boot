@@ -17,8 +17,6 @@ repos:
       - id: verify
         name: Verify
         entry: ./mvnw verify
-        types:
-          - java
         language: system
         pass_filenames: false
         stages:
