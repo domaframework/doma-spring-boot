@@ -12,10 +12,6 @@
     </parent>
     <artifactId>doma-spring-boot-jacoco-aggregate</artifactId>
 
-    <properties>
-        <skipPublishing>true</skipPublishing>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
