@@ -3,10 +3,10 @@ package org.seasar.doma.boot.sample.configuration;
 import javax.sql.DataSource;
 
 import org.seasar.doma.boot.sample.annotation.Secondary;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.sql.init.SqlDataSourceScriptDatabaseInitializer;
-import org.springframework.boot.autoconfigure.sql.init.SqlInitializationProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.autoconfigure.ApplicationDataSourceScriptDatabaseInitializer;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
+import org.springframework.boot.sql.autoconfigure.init.SqlInitializationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -60,16 +60,17 @@ public class DataSourceConfiguration {
 
 	@Primary
 	@Bean
-	public SqlDataSourceScriptDatabaseInitializer dataSourceInitializer(DataSource dataSource,
+	public ApplicationDataSourceScriptDatabaseInitializer dataSourceInitializer(
+			DataSource dataSource,
 			SqlInitializationProperties properties) {
-		return new SqlDataSourceScriptDatabaseInitializer(dataSource, properties);
+		return new ApplicationDataSourceScriptDatabaseInitializer(dataSource, properties);
 	}
 
 	@Secondary
 	@Bean
-	public SqlDataSourceScriptDatabaseInitializer secondaryDataSourceInitializer(
+	public ApplicationDataSourceScriptDatabaseInitializer secondaryDataSourceInitializer(
 			@Secondary DataSource dataSource,
 			@Secondary SqlInitializationProperties properties) {
-		return new SqlDataSourceScriptDatabaseInitializer(dataSource, properties);
+		return new ApplicationDataSourceScriptDatabaseInitializer(dataSource, properties);
 	}
 }
