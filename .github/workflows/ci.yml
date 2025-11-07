@@ -51,7 +51,7 @@ jobs:
         # OSS support versions
         # https://spring.io/projects/spring-boot#support
         # and milestone version of the next release
-        spring-boot-version: [ 4.0.0-RC1, 4.0.0-SNAPSHOT ]
+        spring-boot-version: [ 4.0.0-RC2, 4.0.0-SNAPSHOT ]
 
     steps:
       - uses: actions/checkout@v5
