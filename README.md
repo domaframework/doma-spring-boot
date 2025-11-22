@@ -18,12 +18,12 @@ Spring Boot Support for [Doma](https://github.com/domaframework/doma)
 <dependency>
     <groupId>org.seasar.doma.boot</groupId>
     <artifactId>doma-spring-boot-starter</artifactId>
-    <version>2.4.0</version>
+    <version>3.0.0</version>
 </dependency>
 <dependency>
     <groupId>org.seasar.doma</groupId>
     <artifactId>doma-processor</artifactId>
-    <version>3.6.0</version>
+    <version>3.11.1</version>
     <optional>true</optional>
 </dependency>
 ```
@@ -40,6 +40,12 @@ Add the following repository to use snapshots.
     </snapshots>
 </repository>
 ```
+
+## Requirements
+
+- Java 17+
+- Doma 3.x+
+- Spring Boot 4.x+
 
 ## License
 
