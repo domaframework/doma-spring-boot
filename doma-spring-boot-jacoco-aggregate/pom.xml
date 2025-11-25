@@ -11,6 +11,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>doma-spring-boot-jacoco-aggregate</artifactId>
+    <name>doma-spring-boot-jacoco-aggregate</name>
 
     <dependencies>
         <dependency>
