@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -54,7 +54,7 @@ jobs:
         spring-boot-version: [ 4.0.0 ]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v5
@@ -82,7 +82,7 @@ jobs:
     needs: [ test-matrix ]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
