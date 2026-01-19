@@ -53,7 +53,7 @@
         <javadoc-plugin.version>3.12.0</javadoc-plugin.version>
         <nexus-staging-plugin.version>1.7.0</nexus-staging-plugin.version>
         <formatter-maven-plugin.version>2.29.0</formatter-maven-plugin.version>
-        <versions-maven-plugin.version>2.20.1</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.21.0</versions-maven-plugin.version>
         <gpg-plugin.version>3.2.8</gpg-plugin.version>
         <rootDir>${env.PWD}</rootDir>
     </properties>
